@@ -1,0 +1,452 @@
+[
+  {
+    "courseID": "C201",
+    "courseName": "Database Systems",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Miller",
+    "examWeight": "69",
+    "assignmentWeight": "31"
+  },
+  {
+    "courseID": "C202",
+    "courseName": "Chemistry",
+    "credits": "3",
+    "semester": "Spring",
+    "instructor": "Dr. Lee",
+    "examWeight": "79",
+    "assignmentWeight": "21"
+  },
+  {
+    "courseID": "C203",
+    "courseName": "History",
+    "credits": "2",
+    "semester": "Fall",
+    "instructor": "Prof. Smith",
+    "examWeight": "52",
+    "assignmentWeight": "48"
+  },
+  {
+    "courseID": "C204",
+    "courseName": "Algorithms",
+    "credits": "4",
+    "semester": "Fall",
+    "instructor": "Dr. Lee",
+    "examWeight": "43",
+    "assignmentWeight": "57"
+  },
+  {
+    "courseID": "C205",
+    "courseName": "Mathematics",
+    "credits": "4",
+    "semester": "Fall",
+    "instructor": "Prof. Chen",
+    "examWeight": "53",
+    "assignmentWeight": "47"
+  },
+  {
+    "courseID": "C206",
+    "courseName": "Operating Systems",
+    "credits": "4",
+    "semester": "Spring",
+    "instructor": "Dr. Johnson",
+    "examWeight": "71",
+    "assignmentWeight": "29"
+  },
+  {
+    "courseID": "C207",
+    "courseName": "Chemistry",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Prof. Chen",
+    "examWeight": "61",
+    "assignmentWeight": "39"
+  },
+  {
+    "courseID": "C208",
+    "courseName": "Economics",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Miller",
+    "examWeight": "47",
+    "assignmentWeight": "53"
+  },
+  {
+    "courseID": "C209",
+    "courseName": "Operating Systems",
+    "credits": "2",
+    "semester": "Spring",
+    "instructor": "Dr. Kumar",
+    "examWeight": "64",
+    "assignmentWeight": "36"
+  },
+  {
+    "courseID": "C210",
+    "courseName": "Database Systems",
+    "credits": "2",
+    "semester": "Summer",
+    "instructor": "Dr. Johnson",
+    "examWeight": "75",
+    "assignmentWeight": "25"
+  },
+  {
+    "courseID": "C211",
+    "courseName": "Mathematics",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Kumar",
+    "examWeight": "45",
+    "assignmentWeight": "55"
+  },
+  {
+    "courseID": "C212",
+    "courseName": "Physics",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Prof. Davis",
+    "examWeight": "60",
+    "assignmentWeight": "40"
+  },
+  {
+    "courseID": "C213",
+    "courseName": "Statistics",
+    "credits": "4",
+    "semester": "Fall",
+    "instructor": "Prof. Smith",
+    "examWeight": "43",
+    "assignmentWeight": "57"
+  },
+  {
+    "courseID": "C214",
+    "courseName": "Philosophy",
+    "credits": "4",
+    "semester": "Fall",
+    "instructor": "Prof. Smith",
+    "examWeight": "50",
+    "assignmentWeight": "50"
+  },
+  {
+    "courseID": "C215",
+    "courseName": "Networking",
+    "credits": "4",
+    "semester": "Fall",
+    "instructor": "Prof. Smith",
+    "examWeight": "63",
+    "assignmentWeight": "37"
+  },
+  {
+    "courseID": "C216",
+    "courseName": "Software Engineering",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Johnson",
+    "examWeight": "65",
+    "assignmentWeight": "35"
+  },
+  {
+    "courseID": "C217",
+    "courseName": "Data Structures",
+    "credits": "2",
+    "semester": "Spring",
+    "instructor": "Dr. Johnson",
+    "examWeight": "43",
+    "assignmentWeight": "57"
+  },
+  {
+    "courseID": "C218",
+    "courseName": "Machine Learning",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Prof. Davis",
+    "examWeight": "55",
+    "assignmentWeight": "45"
+  },
+  {
+    "courseID": "C219",
+    "courseName": "Computer Science",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Prof. Chen",
+    "examWeight": "61",
+    "assignmentWeight": "39"
+  },
+  {
+    "courseID": "C220",
+    "courseName": "Biology",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Prof. Davis",
+    "examWeight": "80",
+    "assignmentWeight": "20"
+  },
+  {
+    "courseID": "C221",
+    "courseName": "Physics",
+    "credits": "2",
+    "semester": "Spring",
+    "instructor": "Dr. Johnson",
+    "examWeight": "63",
+    "assignmentWeight": "37"
+  },
+  {
+    "courseID": "C222",
+    "courseName": "Networking",
+    "credits": "2",
+    "semester": "Summer",
+    "instructor": "Dr. Kumar",
+    "examWeight": "66",
+    "assignmentWeight": "34"
+  },
+  {
+    "courseID": "C223",
+    "courseName": "Literature",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Kumar",
+    "examWeight": "41",
+    "assignmentWeight": "59"
+  },
+  {
+    "courseID": "C224",
+    "courseName": "Machine Learning",
+    "credits": "4",
+    "semester": "Spring",
+    "instructor": "Prof. Smith",
+    "examWeight": "53",
+    "assignmentWeight": "47"
+  },
+  {
+    "courseID": "C225",
+    "courseName": "Statistics",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Dr. Brown",
+    "examWeight": "59",
+    "assignmentWeight": "41"
+  },
+  {
+    "courseID": "C226",
+    "courseName": "English Composition",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Dr. Miller",
+    "examWeight": "40",
+    "assignmentWeight": "60"
+  },
+  {
+    "courseID": "C227",
+    "courseName": "Cybersecurity",
+    "credits": "4",
+    "semester": "Spring",
+    "instructor": "Dr. Brown",
+    "examWeight": "64",
+    "assignmentWeight": "36"
+  },
+  {
+    "courseID": "C228",
+    "courseName": "Operating Systems",
+    "credits": "4",
+    "semester": "Spring",
+    "instructor": "Dr. Miller",
+    "examWeight": "56",
+    "assignmentWeight": "44"
+  },
+  {
+    "courseID": "C229",
+    "courseName": "Data Structures",
+    "credits": "2",
+    "semester": "Fall",
+    "instructor": "Dr. Kumar",
+    "examWeight": "45",
+    "assignmentWeight": "55"
+  },
+  {
+    "courseID": "C230",
+    "courseName": "Statistics",
+    "credits": "3",
+    "semester": "Spring",
+    "instructor": "Dr. Johnson",
+    "examWeight": "40",
+    "assignmentWeight": "60"
+  },
+  {
+    "courseID": "C231",
+    "courseName": "English Composition",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Prof. Chen",
+    "examWeight": "72",
+    "assignmentWeight": "28"
+  },
+  {
+    "courseID": "C232",
+    "courseName": "Economics",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Brown",
+    "examWeight": "70",
+    "assignmentWeight": "30"
+  },
+  {
+    "courseID": "C233",
+    "courseName": "Chemistry",
+    "credits": "4",
+    "semester": "Spring",
+    "instructor": "Dr. Lee",
+    "examWeight": "57",
+    "assignmentWeight": "43"
+  },
+  {
+    "courseID": "C234",
+    "courseName": "Software Engineering",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Dr. Lee",
+    "examWeight": "41",
+    "assignmentWeight": "59"
+  },
+  {
+    "courseID": "C235",
+    "courseName": "Chemistry",
+    "credits": "2",
+    "semester": "Fall",
+    "instructor": "Prof. Davis",
+    "examWeight": "73",
+    "assignmentWeight": "27"
+  },
+  {
+    "courseID": "C236",
+    "courseName": "Software Engineering",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Dr. Brown",
+    "examWeight": "74",
+    "assignmentWeight": "26"
+  },
+  {
+    "courseID": "C237",
+    "courseName": "Algorithms",
+    "credits": "4",
+    "semester": "Summer",
+    "instructor": "Prof. Davis",
+    "examWeight": "58",
+    "assignmentWeight": "42"
+  },
+  {
+    "courseID": "C238",
+    "courseName": "English Composition",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Dr. Kumar",
+    "examWeight": "41",
+    "assignmentWeight": "59"
+  },
+  {
+    "courseID": "C239",
+    "courseName": "Chemistry",
+    "credits": "3",
+    "semester": "Spring",
+    "instructor": "Prof. Davis",
+    "examWeight": "63",
+    "assignmentWeight": "37"
+  },
+  {
+    "courseID": "C240",
+    "courseName": "Database Systems",
+    "credits": "2",
+    "semester": "Spring",
+    "instructor": "Dr. Brown",
+    "examWeight": "51",
+    "assignmentWeight": "49"
+  },
+  {
+    "courseID": "C241",
+    "courseName": "Cybersecurity",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Prof. Davis",
+    "examWeight": "73",
+    "assignmentWeight": "27"
+  },
+  {
+    "courseID": "C242",
+    "courseName": "Philosophy",
+    "credits": "4",
+    "semester": "Fall",
+    "instructor": "Dr. Johnson",
+    "examWeight": "67",
+    "assignmentWeight": "33"
+  },
+  {
+    "courseID": "C243",
+    "courseName": "English Composition",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Dr. Lee",
+    "examWeight": "77",
+    "assignmentWeight": "23"
+  },
+  {
+    "courseID": "C244",
+    "courseName": "Algorithms",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Dr. Johnson",
+    "examWeight": "50",
+    "assignmentWeight": "50"
+  },
+  {
+    "courseID": "C245",
+    "courseName": "Artificial Intelligence",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Dr. Miller",
+    "examWeight": "54",
+    "assignmentWeight": "46"
+  },
+  {
+    "courseID": "C246",
+    "courseName": "Software Engineering",
+    "credits": "2",
+    "semester": "Summer",
+    "instructor": "Dr. Johnson",
+    "examWeight": "42",
+    "assignmentWeight": "58"
+  },
+  {
+    "courseID": "C247",
+    "courseName": "Operating Systems",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Dr. Johnson",
+    "examWeight": "69",
+    "assignmentWeight": "31"
+  },
+  {
+    "courseID": "C248",
+    "courseName": "Chemistry",
+    "credits": "3",
+    "semester": "Summer",
+    "instructor": "Prof. Smith",
+    "examWeight": "60",
+    "assignmentWeight": "40"
+  },
+  {
+    "courseID": "C249",
+    "courseName": "Mathematics",
+    "credits": "3",
+    "semester": "Fall",
+    "instructor": "Dr. Miller",
+    "examWeight": "40",
+    "assignmentWeight": "60"
+  },
+  {
+    "courseID": "C250",
+    "courseName": "Chemistry",
+    "credits": "3",
+    "semester": "Spring",
+    "instructor": "Dr. Johnson",
+    "examWeight": "53",
+    "assignmentWeight": "47"
+  }
+]
