@@ -1,56 +1,56 @@
 package com.mycompany.oodjassignment;
 
 public class User {
-    private String studentID, firstName, lastName, Major, Year, Email;
-    
-    // -------------- Getters ( to retrieve private attributes ) -------------
-    public String getStudentID() {
-        return studentID;
+    private String userID;
+    private String name;
+    private String email;
+    private String password;
+    private String role;
+
+    User() {                // no arg constructor
+        System.out.println("A user is created!");
     }
 
-    public String getFirstName() {
-        return firstName;
+    // getters
+    public String getUserID() {
+        return userID;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getMajor() {
-        return Major;
-    }
-
-    public String getYear() {
-        return Year;
+    public String getName() {
+        return name;
     }
 
     public String getEmail() {
-        return Email;
-    }
-  
-    // -------------- Setters ( set values for object ) -------------
-
-    public void setStudentID(String studentID) {
-        this.studentID = studentID;
+        return email;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public String getPassword() {
+        return password;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getRole() {
+        return role;
     }
 
-    public void setMajor(String Major) {
-        this.Major = Major;
+    // setters
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
-    public void setYear(String Year) {
-        this.Year = Year;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setEmail(String Email) {
-        this.Email = Email;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }
+
