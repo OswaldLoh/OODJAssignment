@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment;
+package com.mycompany.oodjassignment.functions;
 
 import java.util.Properties;
 

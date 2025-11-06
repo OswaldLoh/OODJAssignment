@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Function;
+package com.mycompany.oodjassignment.classes;
 
 public class AcademicOfficer extends User {
     AcademicOfficer() {

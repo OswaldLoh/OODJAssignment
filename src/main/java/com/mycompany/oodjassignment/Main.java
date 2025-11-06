@@ -1,6 +1,5 @@
 package com.mycompany.oodjassignment;
-
-import com.mycompany.oodjassignment.Function.CourseAdmin;
+import com.mycompany.oodjassignment.classes.*;
 
 import java.util.Scanner;
 

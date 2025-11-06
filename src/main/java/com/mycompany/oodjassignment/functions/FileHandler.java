@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Function;
+package com.mycompany.oodjassignment.functions;
 
 import java.io.FileReader;
 import java.io.FileWriter;
