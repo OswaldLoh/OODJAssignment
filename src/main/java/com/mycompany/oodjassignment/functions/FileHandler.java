@@ -1,32 +1,30 @@
 package com.mycompany.oodjassignment.functions;
 
+import java.io.*;
 import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
 
 @SuppressWarnings("CallToPrintStackTrace")
 public class FileHandler {
-    public static void main(String[]args) {
-        try {
-            FileWriter output = new FileWriter("testing.txt");
-            output.write("im testing here");
-            output.close();
-
-            FileReader input = new FileReader("testing.txt");
-            int code = input.read();
-            System.out.println((char) code);wd
-            input.close();
-
+    public static void writeFile(String filename, String contents) {           // method for inputting data
+        try (PrintWriter fileInput = new PrintWriter(filename)) {
+            fileInput.print(contents);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-    public void writeFile(String filename, String contents) {
-        try {
-            
 
-        } catch(IOException e) {
-
+    public void readFile(String filename){
+        try (InputStream targetFile = getClass().getClassLoader().getResourceAsStream(filename);
+             BufferedReader fileOutput = new BufferedReader(new InputStreamReader(targetFile))) {
+            String line;
+            while ((line = fileOutput.readLine()) != null) {
+                System.out.println(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Error reading the file.");
+            e.printStackTrace();
         }
     }
 }

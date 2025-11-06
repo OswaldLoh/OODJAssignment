@@ -1,6 +1,6 @@
 package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
-
+import com.mycompany.oodjassignment.functions.*;
 import java.util.Scanner;
 
 public class Main {
@@ -19,6 +19,9 @@ public class Main {
                 case 1:
                     CourseAdmin courseAdmin1 = new CourseAdmin();
                     System.out.println("The role of Admin 1 is " + courseAdmin1.getRole());
+                    System.out.println("File operations testing below:");
+                    FileHandler test = new FileHandler();
+                    test.readFile("testing.txt");
 
                     break;
                 case 2:
