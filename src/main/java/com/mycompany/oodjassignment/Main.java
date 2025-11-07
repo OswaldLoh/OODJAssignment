@@ -1,5 +1,6 @@
 package com.mycompany.oodjassignment;
-
+import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.functions.*;
 import java.util.Scanner;
 
 public class Main {
@@ -8,7 +9,7 @@ public class Main {
         int selection;
         System.out.println("Welcome to University Management System!");
         System.out.println("1. Login");
-        System.out.println("2. Register");
+        System.out.println("2. Forgot Password");
         System.out.println("3. Exit");
         System.out.println("----------------------------------------");
         while (true) {
@@ -16,10 +17,15 @@ public class Main {
             selection = input.nextInt();
             switch (selection) {
                 case 1:
-                    System.out.println("User Interface");
+                    CourseAdmin courseAdmin1 = new CourseAdmin();
+                    System.out.println("The role of Admin 1 is " + courseAdmin1.getRole());
+                    System.out.println("File operations testing below:");
+                    FileHandler test = new FileHandler();
+                    test.readFile("testing.txt");
+
                     break;
                 case 2:
-                    System.out.println("Register Interface");
+                    System.out.println("Welcome to Password Recovery. Please enter your email.");
                     break;
                 default:
                     System.out.println("Invalid selection entered. Please try again.");

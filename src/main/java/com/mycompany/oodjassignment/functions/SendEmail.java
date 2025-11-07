@@ -1,4 +1,8 @@
+<<<<<<< HEAD:src/main/java/com/mycompany/oodjassignment/Function/SendEmail.java
 package com.mycompany.oodjassignment.Function;
+=======
+package com.mycompany.oodjassignment.functions;
+>>>>>>> f0501d1f92318e6ccab1728cf110065b6df30900:src/main/java/com/mycompany/oodjassignment/functions/SendEmail.java
 
 import java.util.Properties;
 

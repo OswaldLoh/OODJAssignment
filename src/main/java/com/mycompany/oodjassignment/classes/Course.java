@@ -1,10 +1,14 @@
+<<<<<<< HEAD:src/main/java/com/mycompany/oodjassignment/Function/Course.java
 package com.mycompany.oodjassignment.Function;
+=======
+package com.mycompany.oodjassignment.classes;
+>>>>>>> f0501d1f92318e6ccab1728cf110065b6df30900:src/main/java/com/mycompany/oodjassignment/classes/Course.java
 
 public class Course {
     private String courseID, courseName, semester, instructor;
     private int examWeight, assignmentWeight;
 
-    // -------------- Getters ( to retrieve private attributes ) -------------
+    // getters
     public String getCourseID() {
         return courseID;
     }
@@ -29,7 +33,7 @@ public class Course {
         return assignmentWeight;
     }
 
-    // ------------ Setters ( set new ) -----------------
+    // setters
     public void setCourseID(String courseID) {
         this.courseID = courseID;
     }
@@ -38,22 +42,7 @@ public class Course {
         this.courseName = courseName;
     }
 
-    public void setSemester(String semester) {
-        this.semester = semester;
-    }
-
-    public void setInstructor(String instructor) {
-        this.instructor = instructor;
-    }
-
-    public void setExamWeight(int examWeight) {
-        this.examWeight = examWeight;
-    }
-
-    public void setAssignmentWeight(int assignmentWeight) {
-        this.assignmentWeight = assignmentWeight;
-    }
-
+    // constructors
     public Course(String courseID, String courseName, String semester, String instructor, int examWeight, int assignmentWeight) {
         this.courseID = courseID;
         this.courseName = courseName;
@@ -62,6 +51,4 @@ public class Course {
         this.examWeight = examWeight;
         this.assignmentWeight = assignmentWeight;
     }
-    
-    
 }
