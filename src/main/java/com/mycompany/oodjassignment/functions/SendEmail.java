@@ -11,7 +11,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 public class SendEmail {
-    public static void Main(String[] args) {
+    public static void Main(String[]args) {
         // Sender’s Gmail credentials
         final String senderEmail = "markyisnice@gmail.com";
         final String senderPassword = "dbyv ofcy vzia hngt"; // use app password!
@@ -42,8 +42,8 @@ public class SendEmail {
                     InternetAddress.parse(recipientEmail)
             );
 
-            message.setSubject("Inforamtion regarding the notification");
-            message.setText("this is the trsting");
+            message.setSubject("Information regarding the notification");
+            message.setText("this is the testing");
 
             // Send the message
             Transport.send(message);

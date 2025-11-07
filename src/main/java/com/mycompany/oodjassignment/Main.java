@@ -20,9 +20,6 @@ public class Main {
                     CourseAdmin courseAdmin1 = new CourseAdmin();
                     System.out.println("The role of Admin 1 is " + courseAdmin1.getRole());
                     System.out.println("File operations testing below:");
-                    FileHandler test = new FileHandler();
-                    test.readFile("testing.txt");
-
                     break;
                 case 2:
                     System.out.println("Welcome to Password Recovery. Please enter your email.");
