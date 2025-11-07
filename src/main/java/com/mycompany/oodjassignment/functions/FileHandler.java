@@ -24,6 +24,6 @@ public class FileHandler {
     }
 
     public void parseFile(String filename) {
-        
+
     }
 }
