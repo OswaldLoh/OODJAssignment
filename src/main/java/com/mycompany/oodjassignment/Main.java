@@ -1,6 +1,8 @@
 package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
 import com.mycompany.oodjassignment.functions.*;
+
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -20,6 +22,15 @@ public class Main {
                     CourseAdmin courseAdmin1 = new CourseAdmin();
                     System.out.println("The role of Admin 1 is " + courseAdmin1.getRole());
                     System.out.println("File operations testing below:");
+
+                    try (BufferedReader BR = new BufferedReader(new FileReader("testing.txt"))) {
+                        String line;
+                        while ((line = BR.readLine()) != null) {
+                            System.out.println(line);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case 2:
                     System.out.println("Welcome to Password Recovery. Please enter your email.");
