@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment;
+package com.mycompany.oodjassignment.Function;
 
 public class User {
     private String studentID, firstName, lastName, Major, Year, Email;

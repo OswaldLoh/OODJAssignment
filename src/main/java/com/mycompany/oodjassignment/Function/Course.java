@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment;
+package com.mycompany.oodjassignment.Function;
 
 public class Course {
     private String courseID, courseName, semester, instructor;
