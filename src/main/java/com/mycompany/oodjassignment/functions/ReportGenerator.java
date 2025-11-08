@@ -4,11 +4,13 @@ public class ReportGenerator {
     private String reportID;
     private String filePath;
 
+    // constructor
     public ReportGenerator(String reportID, String filePath) {
         this.reportID = reportID;
         this.filePath = filePath;
     }
 
+    // getter and setter
     public String getReportID() {
         return reportID;
     }
@@ -25,6 +27,7 @@ public class ReportGenerator {
         this.filePath = filePath;
     }
 
+    // method
     public void displayReport(){
         
     }
@@ -32,4 +35,6 @@ public class ReportGenerator {
     public void generateReport(){
 
     }
+
+
 }
