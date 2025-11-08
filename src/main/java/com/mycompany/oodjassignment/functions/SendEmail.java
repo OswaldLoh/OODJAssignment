@@ -108,7 +108,7 @@ public class SendEmail {
             multipart.addBodyPart(messageBodyPart1);     
             multipart.addBodyPart(messageBodyPart2);      
 
-            //Set the multiplart object to the message object    
+            //Set the multipart object to the message object
             message.setContent(multipart );        
 
             //Send message    
