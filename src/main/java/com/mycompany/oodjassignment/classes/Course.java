@@ -1,8 +1,4 @@
-<<<<<<< HEAD:src/main/java/com/mycompany/oodjassignment/Function/Course.java
-package com.mycompany.oodjassignment.Function;
-=======
 package com.mycompany.oodjassignment.classes;
->>>>>>> f0501d1f92318e6ccab1728cf110065b6df30900:src/main/java/com/mycompany/oodjassignment/classes/Course.java
 
 public class Course {
     private String courseID, courseName, semester, instructor;
