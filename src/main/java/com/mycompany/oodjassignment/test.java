@@ -1,8 +1,16 @@
 package com.mycompany.oodjassignment;
 
-public class test {
-    public static void main(String[] args) {
+import com.mycompany.oodjassignment.functions.SendEmail;
 
+
+public class Test {
+    public static void testSendEmail(){       
+        SendEmail sendEmail = new SendEmail();
+        sendEmail.Pdf("test", "test");
+        
+    }
+    public static void main(String[] args) {
+        testSendEmail();
     }
     
 }
