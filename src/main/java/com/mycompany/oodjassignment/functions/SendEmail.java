@@ -19,9 +19,28 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendEmail {
 
-    private String senderEmail = "markyisnice@gmail.com";
-    private String senderPassword = "dbyv ofcy vzia hngt";
-    private String recipientEmail = "TP078141@mail.apu.edu.my";;
+    private final String senderEmail = "markyisnice@gmail.com";
+    private final String senderPassword = "dbyv ofcy vzia hngt";
+    private String recipientEmail = "TP078141@mail.apu.edu.my";
+    private String fileLocation;
+
+
+    // getter and setter
+    public String getRecipientEmail() {
+        return recipientEmail;
+    }
+
+    public void setRecipientEmail(String recipientEmail) {
+        this.recipientEmail = recipientEmail;
+    }
+
+    public String getFileLocation() {
+        return fileLocation;
+    }
+
+    public void setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
+    }
 
 
     // method
@@ -65,7 +84,7 @@ public class SendEmail {
 
     }
 
-    public void Pdf(String subject,String content){
+    public void Pdf(String subject,String content,String fileLocation){
         // SMTP server settings for Gmail
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -89,6 +108,7 @@ public class SendEmail {
                     InternetAddress.parse(recipientEmail)
             );
 
+            // Subject for the email
             message.setSubject(subject);
             message.setText(content);
 
@@ -98,10 +118,9 @@ public class SendEmail {
 
             //Create new MimeBodyPart object and set DataHandler object to this object        
             MimeBodyPart messageBodyPart2 = new MimeBodyPart();      
-            String filename = "testing.txt";//change accordingly     
-            DataSource source = new FileDataSource(filename);    
+            DataSource source = new FileDataSource(fileLocation);    
             messageBodyPart2.setDataHandler(new DataHandler(source));    
-            messageBodyPart2.setFileName(filename);             
+            messageBodyPart2.setFileName(fileLocation);             
 
             //Create Multipart object and add MimeBodyPart objects to this object        
             Multipart multipart = new MimeMultipart();    
@@ -125,6 +144,7 @@ public class SendEmail {
         }
 
     }
+
 
 }
 
