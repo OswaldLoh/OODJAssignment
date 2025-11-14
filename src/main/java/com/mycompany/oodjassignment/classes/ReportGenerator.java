@@ -1,6 +1,7 @@
-package com.mycompany.oodjassignment.functions;
+package com.mycompany.oodjassignment.classes;
 
 public class ReportGenerator {
+    
     private String reportID;
     private String filePath;
 

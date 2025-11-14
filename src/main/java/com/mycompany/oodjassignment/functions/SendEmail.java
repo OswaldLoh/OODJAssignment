@@ -19,11 +19,15 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendEmail {
 
-    private final String senderEmail = "markyisnice@gmail.com";
-    private final String senderPassword = "dbyv ofcy vzia hngt";
-    private String recipientEmail = "TP078141@mail.apu.edu.my";
+    private final String senderEmail = "markyisnice@gmail.com"; // the app password only can be generated when email is quite old
+    private final String senderPassword = "dbyv ofcy vzia hngt"; // this is the app password for gmail ( app pass dif with gmail pass )
+    private String recipientEmail;
     private String fileLocation;
 
+    // constructor
+    public SendEmail(String recipientEmail) {
+        this.recipientEmail = recipientEmail;
+    }
 
     // getter and setter
     public String getRecipientEmail() {
@@ -85,6 +89,7 @@ public class SendEmail {
     }
 
     public void Pdf(String subject,String content,String fileLocation){
+        
         // SMTP server settings for Gmail
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
@@ -110,7 +115,6 @@ public class SendEmail {
 
             // Subject for the email
             message.setSubject(subject);
-            message.setText(content);
 
             //Create MimeBodyPart object and set your message text        
             BodyPart messageBodyPart1 = new MimeBodyPart();     
