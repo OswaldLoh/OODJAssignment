@@ -2,7 +2,6 @@ package com.mycompany.oodjassignment.functions;
 import com.mycompany.oodjassignment.classes.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("CallToPrintStackTrace")
 
@@ -15,10 +14,11 @@ public class FileHandler {
         }
     }
 
-    public ArrayList<Student> parseFile(String filename){          // completed, method for reading text file
+    public ArrayList<Student> parseStudents(String filename){          // completed, method for reading text file
         ArrayList<Student> students = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(filename))) {
             String line;
+            fileReader.readLine();
             while ((line=fileReader.readLine()) != null) {
                 String[] studentDetails = line.split(",");
                 students.add(new Student(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[4]));
@@ -28,4 +28,22 @@ public class FileHandler {
         }
         return students;
     }
+
+    public ArrayList<RecoveryPlan> parseRecoveryPlan(String filename) {
+        ArrayList<RecoveryPlan> recoveryPlans = new ArrayList<>();
+
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            fileReader.readLine();
+            while ((line=fileReader.readLine()) != null) {
+                String[] recoveryPlanDetails = line.split(",");
+                recoveryPlans.add(new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2],recoveryPlanDetails[3]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return recoveryPlans;
+    }
+
+
 }

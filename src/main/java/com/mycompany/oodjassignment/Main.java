@@ -1,14 +1,13 @@
 package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
 import com.mycompany.oodjassignment.functions.*;
-import java.util.ArrayList;
-import java.io.*;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         FileHandler handler = new FileHandler();
-        handler.parseFile("student_information.csv");
+        handler.parseStudents("student_information.csv");
         Scanner input = new Scanner(System.in);
         int selection = -1;
         System.out.println("Welcome to University Management System!");
