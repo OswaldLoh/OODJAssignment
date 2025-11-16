@@ -4,18 +4,31 @@ import com.mycompany.oodjassignment.functions.FileHandler;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class AcademicOfficer extends User implements RecoveryPlanManager {
+public class AcademicOfficer extends User {
     public AcademicOfficer() {
         setRole("Academic Officer");
     }
 
-    @Override
-    public ArrayList<RecoveryPlan> addRecoveryPlan(ArrayList<RecoveryPlan> recPlans, String UserID) {
+    public ArrayList<RecoveryPlan> addRecoveryPlan(ArrayList<RecoveryPlan> recPlans, ArrayList<Student> studentList, String UserID) {
+        boolean studentFound = false;
         Scanner userInput = new Scanner(System.in);
-        System.out.print("Please enter student ID: ");
-        for (RecoveryPlan plan : recPlans) {
-            System.out.println(plan.getPlanID());
-        }
+        do {
+            System.out.print("Please enter student ID: ");
+            String targetStudentID = userInput.nextLine();
+            for (Student student : studentList) {
+                if ((student.getStudentID()).equals(targetStudentID)) {
+                    System.out.println("Student ID found.");
+                    studentFound = true;
+                    break;
+                }
+            }
+            if (!studentFound) {
+                System.out.println("Student ID: " + targetStudentID + " is not found in the database records. Please try again.");
+                System.out.println();
+            }
+        } while (!studentFound);
+        System.out.println("Just a flag for logic testing");
+
         return recPlans;
     }
 

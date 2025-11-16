@@ -10,7 +10,7 @@ public class User {
     private String password;
     private String role;
 
-    User() {                // no arg constructor
+    public User() {                // no arg constructor
         System.out.println("A user is created!");
     }
 
@@ -52,9 +52,5 @@ public class User {
     public void showMenu() {
         System.out.println("General Menu");
     }
-
-    public ArrayList<RecoveryPlan> addRecoveryPlan(ArrayList<RecoveryPlan> recPlans, String UserID) {
-        return recPlans;
-    };
 }
 

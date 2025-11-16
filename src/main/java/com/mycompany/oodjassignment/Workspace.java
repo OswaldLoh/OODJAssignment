@@ -8,19 +8,21 @@ import java.io.*;
 public class Workspace {
     public static void main(String[]args) {
         // creating utility objects
-        User testUser = new AcademicOfficer();
+        AcademicOfficer testUser = new AcademicOfficer();
+        testUser.setUserID("A01");
         FileHandler fileHandler = new FileHandler();
         Scanner userInput = new Scanner(System.in);
 
         // parsing required objects / files
         ArrayList<RecoveryPlan> recPlans = fileHandler.parseRecoveryPlan();
+        ArrayList<Student> studentList = fileHandler.parseStudents();
 
         testUser.showMenu();
         int selection = userInput.nextInt();
 
         switch (selection) {
             case 1:
-                testUser.addRecoveryPlan(recPlans, testUser.getUserID()));
+                testUser.addRecoveryPlan(recPlans, studentList, testUser.getUserID());
         }
     }
 }

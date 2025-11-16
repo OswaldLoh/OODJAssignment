@@ -12,7 +12,7 @@ public class FileHandlingTest {
         Scanner input = new Scanner(System.in);
         // Parsing csv files into Student objects
         FileHandler handler = new FileHandler();
-        studentList = handler.parseStudents("student_information.csv");
+        studentList = handler.parseStudents();
         ArrayList<RecoveryPlan> recPlans = new ArrayList<>();
 
         // Testing terminal

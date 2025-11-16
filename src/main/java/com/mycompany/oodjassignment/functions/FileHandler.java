@@ -14,9 +14,9 @@ public class FileHandler {
         }
     }
     // student file handling
-    public ArrayList<Student> parseStudents(String filename){          // completed, method for reading text file
+    public ArrayList<Student> parseStudents(){          // completed, method for reading text file
         ArrayList<Student> students = new ArrayList<>();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader("student_information.csv"))) {
             String line;
             fileReader.readLine();
             while ((line=fileReader.readLine()) != null) {
