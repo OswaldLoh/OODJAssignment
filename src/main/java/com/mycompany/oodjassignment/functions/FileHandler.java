@@ -13,7 +13,7 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-
+    // student file handling
     public ArrayList<Student> parseStudents(String filename){          // completed, method for reading text file
         ArrayList<Student> students = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(filename))) {
@@ -29,10 +29,11 @@ public class FileHandler {
         return students;
     }
 
-    public ArrayList<RecoveryPlan> parseRecoveryPlan(String filename) {
+    // Recovery Plans
+    public ArrayList<RecoveryPlan> parseRecoveryPlan() {     // parse data from text file into RecoveryPlan objects in ArrayList
         ArrayList<RecoveryPlan> recoveryPlans = new ArrayList<>();
 
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader("recovery_plans.csv"))) {
             String line;
             fileReader.readLine();
             while ((line=fileReader.readLine()) != null) {
@@ -45,5 +46,14 @@ public class FileHandler {
         return recoveryPlans;
     }
 
-
+    public void writeRecoveryPlanCSV(ArrayList<RecoveryPlan> recoveryPlans) {   // write RecoveryPlan objects into text file in CSV format
+        try (PrintWriter fileWriter = new PrintWriter(new FileWriter("recovery_plans.csv"))) {
+            fileWriter.println("planID,studentID,createdBy,progress");
+            for (RecoveryPlan Plan : recoveryPlans) {
+                fileWriter.println(Plan.getPlanID()+","+Plan.getStudentID()+","+Plan.getCreatedBy()+","+Plan.getProgress());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

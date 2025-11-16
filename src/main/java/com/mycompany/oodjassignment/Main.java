@@ -73,7 +73,6 @@ public class Main {
                     System.out.println("Entered Eligibility Check.");
                     break;
                 case 2:
-                    AcademicOfficer.createRecoveryPlan(input);
                     break;
                 case 3:
                     break;

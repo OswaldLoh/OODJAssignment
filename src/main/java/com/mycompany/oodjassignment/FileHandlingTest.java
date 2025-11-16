@@ -21,6 +21,7 @@ public class FileHandlingTest {
         System.out.println("1. Using StudentID to find Student Name (read+.equals)");
         System.out.println("2. Writing Recovery Plan objects into csv file");
         System.out.println("3. Find Student ID in student array list and create recovery plan if it exists");
+        System.out.println("4. Latest testing");
         System.out.print(">>>   ");
         int selection = input.nextInt();
         switch (selection) {
@@ -38,29 +39,9 @@ public class FileHandlingTest {
                     e.printStackTrace();
                 }
             case 3:
-                RecoveryPlan rec1 = new RecoveryPlan("P1", "Oswald", "Rich", "45.6");
-                RecoveryPlan rec2 = new RecoveryPlan("P1", "Oswald", "Rich", "45.6");
-                recPlans.add(rec1);
-                recPlans.add(rec2);
-
-                input.nextLine();
-                System.out.printf("Please enter student ID of student to create recovery plan:");
-                String targetStudentID = input.nextLine();
-                int nextPlanID = recPlans.size() + 1;
-                for (Student student : studentList) {
-                    if ((student.getStudentID()).equals(targetStudentID)) {
-                        recPlans.add(new RecoveryPlan("P" + nextPlanID, student.getStudentID(), "Oswald", "50"));
-                    }
-                }
-
-                try (PrintWriter printWriter = new PrintWriter(new FileWriter("recovery_plans.csv"))) {
-                    printWriter.println("planID,studentID,createdBy,progress");
-                    for (RecoveryPlan plan : recPlans) {
-                        printWriter.println(plan.getPlanID() + "," + plan.getStudentID() + "," + plan.getCreatedBy() + "," + plan.getProgress());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                recPlans = handler.parseRecoveryPlan();
+                recPlans.add(new RecoveryPlan("test","wdwd","wdwd","47.5"));
+                handler.writeRecoveryPlanCSV(recPlans);
             }
         }
 

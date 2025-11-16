@@ -38,4 +38,5 @@ public class RecoveryPlan {
     public void setProgress(double progress) {
         this.progress = progress;
     }
+
 }
