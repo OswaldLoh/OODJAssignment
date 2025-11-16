@@ -1,10 +1,8 @@
 package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.*;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.List;
 
 public class AcademicOfficer extends User {
     public AcademicOfficer() {
