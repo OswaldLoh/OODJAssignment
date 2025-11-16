@@ -46,10 +46,10 @@ public class FileHandler {
         return recoveryPlans;
     }
 
-    public void writeRecoveryPlanCSV(ArrayList<RecoveryPlan> recoveryPlans) {   // write RecoveryPlan objects into text file in CSV format
+    public void writeRecoveryPlanCSV(ArrayList<RecoveryPlan> recPlans) {   // write RecoveryPlan objects into text file in CSV format
         try (PrintWriter fileWriter = new PrintWriter(new FileWriter("recovery_plans.csv"))) {
             fileWriter.println("planID,studentID,createdBy,progress");
-            for (RecoveryPlan Plan : recoveryPlans) {
+            for (RecoveryPlan Plan : recPlans) {
                 fileWriter.println(Plan.getPlanID()+","+Plan.getStudentID()+","+Plan.getCreatedBy()+","+Plan.getProgress());
             }
         } catch (IOException e) {

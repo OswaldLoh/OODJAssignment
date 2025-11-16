@@ -22,7 +22,13 @@ public class Workspace {
 
         switch (selection) {
             case 1:
-                testUser.addRecoveryPlan(recPlans, studentList, testUser.getUserID());
+                testUser.addRecoveryPlan(recPlans, studentList);
+                fileHandler.writeRecoveryPlanCSV(recPlans);
+                break;
+
+            case 2:
+                testUser.viewRecoveryPlans(recPlans);
+                break;
         }
     }
 }
