@@ -2,14 +2,19 @@ package com.mycompany.oodjassignment.classes;
 
 public class RecoveryTask {
     String taskID, description, planID;
-    int week;
+    int duration;
     boolean completion;
 
-    public RecoveryTask(String taskID, String planID, String description, int week) {
+    public RecoveryTask(String planID) {
+        this.planID = planID;
+        this.completion = false;
+    }; // parameterized constructor used during recPlan creation
+
+    public RecoveryTask(String taskID, String planID, String description, int duration) { // used for parsing possibly
         this.taskID = taskID;
         this.planID = planID;
         this.description = description;
-        this.week = week;
+        this.duration = duration;
         this.completion = false;
     }
 
@@ -21,17 +26,15 @@ public class RecoveryTask {
         this.completion = completion;
     }
 
-    public int getWeek() {
-        return week;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setWeek(int week) {
-        this.week = week;
+    public void setDuration(int duration) {
+        this.duration = this.duration;
     }
 
-    public String getPlanID() {
-        return planID;
-    }
+    public String getPlanID() { return planID; }
 
     public void setPlanID(String planID) {
         this.planID = planID;

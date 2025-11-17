@@ -1,5 +1,6 @@
 package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.FileHandler;
 
 import java.util.HashMap;

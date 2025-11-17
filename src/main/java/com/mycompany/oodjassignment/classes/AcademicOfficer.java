@@ -38,11 +38,13 @@ public class AcademicOfficer extends User {
                 System.out.println();
             }
         } while (!studentFound);
-        recPlanDB.put(nextPlanID,new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00"));
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
+        recPlanDB.put(nextPlanID,newPlan);
+        newPlan.addRecoveryTask();
         return recPlanDB;
     }
 
-    // view all recovery plans
+    // view all recovery plans ( will be changed to single search later on )
     public void viewRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB) {
         System.out.println("PlanID   StudentID   Created By   Progress");
         for (RecoveryPlan plan : recPlanDB.values()) {

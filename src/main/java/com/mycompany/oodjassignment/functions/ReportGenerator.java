@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.classes;
+package com.mycompany.oodjassignment.functions;
 
 public class ReportGenerator {
     

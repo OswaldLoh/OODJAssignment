@@ -1,4 +1,6 @@
-package com.mycompany.oodjassignment.classes;
+package com.mycompany.oodjassignment.functions;
+import com.mycompany.oodjassignment.classes.*;
+
 import java.util.HashMap;
 
 public class Database {
@@ -9,6 +11,6 @@ public class Database {
         this.recoveryPlans = new HashMap<>();
         this.studentMap = new HashMap<>();
     }
-    public HashMap<String, RecoveryPlan> getRecoveryPlanMap() { return recoveryPlans; }
     public HashMap<String, Student> getStudentMap() { return studentMap; }
+    public HashMap<String, RecoveryPlan> getRecoveryPlanMap() { return recoveryPlans; }
 }
