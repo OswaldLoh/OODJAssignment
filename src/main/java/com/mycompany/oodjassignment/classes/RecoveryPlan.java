@@ -8,7 +8,6 @@ public class RecoveryPlan {
     private double progress;
     ArrayList<RecoveryTask> recTasks = new ArrayList<>();
 
-    public RecoveryPlan() {};
     public RecoveryPlan(String planID, String studentID, String createdBy, String progress) {
         this.planID = planID;
         this.studentID = studentID;
