@@ -1,11 +1,11 @@
 package com.mycompany.oodjassignment.classes;
 import java.util.HashMap;
 
-public class HashMaps {
+public class Database {
     HashMap<String, RecoveryPlan> recoveryPlans;
     HashMap<String, Student> studentMap;
 
-    public HashMaps() {
+    public Database() {
         this.recoveryPlans = new HashMap<>();
         this.studentMap = new HashMap<>();
     }

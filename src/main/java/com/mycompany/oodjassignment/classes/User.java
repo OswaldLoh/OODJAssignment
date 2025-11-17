@@ -4,7 +4,7 @@ package com.mycompany.oodjassignment.classes;
 import java.util.ArrayList;
 
 public class User {
-    private String userID;
+    protected String userID;
     private String name;
     private String email;
     private String password;

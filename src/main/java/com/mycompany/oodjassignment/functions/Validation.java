@@ -1,20 +1,22 @@
 package com.mycompany.oodjassignment.functions;
 
 import com.mycompany.oodjassignment.classes.Student;
-
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.HashMap;
 
 public class Validation {
 
-    public boolean validateStudentID(String targetStudentID, ArrayList<Student> studentList) {
+    public boolean validateStudentID(String targetStudentID, HashMap<String, Student> studentDB) {
         boolean studentFound = false;
-        for (Student student : studentList) {
-            if ((student.getStudentID()).equals(targetStudentID)) {
-                System.out.println("Student ID found.");
-                studentFound = true;
-                break;
-            }
+        System.out.println("HI!!!!");
+        for (String ID : studentDB.keySet()){
+            System.out.println(ID);
+        }
+        System.out.println("HIII!");
+        if (studentDB.containsKey(targetStudentID)) {
+            System.out.println("Student is found inside the hash map.");
+            studentFound = true;
+        }   else {
+            System.out.println("Student is NOT FOUND.");
         }
         return studentFound;
     }

@@ -1,6 +1,8 @@
 package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.*;
 
+
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -10,58 +12,64 @@ public class AcademicOfficer extends User {
     }
 
     // adding new recovery plan after checking existence of user ID
-    public ArrayList<RecoveryPlan> addRecoveryPlan(ArrayList<RecoveryPlan> recPlans, ArrayList<Student> studentList) {
+    public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB) {
         Scanner userInput = new Scanner(System.in);
         Validation checkInput = new Validation();
         String targetStudentID;
         boolean studentFound;
+
         // calculating the next planID
-        String [] lastPlanID = recPlans.getLast().getPlanID().split("P");
-        int nextPlanID = Integer.parseInt(lastPlanID[1]) + 1;
+        int max = 0;
+        for (String key : recPlanDB.keySet()) {
+            int num = Integer.parseInt(key.substring(1)); // remove "P"
+            if (num > max) {
+                max = num;
+            }
+        }
+        String nextPlanID = "P" + (max+1);
 
         do {
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = checkInput.validateStudentID(targetStudentID,studentList);
+            studentFound = checkInput.validateStudentID(targetStudentID,studentDB);
 
             if (!studentFound) {
                 System.out.println("Student ID: " + targetStudentID + " is not found in the database records. Please try again.");
                 System.out.println();
             }
         } while (!studentFound);
-
-        recPlans.add(new RecoveryPlan("P"+nextPlanID,targetStudentID,this.getUserID(),"0.00"));
-        return recPlans;
+        recPlanDB.put(nextPlanID,new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00"));
+        return recPlanDB;
     }
 
     // view all recovery plans
-    public void viewRecoveryPlans(ArrayList<RecoveryPlan> recPlans) {
+    public void viewRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB) {
         System.out.println("PlanID   StudentID   Created By   Progress");
-        for (RecoveryPlan plan : recPlans) {
+        for (RecoveryPlan plan : recPlanDB.values()) {
             System.out.println(plan.getPlanID()+"   "+plan.getStudentID()+"   "+plan.getCreatedBy()+"   "+plan.getProgress());
         }
     }
 
     // delete recovery plan
-    public ArrayList<RecoveryPlan> deleteRecoveryPlans(ArrayList<RecoveryPlan> recPlans, ArrayList<Student> studentList) {
+    public HashMap<String, RecoveryPlan> deleteRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB) {
         Scanner userInput = new Scanner(System.in);
         Validation checkInput = new Validation();
         String targetStudentID;
-        boolean studentFound, planFound = false, planDelete = false;
+        boolean studentFound, planDelete = false;
         int planCount = 0, planSelection;
         ArrayList<String> studentPlanID = new ArrayList<>();
 
-        do {                // Finding if student exists in student database
+        do {                // Finding if student exists in student Database
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = checkInput.validateStudentID(targetStudentID,studentList);
+            studentFound = checkInput.validateStudentID(targetStudentID,studentDB);
             if (!studentFound) {
-                System.out.println("Student ID: " + targetStudentID + " is not found in the database records. Please try again.");
+                System.out.println("Student ID: " + targetStudentID + " is not found in the Database records. Please try again.");
                 System.out.println();
             }
         } while (!studentFound);
 
-        for (RecoveryPlan plan : recPlans) {        // Finding if student has recovery plans and add them into a list if yes
+        for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
             if ((targetStudentID).equals(plan.getStudentID())) {
                 planCount += 1;
                 studentPlanID.add(plan.getPlanID());
@@ -86,12 +94,12 @@ public class AcademicOfficer extends User {
                     System.out.println();
                 } else {
                     final int listIndex = planSelection - 1;
-                    recPlans.removeIf(plan -> plan.getPlanID().equals(studentPlanID.get(listIndex)));
+                    recPlanDB.remove(studentPlanID.get(listIndex));
                     planDelete = true;
                 }
             } while (!planDelete);
         }
-        return recPlans;
+        return recPlanDB;
     }
 
     @Override
@@ -101,6 +109,6 @@ public class AcademicOfficer extends User {
         System.out.println("1. Add Recovery Plan");
         System.out.println("2. View All Recovery Plans");
         System.out.println("3. Delete Recovery Plans");
-        System.out.print(">>>   ");
+        System.out.println("4. Exit");
     }
 }
