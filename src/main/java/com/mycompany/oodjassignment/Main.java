@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         FileHandler handler = new FileHandler();
-        handler.parseStudents();
+
         Scanner input = new Scanner(System.in);
         int selection = -1;
         System.out.println("Welcome to University Management System!");

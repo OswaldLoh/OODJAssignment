@@ -5,8 +5,10 @@ public class HashMaps {
     HashMap<String, RecoveryPlan> recoveryPlans;
     HashMap<String, Student> studentMap;
 
-    public HashMaps() {};
-
+    public HashMaps() {
+        this.recoveryPlans = new HashMap<>();
+        this.studentMap = new HashMap<>();
+    }
     public HashMap<String, RecoveryPlan> getRecoveryPlanMap() { return recoveryPlans; }
     public HashMap<String, Student> getStudentMap() { return studentMap; }
 }

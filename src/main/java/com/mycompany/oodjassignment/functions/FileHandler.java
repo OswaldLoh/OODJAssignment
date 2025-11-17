@@ -7,13 +7,6 @@ import java.util.HashMap;
 @SuppressWarnings("CallToPrintStackTrace")
 
 public class FileHandler {
-    public void appendFile(String filename, String contents) {          // completed, method for appending text file
-        try (PrintWriter fileInput = new PrintWriter(filename)) {
-            fileInput.append(contents);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     // Parse files into Hash Maps
     public HashMaps parseFiles() {
@@ -40,28 +33,7 @@ public class FileHandler {
         }
         return database;
     }
-
-
-
-
-
-    // Recovery Plans
-    public ArrayList<RecoveryPlan> parseRecoveryPlan() {     // parse data from text file into RecoveryPlan objects in ArrayList
-        ArrayList<RecoveryPlan> recoveryPlans = new ArrayList<>();
-
-        try (BufferedReader fileReader = new BufferedReader(new FileReader("recovery_plans.csv"))) {
-            String line;
-            fileReader.readLine();
-            while ((line=fileReader.readLine()) != null) {
-                String[] recoveryPlanDetails = line.split(",");
-                recoveryPlans.add(new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2], recoveryPlanDetails[3]));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    return recoveryPlans;
-    }
-
+    
     public void writeRecoveryPlanCSV(ArrayList<RecoveryPlan> recPlans) {   // write RecoveryPlan objects into text file in CSV format
         try (PrintWriter fileWriter = new PrintWriter(new FileWriter("recovery_plans.csv"))) {
             fileWriter.println("planID,studentID,createdBy,progress");

@@ -15,21 +15,20 @@ public class Workspace {
 
         // parsing required objects / files
         ArrayList<RecoveryPlan> recPlans = fileHandler.parseRecoveryPlan();
-        ArrayList<Student> studentList = fileHandler.parseStudents();
 
         testUser.showMenu();
         int selection = userInput.nextInt();
 
         switch (selection) {
             case 1:
-                testUser.addRecoveryPlan(recPlans, studentList);
+
                 fileHandler.writeRecoveryPlanCSV(recPlans);    // putting here for easier debug
                 break;
             case 2:
                 testUser.viewRecoveryPlans(recPlans);
                 break;
             case 3:
-                testUser.deleteRecoveryPlans(recPlans,studentList);
+
                 fileHandler.writeRecoveryPlanCSV(recPlans);   // putting here for easier debug
         }
         fileHandler.writeRecoveryPlanCSV(recPlans);
