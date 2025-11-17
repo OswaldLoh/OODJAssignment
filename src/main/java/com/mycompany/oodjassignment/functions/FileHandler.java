@@ -20,12 +20,19 @@ public class FileHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+        int highestPlanID = 0;
         try (BufferedReader fileReader = new BufferedReader(new FileReader("recovery_plans.csv"))) {
             String line;
             fileReader.readLine();
             while ((line = fileReader.readLine()) != null) {
                 String[] recoveryPlanDetails = line.split(",");
                 database.getRecoveryPlanMap().put(recoveryPlanDetails[0], new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2], recoveryPlanDetails[3]));
+                int PlanID = Integer.parseInt(recoveryPlanDetails[0].substring(1));
+                if (PlanID > highestPlanID) {
+                    highestPlanID = PlanID;
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
