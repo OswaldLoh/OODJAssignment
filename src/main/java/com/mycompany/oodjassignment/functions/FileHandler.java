@@ -38,12 +38,12 @@ public class FileHandler {
             fileReader.readLine();
             while ((line=fileReader.readLine()) != null) {
                 String[] recoveryPlanDetails = line.split(",");
-                recoveryPlans.add(new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2],recoveryPlanDetails[3]));
+                recoveryPlans.add(new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2], recoveryPlanDetails[3]));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return recoveryPlans;
+    return recoveryPlans;
     }
 
     public void writeRecoveryPlanCSV(ArrayList<RecoveryPlan> recPlans) {   // write RecoveryPlan objects into text file in CSV format
@@ -52,6 +52,14 @@ public class FileHandler {
             for (RecoveryPlan Plan : recPlans) {
                 fileWriter.println(Plan.getPlanID()+","+Plan.getStudentID()+","+Plan.getCreatedBy()+","+Plan.getProgress());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void writeRecoveryTaskCSV(ArrayList<RecoveryTask> recTasks) {
+        try (PrintWriter fileWriter = new PrintWriter(new FileWriter("recovery_tasks.csv"))) {
+            fileWriter.println("");
         } catch (IOException e) {
             e.printStackTrace();
         }

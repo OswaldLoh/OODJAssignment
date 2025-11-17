@@ -1,11 +1,14 @@
 package com.mycompany.oodjassignment.classes;
+import java.util.ArrayList;
 
 public class RecoveryPlan {
     private String planID;
     private String studentID;
     private String createdBy;
     private double progress;
+    ArrayList<RecoveryTask> recTasks = new ArrayList<>();
 
+    public RecoveryPlan() {};
     public RecoveryPlan(String planID, String studentID, String createdBy, String progress) {
         this.planID = planID;
         this.studentID = studentID;
@@ -39,4 +42,12 @@ public class RecoveryPlan {
         this.progress = progress;
     }
 
+    // methods
+    public void addRecoveryTask(RecoveryTask task) {
+        recTasks.add(task);
+    }
+
+    public ArrayList<RecoveryTask> getTasks() {
+        return recTasks;
+    }
 }
