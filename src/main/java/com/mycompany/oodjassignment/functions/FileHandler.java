@@ -22,6 +22,7 @@ public class FileHandler {
         ArrayList<Student> students = new ArrayList<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader("student_information.csv"))) {
             String line;
+            int hi;
             fileReader.readLine();
             while ((line=fileReader.readLine()) != null) {
                 String[] studentDetails = line.split(",");
