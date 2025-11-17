@@ -2,6 +2,7 @@ package com.mycompany.oodjassignment.functions;
 import com.mycompany.oodjassignment.classes.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @SuppressWarnings("CallToPrintStackTrace")
 
@@ -13,6 +14,9 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
+
+
+
     // student file handling
     public ArrayList<Student> parseStudents(){          // completed, method for reading text file
         ArrayList<Student> students = new ArrayList<>();
