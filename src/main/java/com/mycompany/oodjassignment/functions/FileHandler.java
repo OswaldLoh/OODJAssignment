@@ -14,7 +14,7 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-    
+
     // Parse files into Hash Maps
     public HashMaps parseFiles() {
         HashMaps database = new HashMaps();
