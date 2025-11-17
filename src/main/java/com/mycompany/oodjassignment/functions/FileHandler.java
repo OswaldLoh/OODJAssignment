@@ -14,25 +14,36 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-
-
-
-    // student file handling
-    public ArrayList<Student> parseStudents(){          // completed, method for reading text file
-        ArrayList<Student> students = new ArrayList<>();
+    
+    // Parse files into Hash Maps
+    public HashMaps parseFiles() {
+        HashMaps database = new HashMaps();
         try (BufferedReader fileReader = new BufferedReader(new FileReader("student_information.csv"))) {
             String line;
-            int hi;
             fileReader.readLine();
             while ((line=fileReader.readLine()) != null) {
-                String[] studentDetails = line.split(",");
-                students.add(new Student(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[4]));
+                String [] studentDetails = line.split(",");
+                database.getStudentMap().put(studentDetails[0],new Student(studentDetails[0],studentDetails[1],studentDetails[2],studentDetails[3],studentDetails[5]));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return students;
+        try (BufferedReader fileReader = new BufferedReader(new FileReader("recovery_plans.csv"))) {
+            String line;
+            fileReader.readLine();
+            while ((line=fileReader.readLine()) != null) {
+                String[] recoveryPlanDetails = line.split(",");
+                database.getRecoveryPlanMap().put(recoveryPlanDetails[0],new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2], recoveryPlanDetails[3]));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return database;
     }
+
+
+
+
 
     // Recovery Plans
     public ArrayList<RecoveryPlan> parseRecoveryPlan() {     // parse data from text file into RecoveryPlan objects in ArrayList
