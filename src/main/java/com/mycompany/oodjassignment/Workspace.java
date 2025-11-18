@@ -18,6 +18,7 @@ public class Workspace {
         Database database = fileHandler.parseFiles();
         HashMap<String, Student> studentDB = database.getStudentMap();
         HashMap<String, RecoveryPlan> recPlanDB = database.getRecoveryPlanMap();
+        HashMap<String, RecoveryTask> recTaskDB = database.getRecoveryTaskMap();
         // variables
         boolean repeat = false;
         do {
@@ -28,16 +29,21 @@ public class Workspace {
             switch (selection) {
                 case 1:
                     testUser.addRecoveryPlan(recPlanDB, studentDB);
-                    fileHandler.writeFiles(recPlanDB, studentDB);
+                    fileHandler.writeFiles(recPlanDB, recTaskDB);
                     break;
                 case 2:
                     testUser.viewRecoveryPlan(recPlanDB);
                     break;
                 case 3:
                     testUser.deleteRecoveryPlan(recPlanDB, studentDB);
-                    fileHandler.writeFiles(recPlanDB, studentDB);
+                    fileHandler.writeFiles(recPlanDB, recTaskDB);
                     break;
                 case 4:
+                    for (String key : recTaskDB.keySet()) {
+                        System.out.println(key);
+                    }
+                    break;
+                case 5:
                     System.out.println("Exiting program.");
                     repeat = false;
                     continue;
