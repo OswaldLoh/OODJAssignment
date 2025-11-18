@@ -37,9 +37,6 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
         final String MODULE = "Module";
         boolean validAnswer = true;
 
-        IDManager recTaskIDManager = new IDManager();
-        recTaskIDManager.getHighestTaskID(recTaskDB);
-
         RecoveryTask newTask = new RecoveryTask();
         Scanner userInput = new Scanner(System.in);
         System.out.println("Select Recovery Task to be Added:");
@@ -67,9 +64,13 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
                     validAnswer = false;
             }
         } while (!validAnswer);
-        newTask.setTaskID("T" + recTaskIDManager.generateNewID());
+
+        IDManager recTaskIDManager = new IDManager();
+        recTaskIDManager.getHighestTaskID(recTaskDB);
+        String nextTaskID = "T" + recTaskIDManager.generateNewID();
+        newTask.setTaskID(nextTaskID);
         newTask.setPlanID(this.planID);
-        recTaskDB.put(this.planID,newTask);
+        recTaskDB.put(nextTaskID,newTask);
         return recTaskDB;
     }
 

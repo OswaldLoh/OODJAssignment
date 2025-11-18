@@ -32,16 +32,12 @@ public class Workspace {
             switch (selection) {
                 case 1:
                     testUser.addRecoveryPlan(recPlanDB, studentDB, recTaskDB);
-                    FileHandler.writeCSV(RecoveryPlan, recPlanDB);
-                    FileHandler.writeCSV(RecoveryTask, recTaskDB);
                     break;
                 case 2:
                     testUser.viewRecoveryPlan(recPlanDB);
                     break;
                 case 3:
                     testUser.deleteRecoveryPlan(recPlanDB, studentDB);
-                    FileHandler.writeCSV(RecoveryPlan, recPlanDB);
-                    FileHandler.writeCSV(RecoveryTask, recTaskDB);
                     break;
                 case 4:
                     for (String key : recTaskDB.keySet()) {
@@ -61,5 +57,7 @@ public class Workspace {
             repeat = response.equals("Y");
 
         } while (repeat);
+        FileHandler.writeCSV(RecoveryPlan, recPlanDB);
+        FileHandler.writeCSV(RecoveryTask, recTaskDB);
     }
 }

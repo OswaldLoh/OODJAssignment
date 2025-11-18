@@ -6,7 +6,7 @@ public class IDManager {
     private int highestInt = 0;
 
     public int generateNewID() {
-        return highestInt++;
+        return highestInt+1;
     }
     public int getHighestTaskID(HashMap<String, ?> sourceHashMap) {
         for (String key : sourceHashMap.keySet()) {
