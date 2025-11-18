@@ -31,7 +31,7 @@ public class AcademicOfficer extends User {
         IDManager IDManager = new IDManager();
         IDManager.getHighestTaskID(recPlanDB);
         String nextPlanID = "P"+IDManager.generateNewID();
-        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,nextPlanID,userID,"0.00");
         recPlanDB.put(nextPlanID,newPlan);
         newPlan.addRecoveryTask(recTaskDB);
         return recPlanDB;
