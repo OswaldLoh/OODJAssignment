@@ -2,6 +2,7 @@ package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
 import com.mycompany.oodjassignment.functions.FileHandler;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -15,15 +16,20 @@ public class Workspace {
         Scanner userInput = new Scanner(System.in);
 
         // parsing data from csv files into hashmaps
+        Course Course = new Course();
         RecoveryPlan RecoveryPlan = new RecoveryPlan();
         RecoveryTask RecoveryTask = new RecoveryTask();
         Student Student = new Student();
+        Grades Grades = new Grades();
+        HashMap<String, Course> courseDB = FileHandler.readCSV(Course);
         HashMap<String, RecoveryPlan> recPlanDB = FileHandler.readCSV(RecoveryPlan);
         HashMap<String, RecoveryTask> recTaskDB = FileHandler.readCSV(RecoveryTask);
         HashMap<String, Student> studentDB = FileHandler.readCSV(Student);
+        HashMap<String, Grades> gradesDB = FileHandler.readCSV(Grades);
 
         // variables
         boolean repeat;
+
         do {
             testUser.showMenu();
             System.out.print(">>>   ");

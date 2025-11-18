@@ -73,6 +73,9 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
         recTaskDB.put(nextTaskID,newTask);
         return recTaskDB;
     }
+    public HashMap<String, RecoveryTask> deleteRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {
+        return recTaskDB;
+    }
 
     @Override
     public RecoveryPlan fromCSV(String line) {
