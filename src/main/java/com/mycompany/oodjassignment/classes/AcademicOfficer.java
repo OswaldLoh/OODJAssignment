@@ -10,11 +10,10 @@ public class AcademicOfficer extends User {
     public AcademicOfficer() {
         setRole("Academic Officer");
     }
-
     // adding new recovery plan after checking existence of user ID
     public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB, HashMap<String, RecoveryTask> recTaskDB) {
         Scanner userInput = new Scanner(System.in);
-        Validation checkInput = new Validation();
+        StudentManager checkInput = new StudentManager();
         String targetStudentID;
         boolean studentFound;
 
@@ -48,28 +47,22 @@ public class AcademicOfficer extends User {
     // delete recovery plan
     public HashMap<String, RecoveryPlan> deleteRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB) {
         Scanner userInput = new Scanner(System.in);
-        Validation checkInput = new Validation();
         String targetStudentID;
         boolean studentFound, planDelete = false;
-        int planCount = 0, planSelection;
-        ArrayList<String> studentPlanID = new ArrayList<>();
+        int planSelection;
 
         do {                // Finding if student exists in student Database
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = checkInput.validateStudentID(targetStudentID,studentDB);
+            studentFound = StudentManager.validateStudentID(targetStudentID,studentDB);
             if (!studentFound) {
                 System.out.println("Student ID: " + targetStudentID + " is not found in the Database records. Please try again.");
                 System.out.println();
             }
         } while (!studentFound);
 
-        for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
-            if ((targetStudentID).equals(plan.getStudentID())) {
-                planCount += 1;
-                studentPlanID.add(plan.getPlanID());
-            }
-        }
+        ArrayList<String> studentPlanID = StudentManager.validateStudentRecoveryPlan(targetStudentID,recPlanDB);
+        int planCount = StudentManager.getRecoveryPlanCount(targetStudentID, recPlanDB);
 
         if (planCount == 0) {               // no recovery plan is found for student
             System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
@@ -96,7 +89,11 @@ public class AcademicOfficer extends User {
         }
         return recPlanDB;
     }
+    public ArrayList<String> getFailedStudents(HashMap<String,Student> studentDB, HashMap<String,Grades> gradeDB, HashMap<String, Course> courseDB) {
+        ArrayList<String> failedStudentsList = new ArrayList<>();
 
+        return failedStudentsList;
+    }
     @Override
     public void showMenu() {
         System.out.println("Logged in as " + this.getRole() + " with user ID: " + this.getUserID());
