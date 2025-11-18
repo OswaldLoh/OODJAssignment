@@ -1,6 +1,5 @@
 package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
-import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.FileHandler;
 
 import java.util.HashMap;
@@ -11,14 +10,20 @@ public class Workspace {
         // dummy login
         AcademicOfficer testUser = new AcademicOfficer();
         testUser.setUserID("A01");
+
         // creating utility objects
         FileHandler fileHandler = new FileHandler();
         Scanner userInput = new Scanner(System.in);
-        // hash maps
-        Database database = fileHandler.parseFiles();
-        HashMap<String, Student> studentDB = database.getStudentMap();
-        HashMap<String, RecoveryPlan> recPlanDB = database.getRecoveryPlanMap();
-        HashMap<String, RecoveryTask> recTaskDB = database.getRecoveryTaskMap();
+
+        // parsing hash maps
+        RecoveryPlan RecoveryPlan = new RecoveryPlan();
+        HashMap<String, RecoveryPlan> recPlanDB = FileHandler.loadCSV("recovery_plans.csv",RecoveryPlan);
+        RecoveryTask RecoveryTask = new RecoveryTask();
+        HashMap<String, RecoveryTask> recTaskDB = FileHandler.loadCSV("recovery_tasks.csv", RecoveryTask);
+        Student Student = new Student();
+        HashMap<String, Student> studentDB = FileHandler.loadCSV("student_information.csv",Student);
+
+
         // variables
         boolean repeat = false;
         do {

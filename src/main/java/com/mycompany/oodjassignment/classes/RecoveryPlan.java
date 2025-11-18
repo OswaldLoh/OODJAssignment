@@ -1,18 +1,18 @@
 package com.mycompany.oodjassignment.classes;
+import com.mycompany.oodjassignment.functions.CSVParser;
 import com.mycompany.oodjassignment.functions.IDManager;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class RecoveryPlan {
+public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     private String planID;
     private String studentID;
     private String createdBy;
     private double progress;
     private ArrayList<RecoveryTask> recTasks;
-    private final String ASSIGNMENT = "Assignment";
-    private final String EXAM = "Exam";
-    private final String MODULE = "Module";
+
+    public RecoveryPlan() {};
 
     public RecoveryPlan(String planID, String studentID, String createdBy, String progress) {
         this.planID = planID;
@@ -34,8 +34,13 @@ public class RecoveryPlan {
     public void setProgress(double progress) { this.progress = progress;}
 
     // methods
+
     public void addRecoveryTask() {
+        final String ASSIGNMENT = "Assignment";
+        final String EXAM = "Exam";
+        final String MODULE = "Module";
         boolean validAnswer = true;
+
         IDManager recTaskIDManager = new IDManager();
         RecoveryTask newTask = new RecoveryTask(this.getPlanID(),"T"+recTaskIDManager.generateNewID());
         Scanner userInput = new Scanner(System.in);
@@ -65,7 +70,11 @@ public class RecoveryPlan {
             }
         } while (!validAnswer);
         recTasks.add(newTask);
-
+    }
+    @Override
+    public RecoveryPlan fromCSV(String line) {
+        String[] details = line.split(",");
+        return new RecoveryPlan(details[0],details[1],details[2],details[3]);
     }
 }
 
