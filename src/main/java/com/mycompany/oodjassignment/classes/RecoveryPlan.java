@@ -1,48 +1,46 @@
 package com.mycompany.oodjassignment.classes;
-import com.mycompany.oodjassignment.functions.CSVParser;
-import com.mycompany.oodjassignment.functions.IDManager;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import com.mycompany.oodjassignment.functions.*;
+import java.util.*;
 
 public class RecoveryPlan implements CSVParser<RecoveryPlan> {
-    private String planID;
-    private String studentID;
-    private String createdBy;
+    private String planID, studentID, createdBy;
     private double progress;
-    private ArrayList<RecoveryTask> recTasks;
+    private static final String filename = "recovery_plans.csv";
 
-    public RecoveryPlan() {};
+    // constructors
+    public RecoveryPlan() {}
 
     public RecoveryPlan(String planID, String studentID, String createdBy, String progress) {
         this.planID = planID;
         this.studentID = studentID;
         this.createdBy = createdBy;
         this.progress = Double.parseDouble(progress);
-        this.recTasks = new ArrayList<>();
     }
-    //getters
-    public String getPlanID() {return planID;}
-    public String getStudentID() {return studentID;}
-    public String getCreatedBy() {return createdBy;}
-    public double getProgress() {return progress;}
 
-    //setters
-    public void setPlanID(String planID) { this.planID = planID;}
-    public void setStudentID(String studentID) { this.studentID = studentID;}
-    public void setCreatedBy(String createdBy) { this.createdBy = createdBy;}
-    public void setProgress(double progress) { this.progress = progress;}
+    // getters
+    public String getPlanID() { return planID; }
+    public String getStudentID() { return studentID; }
+    public String getCreatedBy() { return createdBy; }
+    public double getProgress() { return progress; }
+
+    // setters
+    public void setPlanID(String planID) { this.planID = planID; }
+    public void setStudentID(String studentID) { this.studentID = studentID; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
+    public void setProgress(double progress) { this.progress = progress; }
 
     // methods
-
-    public void addRecoveryTask() {
+    public HashMap<String, RecoveryTask> addRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {
         final String ASSIGNMENT = "Assignment";
         final String EXAM = "Exam";
         final String MODULE = "Module";
         boolean validAnswer = true;
 
         IDManager recTaskIDManager = new IDManager();
-        RecoveryTask newTask = new RecoveryTask(this.getPlanID(),"T"+recTaskIDManager.generateNewID());
+        recTaskIDManager.getHighestTaskID(recTaskDB);
+
+        RecoveryTask newTask = new RecoveryTask();
         Scanner userInput = new Scanner(System.in);
         System.out.println("Select Recovery Task to be Added:");
         System.out.println("1. Assignment");
@@ -69,12 +67,28 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
                     validAnswer = false;
             }
         } while (!validAnswer);
-        recTasks.add(newTask);
+        newTask.setTaskID("T" + recTaskIDManager.generateNewID());
+        newTask.setPlanID(this.planID);
+        recTaskDB.put(this.planID,newTask);
+        return recTaskDB;
     }
+
     @Override
     public RecoveryPlan fromCSV(String line) {
         String[] details = line.split(",");
         return new RecoveryPlan(details[0],details[1],details[2],details[3]);
+    }
+    @Override
+        public String toCSV() {
+        return (planID+","+studentID+","+createdBy+","+progress);
+    }
+    @Override
+        public String getFileHeader() {
+        return "planID,studentId,createdBy,progress";
+    }
+    @Override
+        public String getFilename() {
+        return filename;
     }
 }
 

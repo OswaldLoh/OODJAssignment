@@ -12,21 +12,11 @@ public class AcademicOfficer extends User {
     }
 
     // adding new recovery plan after checking existence of user ID
-    public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB) {
+    public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB, HashMap<String, RecoveryTask> recTaskDB) {
         Scanner userInput = new Scanner(System.in);
         Validation checkInput = new Validation();
         String targetStudentID;
         boolean studentFound;
-
-        // calculating the next planID
-        int max = 0;
-        for (String key : recPlanDB.keySet()) {
-            int num = Integer.parseInt(key.substring(1)); // remove "P"
-            if (num > max) {
-                max = num;
-            }
-        }
-        String nextPlanID = "P" + (max+1);
 
         do {
             System.out.print("Please enter student ID: ");
@@ -38,9 +28,12 @@ public class AcademicOfficer extends User {
                 System.out.println();
             }
         } while (!studentFound);
+        IDManager IDManager = new IDManager();
+        IDManager.getHighestTaskID(recPlanDB);
+        String nextPlanID = "P"+IDManager.generateNewID();
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
         recPlanDB.put(nextPlanID,newPlan);
-        newPlan.addRecoveryTask();
+        newPlan.addRecoveryTask(recTaskDB);
         return recPlanDB;
     }
 

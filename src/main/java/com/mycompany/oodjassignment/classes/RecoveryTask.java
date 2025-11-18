@@ -5,6 +5,7 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     private String taskID, description, planID;
     private int duration;
     private boolean completion;
+    private static final String filename = "recovery_tasks.csv";
 
     public RecoveryTask() {
     }; // No arg constructor used to retrieve fromCSV method for object parsing
@@ -35,6 +36,8 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     }
 
     // setters
+    public void setPlanID (String planID) { this.planID = planID; }
+    public void setTaskID(String taskID) { this.taskID = taskID; }
     public void setCompletion(boolean completion) {
         this.completion = completion;
     }
@@ -52,5 +55,17 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
         int duration = Integer.parseInt(details[3]);
         boolean completion = Boolean.parseBoolean(details[4]);
         return new RecoveryTask(details[0],details[1],details[2],duration,completion);
+    }
+    @Override
+    public String toCSV() {
+        return (taskID+","+planID+","+description+","+duration+","+completion);
+    }
+    @Override
+    public String getFileHeader() {
+        return "taskID,planID,description,duration,completion";
+    }
+    @Override
+    public String getFilename() {
+        return filename;
     }
 }

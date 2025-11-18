@@ -8,9 +8,8 @@ public class IDManager {
     public int generateNewID() {
         return highestInt++;
     }
-
-    public int getHighestTaskID(HashMap<String, ?> Dataset) {
-        for (String key : Dataset.keySet()) {
+    public int getHighestTaskID(HashMap<String, ?> sourceHashMap) {
+        for (String key : sourceHashMap.keySet()) {
             int num = Integer.parseInt(key.substring(1));
             if (num > highestInt) {
                 highestInt = num;

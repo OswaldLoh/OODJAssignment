@@ -12,20 +12,18 @@ public class Workspace {
         testUser.setUserID("A01");
 
         // creating utility objects
-        FileHandler fileHandler = new FileHandler();
         Scanner userInput = new Scanner(System.in);
 
-        // parsing hash maps
+        // parsing data from csv files into hashmaps
         RecoveryPlan RecoveryPlan = new RecoveryPlan();
-        HashMap<String, RecoveryPlan> recPlanDB = FileHandler.loadCSV("recovery_plans.csv",RecoveryPlan);
         RecoveryTask RecoveryTask = new RecoveryTask();
-        HashMap<String, RecoveryTask> recTaskDB = FileHandler.loadCSV("recovery_tasks.csv", RecoveryTask);
         Student Student = new Student();
-        HashMap<String, Student> studentDB = FileHandler.loadCSV("student_information.csv",Student);
-
+        HashMap<String, RecoveryPlan> recPlanDB = FileHandler.readCSV(RecoveryPlan);
+        HashMap<String, RecoveryTask> recTaskDB = FileHandler.readCSV(RecoveryTask);
+        HashMap<String, Student> studentDB = FileHandler.readCSV(Student);
 
         // variables
-        boolean repeat = false;
+        boolean repeat;
         do {
             testUser.showMenu();
             System.out.print(">>>   ");
@@ -33,15 +31,17 @@ public class Workspace {
             userInput.nextLine();
             switch (selection) {
                 case 1:
-                    testUser.addRecoveryPlan(recPlanDB, studentDB);
-                    fileHandler.writeFiles(recPlanDB, recTaskDB);
+                    testUser.addRecoveryPlan(recPlanDB, studentDB, recTaskDB);
+                    FileHandler.writeCSV(RecoveryPlan, recPlanDB);
+                    FileHandler.writeCSV(RecoveryTask, recTaskDB);
                     break;
                 case 2:
                     testUser.viewRecoveryPlan(recPlanDB);
                     break;
                 case 3:
                     testUser.deleteRecoveryPlan(recPlanDB, studentDB);
-                    fileHandler.writeFiles(recPlanDB, recTaskDB);
+                    FileHandler.writeCSV(RecoveryPlan, recPlanDB);
+                    FileHandler.writeCSV(RecoveryTask, recTaskDB);
                     break;
                 case 4:
                     for (String key : recTaskDB.keySet()) {

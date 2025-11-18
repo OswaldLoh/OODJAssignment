@@ -6,10 +6,11 @@ import java.util.HashMap;
 @SuppressWarnings("CallToPrintStackTrace")
 
 public class FileHandler {
-    // Parse files into Hash Maps
-    public static <Class extends CSVParser<Class>> HashMap<String, Class> loadCSV(String filename, Class parseTarget) {
+
+    // parse lines from CSV files into objects and add them into a HashMap
+    public static <Class extends CSVParser<Class>> HashMap<String, Class> readCSV(Class parseTarget) {
         HashMap<String, Class> resultHashMap = new HashMap<>();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(filename))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(parseTarget.getFilename()))) {
             String line;
             fileReader.readLine();
             while ((line = fileReader.readLine()) != null) {
@@ -22,19 +23,12 @@ public class FileHandler {
         return resultHashMap;
     }
 
-    public void writeFiles(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB) {
-        try (PrintWriter printWriter = new PrintWriter(new FileWriter("recovery_plans.csv"))) {
-            printWriter.println("planID,studentId,createdBy,progress");
-            for (RecoveryPlan plan : recPlanDB.values()) {
-                printWriter.println(plan.getPlanID() + "," + plan.getStudentID() + "," + plan.getCreatedBy() + "," + plan.getProgress());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try (PrintWriter printWriter = new PrintWriter(new FileWriter("recovery_tasks.csv:"))) {
-            printWriter.println("taskID,planID,description,duration,completion");
-            for (RecoveryTask task : recTaskDB.values()) {
-                printWriter.println(task.getTaskID() + "," + task.getPlanID() + "," + task.getDescription() + "," + task.getDuration() + "," + task.getCompletion());
+    // writing back to CSV file based on the objects in the HashMap
+    public static <Class extends CSVParser<Class>> void writeCSV(Class parseTarget, HashMap<String, Class> sourceHashMap) {
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter(parseTarget.getFilename()))) {
+            printWriter.println(parseTarget.getFileHeader());
+            for (Class object : sourceHashMap.values()) {
+                printWriter.println(object.toCSV());
             }
         } catch (IOException e) {
             e.printStackTrace();
