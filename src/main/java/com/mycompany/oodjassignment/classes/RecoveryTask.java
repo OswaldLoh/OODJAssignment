@@ -5,20 +5,21 @@ public class RecoveryTask {
     int duration;
     boolean completion;
 
-    public RecoveryTask(String planID) {
+    public RecoveryTask(String planID, String taskID) {
+        this.taskID = taskID;
         this.planID = planID;
         this.completion = false;
     }; // parameterized constructor used during recPlan creation
 
-    public RecoveryTask(String taskID, String planID, String description, int duration) { // used for parsing possibly
+    public RecoveryTask(String taskID, String planID, String description, int duration, boolean completion) { // used for parsing possibly
         this.taskID = taskID;
         this.planID = planID;
         this.description = description;
         this.duration = duration;
-        this.completion = false;
+        this.completion = completion;
     }
 
-    public boolean isCompletion() {
+    public boolean getCompletion() {
         return completion;
     }
 
@@ -36,9 +37,6 @@ public class RecoveryTask {
 
     public String getPlanID() { return planID; }
 
-    public void setPlanID(String planID) {
-        this.planID = planID;
-    }
 
     public String getDescription() {
         return description;

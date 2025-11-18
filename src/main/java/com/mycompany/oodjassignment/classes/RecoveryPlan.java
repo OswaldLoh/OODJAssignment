@@ -1,4 +1,6 @@
 package com.mycompany.oodjassignment.classes;
+import com.mycompany.oodjassignment.functions.IDManager;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -34,7 +36,8 @@ public class RecoveryPlan {
     // methods
     public void addRecoveryTask() {
         boolean validAnswer = true;
-        RecoveryTask newTask = new RecoveryTask(this.getPlanID());
+        IDManager recTaskIDManager = new IDManager();
+        RecoveryTask newTask = new RecoveryTask(this.getPlanID(),"T"+recTaskIDManager.generateNewID());
         Scanner userInput = new Scanner(System.in);
         System.out.println("Select Recovery Task to be Added:");
         System.out.println("1. Assignment");
@@ -61,6 +64,8 @@ public class RecoveryPlan {
                     validAnswer = false;
             }
         } while (!validAnswer);
+        recTasks.add(newTask);
+
     }
 }
 

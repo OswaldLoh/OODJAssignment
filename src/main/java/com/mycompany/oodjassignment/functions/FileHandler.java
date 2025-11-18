@@ -21,18 +21,24 @@ public class FileHandler {
             e.printStackTrace();
         }
 
-
-        int highestPlanID = 0;
         try (BufferedReader fileReader = new BufferedReader(new FileReader("recovery_plans.csv"))) {
             String line;
             fileReader.readLine();
             while ((line = fileReader.readLine()) != null) {
                 String[] recoveryPlanDetails = line.split(",");
                 database.getRecoveryPlanMap().put(recoveryPlanDetails[0], new RecoveryPlan(recoveryPlanDetails[0], recoveryPlanDetails[1], recoveryPlanDetails[2], recoveryPlanDetails[3]));
-                int PlanID = Integer.parseInt(recoveryPlanDetails[0].substring(1));
-                if (PlanID > highestPlanID) {
-                    highestPlanID = PlanID;
-                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (BufferedReader fileReader = new BufferedReader(new FileReader("recovery_tasks.csv"))) {
+            String line;
+            fileReader.readLine();
+            while ((line = fileReader.readLine()) != null) {
+                String [] recoveryTaskDetails = line.split(",");
+                boolean completion = Boolean.parseBoolean(recoveryTaskDetails[4]);
+                int duration = Integer.parseInt(recoveryTaskDetails[3]);
+                database.getRecoveryTaskMap().put(recoveryTaskDetails[0], new RecoveryTask(recoveryTaskDetails[0],recoveryTaskDetails[1],recoveryTaskDetails[2],duration,completion));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -40,11 +46,19 @@ public class FileHandler {
         return database;
     }
 
-    public void writeFiles(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB) {
+    public void writeFiles(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB) {
         try (PrintWriter printWriter = new PrintWriter(new FileWriter("recovery_plans.csv"))) {
             printWriter.println("planID,studentId,createdBy,progress");
             for (RecoveryPlan plan : recPlanDB.values()) {
-                printWriter.println(plan.getPlanID()+","+plan.getStudentID()+","+plan.getCreatedBy()+","+plan.getProgress());
+                printWriter.println(plan.getPlanID() + "," + plan.getStudentID() + "," + plan.getCreatedBy() + "," + plan.getProgress());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try (PrintWriter printWriter = new PrintWriter(new FileWriter("recovery_tasks.csv:"))) {
+            printWriter.println("taskID,planID,description,duration,completion");
+            for (RecoveryTask task : recTaskDB.values()) {
+                printWriter.println(task.getTaskID() + "," + task.getPlanID() + "," + task.getDescription() + "," + task.getDuration() + "," + task.getCompletion());
             }
         } catch (IOException e) {
             e.printStackTrace();

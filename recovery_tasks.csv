@@ -1,1 +1,2 @@
-taskID,planID,description,week,completion
+taskID,planID,description,duration,completion
+T01,P14,"Assignment",50,false;
