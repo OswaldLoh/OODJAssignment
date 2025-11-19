@@ -28,12 +28,11 @@ public class AcademicOfficer extends User {
         System.out.println(student.getLastName());
     }
 
-
     // Adding new recovery plan after checking existence of user ID ( Fully Working )
     public void addRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         int failStudentCount = 0, studentSelection;
-        boolean studentFound = false, courseFound = false;
+        boolean studentFound = false, courseFound;
         String targetStudentID = "", targetCourseID;
         ArrayList<Student> failedStudents;
 
@@ -42,11 +41,12 @@ public class AcademicOfficer extends User {
             System.out.print("Please enter Course ID: ");
             targetCourseID = userInput.nextLine();
             failedStudents = database.getFailedStudents(targetCourseID);
-            if (failedStudents != null) {
+            if (failedStudents == null || failedStudents.isEmpty()) {
+                System.out.println("Error. Course ID " + targetCourseID + " is not found inside database, or may not have any failing students. Please try again.");
+                System.out.println();
+                courseFound = false;
+            } else {
                 courseFound = true;
-            }
-            if (!courseFound) {
-                System.out.println("Student "+targetStudentID+" is not found inside database. Please try again.");
             }
         } while (!courseFound);
 
@@ -83,9 +83,6 @@ public class AcademicOfficer extends User {
     }
 
 
-
-
-
     // view all recovery plans ( will be changed to single search later on )
     public void viewRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB) {
         System.out.println("PlanID   StudentID   Created By   Progress");
@@ -110,7 +107,7 @@ public class AcademicOfficer extends User {
                 studentFound = true;
             }
             if (!studentFound) {
-                System.out.println("Student is not found inside database. Please try again.");
+
             }
         } while (!studentFound);
 
@@ -141,11 +138,6 @@ public class AcademicOfficer extends User {
             } while (!planDelete);
         }
     }
-
-
-
-
-
 
     @Override
     public void showMenu() {
