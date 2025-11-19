@@ -12,20 +12,21 @@ public class AcademicOfficer extends User {
     }
     public void searchStudent(Database database) {
         Scanner userInput = new Scanner(System.in);
-        boolean studentFound = false;
+        boolean studentFound;
         Student student;
         do {
             System.out.print("Please enter Student ID: ");
             String targetStudentID = userInput.nextLine();
             student = database.getStudent(targetStudentID);
-            if (student != null) {
-                studentFound = true;
-            }
-            if (!studentFound) {
+            if (student == null) {
                 System.out.println("Student is not found inside database. Please try again.");
+                studentFound = false;
+            } else {
+                studentFound = true;
             }
         } while (!studentFound);
         System.out.println(student.getLastName());
+        System.out.println("Work in progress here");
     }
 
     // Adding new recovery plan after checking existence of user ID ( Fully Working )
@@ -82,20 +83,11 @@ public class AcademicOfficer extends User {
         database.addRecoveryTask(newTask);
     }
 
-
-    // view all recovery plans ( will be changed to single search later on )
-    public void viewRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB) {
-        System.out.println("PlanID   StudentID   Created By   Progress");
-        for (RecoveryPlan plan : recPlanDB.values()) {
-            System.out.println(plan.getPlanID()+"   "+plan.getStudentID()+"   "+plan.getCreatedBy()+"   "+plan.getProgress());
-        }
-    }
-
     // delete recovery plan
     public void deleteRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         String targetStudentID;
-        boolean studentFound = false, planDelete = false;
+        boolean studentFound, planDelete = false;
         int planSelection;
         Student student;
 
@@ -103,11 +95,11 @@ public class AcademicOfficer extends User {
             System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
             student = database.getStudent(targetStudentID);
-            if (student != null) {
+            if (student == null) {
+                System.out.println("Student is not found inside database. Please try again.");
+                studentFound = false;
+            } else {
                 studentFound = true;
-            }
-            if (!studentFound) {
-
             }
         } while (!studentFound);
 
@@ -144,7 +136,7 @@ public class AcademicOfficer extends User {
         System.out.println("Logged in as " + this.getRole() + " with user ID: " + this.getUserID());
         System.out.println("------------------------------");
         System.out.println("1. Add Recovery Plan");
-        System.out.println("2. View All Recovery Plans");
+        System.out.println("2. Update Recovery Plans (Haven't Done)");
         System.out.println("3. Delete Recovery Plans");
         System.out.println("4. Search student and show failed components");
         System.out.println("4. Exit");
