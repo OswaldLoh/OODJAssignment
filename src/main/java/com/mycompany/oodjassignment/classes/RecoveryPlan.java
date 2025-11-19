@@ -31,7 +31,7 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     public void setProgress(double progress) { this.progress = progress; }
 
     // methods
-    public HashMap<String, RecoveryTask> addRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {
+    public RecoveryTask addNewTask(Database database) {
         final String ASSIGNMENT = "Assignment";
         final String EXAM = "Exam";
         final String MODULE = "Module";
@@ -65,13 +65,14 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
             }
         } while (!validAnswer);
 
+        // Creating IDManager object to generate new ID for recTask
         IDManager recTaskIDManager = new IDManager();
-        recTaskIDManager.getHighestTaskID(recTaskDB);
+        recTaskIDManager.getHighestTaskID(database.getRecTaskDB());
         String nextTaskID = "T" + recTaskIDManager.generateNewID();
         newTask.setTaskID(nextTaskID);
         newTask.setPlanID(this.planID);
-        recTaskDB.put(nextTaskID,newTask);
-        return recTaskDB;
+        database.addRecoveryTask(newTask);
+        return newTask;
     }
     public HashMap<String, RecoveryTask> deleteRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {
         return recTaskDB;

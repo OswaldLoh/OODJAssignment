@@ -6,7 +6,6 @@ import java.util.HashMap;
 @SuppressWarnings("CallToPrintStackTrace")
 
 public class FileHandler {
-
     // parse lines from CSV files into objects and add them into a HashMap
     public static <Class extends CSVParser<Class>> HashMap<String, Class> readCSV(Class parseTarget) {
         HashMap<String, Class> resultHashMap = new HashMap<>();

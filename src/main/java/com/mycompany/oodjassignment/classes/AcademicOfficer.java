@@ -10,23 +10,53 @@ public class AcademicOfficer extends User {
     public AcademicOfficer() {
         setRole("Academic Officer");
     }
-    // adding new recovery plan after checking existence of user ID
-    public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB, HashMap<String, Student> studentDB, HashMap<String, Course> courseDB, HashMap<String, Grades> gradeDB) {
+    public void searchStudent(Database database) {
+        Scanner userInput = new Scanner(System.in);
+        boolean studentFound = false;
+        Student student;
+        do {
+            System.out.print("Please enter Student ID: ");
+            String targetStudentID = userInput.nextLine();
+            student = database.getStudent(targetStudentID);
+            if (student != null) {
+                studentFound = true;
+            }
+            if (!studentFound) {
+                System.out.println("Student is not found inside database. Please try again.");
+            }
+        } while (!studentFound);
+        System.out.println(student.getLastName());
+    }
+
+
+    // Adding new recovery plan after checking existence of user ID ( Fully Working )
+    public void addRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         int failStudentCount = 0, studentSelection;
-        boolean studentFound = false;
-        String targetStudentID = "";
+        boolean studentFound = false, courseFound = false;
+        String targetStudentID = "", targetCourseID;
+        ArrayList<Student> failedStudents;
 
-        // Parsing failed students into a new hashmap
-        ArrayList<Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
+        // parsing failed students object into array list
+        do {
+            System.out.print("Please enter Course ID: ");
+            targetCourseID = userInput.nextLine();
+            failedStudents = database.getFailedStudents(targetCourseID);
+            if (failedStudents != null) {
+                courseFound = true;
+            }
+            if (!courseFound) {
+                System.out.println("Student "+targetStudentID+" is not found inside database. Please try again.");
+            }
+        } while (!courseFound);
 
-        // Displaying failed students for the user by iterating through the hash map
+        // Displaying failed students for the user by iterating through the array list
         for (Student student : failedStudents) {
             failStudentCount++;
             System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
         }
 
-        // GUI based selection
+        // GUI based selection by indexing through array list of failed students
         do {
             System.out.print(">>>   ");
             studentSelection = userInput.nextInt();
@@ -40,14 +70,21 @@ public class AcademicOfficer extends User {
             }
         } while (!studentFound);
 
+        // Create an instance of IDManager to generate next ID for PlanID
         IDManager IDManager = new IDManager();
-        IDManager.getHighestTaskID(recPlanDB);
+        IDManager.getHighestTaskID(database.getRecPlanDB());
         String nextPlanID = "P"+IDManager.generateNewID();
+
+        // make new RecoveryPlan object
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
-        recPlanDB.put(nextPlanID,newPlan);
-        newPlan.addRecoveryTask(recTaskDB);
-        return recPlanDB;
+        RecoveryTask newTask = newPlan.addNewTask(database);     // Call instance to create RecoveryTask
+        database.addRecoveryPlan(newPlan);
+        database.addRecoveryTask(newTask);
     }
+
+
+
+
 
     // view all recovery plans ( will be changed to single search later on )
     public void viewRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB) {
@@ -58,24 +95,27 @@ public class AcademicOfficer extends User {
     }
 
     // delete recovery plan
-    public HashMap<String, RecoveryPlan> deleteRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB) {
+    public void deleteRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         String targetStudentID;
-        boolean studentFound, planDelete = false;
+        boolean studentFound = false, planDelete = false;
         int planSelection;
+        Student student;
 
-        do {                // Finding if student exists in student Database
-            System.out.print("Please enter student ID: ");
+        do {
+            System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = Validation.validateStudentID(targetStudentID,studentDB);
+            student = database.getStudent(targetStudentID);
+            if (student != null) {
+                studentFound = true;
+            }
             if (!studentFound) {
-                System.out.println("Student ID: " + targetStudentID + " is not found in the Database records. Please try again.");
-                System.out.println();
+                System.out.println("Student is not found inside database. Please try again.");
             }
         } while (!studentFound);
 
-        ArrayList<String> studentPlanID = Validation.validateStudentRecoveryPlan(targetStudentID,recPlanDB);
-        int planCount = Validation.getRecoveryPlanCount(targetStudentID, recPlanDB);
+        ArrayList<String> studentPlanID = database.findStudentRecoveryPlan(targetStudentID);
+        int planCount = database.getStudentRecoveryPlanCount(targetStudentID);
 
         if (planCount == 0) {               // no recovery plan is found for student
             System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
@@ -95,39 +135,18 @@ public class AcademicOfficer extends User {
                     System.out.println();
                 } else {
                     final int listIndex = planSelection - 1;
-                    recPlanDB.remove(studentPlanID.get(listIndex));
+                    database.removeRecoveryPlan(studentPlanID.get(listIndex));
                     planDelete = true;
                 }
             } while (!planDelete);
         }
-        return recPlanDB;
     }
-    public ArrayList<Student> getFailedStudents(HashMap<String,Grades> gradeDB, HashMap<String, Course> courseDB, HashMap<String, Student> studentDB) {
-        ArrayList<Student> failedStudentsList = new ArrayList<>();
-        Scanner userInput = new Scanner(System.in);
-        boolean courseIDFound = false;
 
-        do {
-            System.out.print("Please enter course ID: ");
-            String targetCourseID = userInput.nextLine();
-            for (Grades grade : gradeDB.values()) {
-                if (grade.getCourseID().equals(targetCourseID)) {
-                    if (grade.calculateGPA(courseDB) < 2.0) {
-                        Student student = studentDB.get(grade.getStudentID());
-                        if (student != null) {
-                            failedStudentsList.add(student);
-                        }
-                    }
-                    courseIDFound = true;
-                }
-            }
-            if (!courseIDFound) {
-                System.out.println("Course ID: " + targetCourseID + " is not found in the database records. Please try again.");
-                System.out.println();
-            }
-        } while (!courseIDFound);
-        return failedStudentsList;
-    }
+
+
+
+
+
     @Override
     public void showMenu() {
         System.out.println("Logged in as " + this.getRole() + " with user ID: " + this.getUserID());
@@ -135,7 +154,7 @@ public class AcademicOfficer extends User {
         System.out.println("1. Add Recovery Plan");
         System.out.println("2. View All Recovery Plans");
         System.out.println("3. Delete Recovery Plans");
-        System.out.println("4. Show failed students by search");
+        System.out.println("4. Search student and show failed components");
         System.out.println("4. Exit");
     }
 }
