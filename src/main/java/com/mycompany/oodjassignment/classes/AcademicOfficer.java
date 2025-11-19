@@ -13,9 +13,9 @@ public class AcademicOfficer extends User {
     // adding new recovery plan after checking existence of user ID
     public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB, HashMap<String, Student> studentDB, HashMap<String, Course> courseDB, HashMap<String, Grades> gradeDB) {
         Scanner userInput = new Scanner(System.in);
-        int failStudentCount = 0;
+        int failStudentCount = 0, studentSelection;
         boolean studentFound = false;
-        String targetStudentID;
+        String targetStudentID = "";
 
         // Parsing failed students into a new hashmap
         ArrayList<Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
@@ -25,19 +25,18 @@ public class AcademicOfficer extends User {
             failStudentCount++;
             System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
         }
-        // Letting user choose which student to add
+
+        // GUI based selection
         do {
-            System.out.print("Please enter student ID: ");
-            targetStudentID = userInput.nextLine();
-            for (Student student : failedStudents) {
-                if (student.getStudentID().equals(targetStudentID)) {
-                    studentFound = true;
-                    break;
-                }
-            }
-            if (!studentFound) {
-                System.out.println("Student ID: " + targetStudentID + " is not found in the database records or may not be eligible for recovery plan. Please try again.");
+            System.out.print(">>>   ");
+            studentSelection = userInput.nextInt();
+            if (studentSelection <= 0 || studentSelection > failedStudents.size()) {
+                System.out.println("Invalid selection. Please try again.");
                 System.out.println();
+            } else {
+                final int listIndex = studentSelection - 1;
+                targetStudentID = failedStudents.get(listIndex).getStudentID();
+                studentFound = true;
             }
         } while (!studentFound);
 
