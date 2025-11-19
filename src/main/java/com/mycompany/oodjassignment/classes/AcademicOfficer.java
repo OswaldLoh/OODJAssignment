@@ -11,7 +11,11 @@ public class AcademicOfficer extends User {
         setRole("Academic Officer");
     }
     // adding new recovery plan after checking existence of user ID
-    public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, Student> studentDB, HashMap<String, RecoveryTask> recTaskDB) {
+    public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB, HashMap<String, Student> studentDB, HashMap<String, Course> courseDB, HashMap<String, Grades> gradeDB) {
+        HashMap<String, Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
+        for (Student student : failedStudents.values()) {
+            System.out.println(student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
+        }
         Scanner userInput = new Scanner(System.in);
         StudentManager checkInput = new StudentManager();
         String targetStudentID;
@@ -89,9 +93,21 @@ public class AcademicOfficer extends User {
         }
         return recPlanDB;
     }
-    public ArrayList<String> getFailedStudents(HashMap<String,Student> studentDB, HashMap<String,Grades> gradeDB, HashMap<String, Course> courseDB) {
-        ArrayList<String> failedStudentsList = new ArrayList<>();
-
+    public HashMap<String, Student> getFailedStudents(HashMap<String,Grades> gradeDB, HashMap<String, Course> courseDB, HashMap<String, Student> studentDB) {
+        HashMap<String, Student> failedStudentsList = new HashMap<>();
+        Scanner userInput = new Scanner(System.in);
+        System.out.print("Please enter course ID: ");
+        String targetCourseID = userInput.nextLine();
+        for (Grades grade : gradeDB.values()) {
+            if (grade.getCourseID().equals(targetCourseID)) {
+                if (grade.calculateGPA(courseDB) < 2.0) {
+                    Student student = studentDB.get(grade.getStudentID());
+                    if (student != null) {
+                        failedStudentsList.put(student.getStudentID(),student);
+                    }
+                }
+            }
+        }
         return failedStudentsList;
     }
     @Override
@@ -101,6 +117,7 @@ public class AcademicOfficer extends User {
         System.out.println("1. Add Recovery Plan");
         System.out.println("2. View All Recovery Plans");
         System.out.println("3. Delete Recovery Plans");
+        System.out.println("4. Show failed students by search");
         System.out.println("4. Exit");
     }
 }

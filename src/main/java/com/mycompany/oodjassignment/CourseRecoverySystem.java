@@ -2,11 +2,9 @@ package com.mycompany.oodjassignment;
 import com.mycompany.oodjassignment.classes.*;
 import com.mycompany.oodjassignment.functions.FileHandler;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
-public class Workspace {
+public class CourseRecoverySystem {
     public static void main(String[]args) {
         // dummy login
         AcademicOfficer testUser = new AcademicOfficer();
@@ -37,7 +35,7 @@ public class Workspace {
             userInput.nextLine();
             switch (selection) {
                 case 1:
-                    testUser.addRecoveryPlan(recPlanDB, studentDB, recTaskDB);
+                    testUser.addRecoveryPlan(recPlanDB, recTaskDB, studentDB, courseDB, gradesDB);
                     break;
                 case 2:
                     testUser.viewRecoveryPlan(recPlanDB);
@@ -46,8 +44,9 @@ public class Workspace {
                     testUser.deleteRecoveryPlan(recPlanDB, studentDB);
                     break;
                 case 4:
-                    for (String key : recTaskDB.keySet()) {
-                        System.out.println(key);
+                    HashMap<String, Student> failedStudents = testUser.getFailedStudents(gradesDB, courseDB, studentDB);
+                    for (Student student : failedStudents.values()) {
+                        System.out.println(student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
                     }
                     break;
                 case 5:
