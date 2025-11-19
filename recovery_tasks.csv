@@ -1,0 +1,5 @@
+taskID,planID,description,duration,completion
+T4,P27,Exam,30,false
+T1,P25,Assignment,50,false
+T2,P14,Assignment,50,false
+T3,P26,Assignment,50,false
