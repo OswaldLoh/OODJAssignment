@@ -12,25 +12,42 @@ public class AcademicOfficer extends User {
     }
     // adding new recovery plan after checking existence of user ID
     public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB, HashMap<String, Student> studentDB, HashMap<String, Course> courseDB, HashMap<String, Grades> gradeDB) {
-        HashMap<String, Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
-        for (Student student : failedStudents.values()) {
-            System.out.println(student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
-        }
-        Scanner userInput = new Scanner(System.in);
-        StudentManager checkInput = new StudentManager();
+        int failStudentCount = 0;
+        boolean studentSelected = false, studentFound;
         String targetStudentID;
-        boolean studentFound;
+        Scanner userInput = new Scanner(System.in);
 
+        // Parsing failed students into a new hashmap
+        HashMap<String, Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
+        // Displaying failed students for the user by iterating through the hash map
+        for (Student student : failedStudents.values()) {
+            failStudentCount++;
+            System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
+        }
+        System.out.println("Please choose Student ID.");
+        do {
+            System.out.print(">>>   ");
+            int studentSelection = userInput.nextInt();
+            if (studentSelection <= 0 || studentSelection > failedStudents.size()) {
+                System.out.println("Invalid selection. Please try again.");
+                System.out.println();
+            } else {
+                final String listIndex = String.valueOf(studentSelection - 1);
+                studentSelected = true;
+            }
+        } while (!studentSelected);
+        
         do {
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = checkInput.validateStudentID(targetStudentID,studentDB);
+            studentFound = Validation.validateStudentID(targetStudentID,studentDB);
 
             if (!studentFound) {
                 System.out.println("Student ID: " + targetStudentID + " is not found in the database records. Please try again.");
                 System.out.println();
             }
         } while (!studentFound);
+
         IDManager IDManager = new IDManager();
         IDManager.getHighestTaskID(recPlanDB);
         String nextPlanID = "P"+IDManager.generateNewID();
@@ -58,15 +75,15 @@ public class AcademicOfficer extends User {
         do {                // Finding if student exists in student Database
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = StudentManager.validateStudentID(targetStudentID,studentDB);
+            studentFound = Validation.validateStudentID(targetStudentID,studentDB);
             if (!studentFound) {
                 System.out.println("Student ID: " + targetStudentID + " is not found in the Database records. Please try again.");
                 System.out.println();
             }
         } while (!studentFound);
 
-        ArrayList<String> studentPlanID = StudentManager.validateStudentRecoveryPlan(targetStudentID,recPlanDB);
-        int planCount = StudentManager.getRecoveryPlanCount(targetStudentID, recPlanDB);
+        ArrayList<String> studentPlanID = Validation.validateStudentRecoveryPlan(targetStudentID,recPlanDB);
+        int planCount = Validation.getRecoveryPlanCount(targetStudentID, recPlanDB);
 
         if (planCount == 0) {               // no recovery plan is found for student
             System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");

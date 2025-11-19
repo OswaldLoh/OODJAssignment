@@ -5,7 +5,7 @@ import com.mycompany.oodjassignment.classes.Student;
 import java.util.HashMap;
 import java.util.ArrayList;
 
-public class StudentManager {
+public class Validation {
 
     public static boolean validateStudentID(String targetStudentID, HashMap<String, Student> studentDB) {
         boolean studentFound = false;
