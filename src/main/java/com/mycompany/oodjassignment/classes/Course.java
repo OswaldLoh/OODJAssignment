@@ -5,6 +5,7 @@ public class Course implements CSVParser<Course>{
     private String courseID, courseName, semester, instructor;
     private int examWeight, assignmentWeight, credit;
     private static final String filename = "course_assessment_information.csv";
+
     // constructors
     public Course() {};
 

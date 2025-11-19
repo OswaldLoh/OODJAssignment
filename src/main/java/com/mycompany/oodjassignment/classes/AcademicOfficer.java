@@ -13,37 +13,30 @@ public class AcademicOfficer extends User {
     // adding new recovery plan after checking existence of user ID
     public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB, HashMap<String, Student> studentDB, HashMap<String, Course> courseDB, HashMap<String, Grades> gradeDB) {
         int failStudentCount = 0;
-        boolean studentSelected = false, studentFound;
+        boolean studentFound = false;
         String targetStudentID;
         Scanner userInput = new Scanner(System.in);
 
         // Parsing failed students into a new hashmap
         HashMap<String, Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
+
         // Displaying failed students for the user by iterating through the hash map
         for (Student student : failedStudents.values()) {
             failStudentCount++;
             System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
         }
-        System.out.println("Please choose Student ID.");
-        do {
-            System.out.print(">>>   ");
-            int studentSelection = userInput.nextInt();
-            if (studentSelection <= 0 || studentSelection > failedStudents.size()) {
-                System.out.println("Invalid selection. Please try again.");
-                System.out.println();
-            } else {
-                final String listIndex = String.valueOf(studentSelection - 1);
-                studentSelected = true;
-            }
-        } while (!studentSelected);
-        
+        // Letting user choose which student to add
         do {
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            studentFound = Validation.validateStudentID(targetStudentID,studentDB);
-
+            for (Student student : failedStudents.values()) {
+                if (student.getStudentID().equals(targetStudentID)) {
+                    studentFound = true;
+                    break;
+                }
+            }
             if (!studentFound) {
-                System.out.println("Student ID: " + targetStudentID + " is not found in the database records. Please try again.");
+                System.out.println("Student ID: " + targetStudentID + " is not found in the database records or may not be eligible for recovery plan. Please try again.");
                 System.out.println();
             }
         } while (!studentFound);
