@@ -12,16 +12,16 @@ public class AcademicOfficer extends User {
     }
     // adding new recovery plan after checking existence of user ID
     public HashMap<String, RecoveryPlan> addRecoveryPlan(HashMap<String, RecoveryPlan> recPlanDB, HashMap<String, RecoveryTask> recTaskDB, HashMap<String, Student> studentDB, HashMap<String, Course> courseDB, HashMap<String, Grades> gradeDB) {
+        Scanner userInput = new Scanner(System.in);
         int failStudentCount = 0;
         boolean studentFound = false;
         String targetStudentID;
-        Scanner userInput = new Scanner(System.in);
 
         // Parsing failed students into a new hashmap
-        HashMap<String, Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
+        ArrayList<Student> failedStudents = getFailedStudents(gradeDB, courseDB, studentDB);
 
         // Displaying failed students for the user by iterating through the hash map
-        for (Student student : failedStudents.values()) {
+        for (Student student : failedStudents) {
             failStudentCount++;
             System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
         }
@@ -29,7 +29,7 @@ public class AcademicOfficer extends User {
         do {
             System.out.print("Please enter student ID: ");
             targetStudentID = userInput.nextLine();
-            for (Student student : failedStudents.values()) {
+            for (Student student : failedStudents) {
                 if (student.getStudentID().equals(targetStudentID)) {
                     studentFound = true;
                     break;
@@ -103,21 +103,30 @@ public class AcademicOfficer extends User {
         }
         return recPlanDB;
     }
-    public HashMap<String, Student> getFailedStudents(HashMap<String,Grades> gradeDB, HashMap<String, Course> courseDB, HashMap<String, Student> studentDB) {
-        HashMap<String, Student> failedStudentsList = new HashMap<>();
+    public ArrayList<Student> getFailedStudents(HashMap<String,Grades> gradeDB, HashMap<String, Course> courseDB, HashMap<String, Student> studentDB) {
+        ArrayList<Student> failedStudentsList = new ArrayList<>();
         Scanner userInput = new Scanner(System.in);
-        System.out.print("Please enter course ID: ");
-        String targetCourseID = userInput.nextLine();
-        for (Grades grade : gradeDB.values()) {
-            if (grade.getCourseID().equals(targetCourseID)) {
-                if (grade.calculateGPA(courseDB) < 2.0) {
-                    Student student = studentDB.get(grade.getStudentID());
-                    if (student != null) {
-                        failedStudentsList.put(student.getStudentID(),student);
+        boolean courseIDFound = false;
+
+        do {
+            System.out.print("Please enter course ID: ");
+            String targetCourseID = userInput.nextLine();
+            for (Grades grade : gradeDB.values()) {
+                if (grade.getCourseID().equals(targetCourseID)) {
+                    if (grade.calculateGPA(courseDB) < 2.0) {
+                        Student student = studentDB.get(grade.getStudentID());
+                        if (student != null) {
+                            failedStudentsList.add(student);
+                        }
                     }
+                    courseIDFound = true;
                 }
             }
-        }
+            if (!courseIDFound) {
+                System.out.println("Course ID: " + targetCourseID + " is not found in the database records. Please try again.");
+                System.out.println();
+            }
+        } while (!courseIDFound);
         return failedStudentsList;
     }
     @Override

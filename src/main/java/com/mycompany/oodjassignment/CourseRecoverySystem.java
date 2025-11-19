@@ -44,8 +44,8 @@ public class CourseRecoverySystem {
                     testUser.deleteRecoveryPlan(recPlanDB, studentDB);
                     break;
                 case 4:
-                    HashMap<String, Student> failedStudents = testUser.getFailedStudents(gradesDB, courseDB, studentDB);
-                    for (Student student : failedStudents.values()) {
+                    ArrayList<Student> failedStudents = testUser.getFailedStudents(gradesDB, courseDB, studentDB);
+                    for (Student student : failedStudents) {
                         System.out.println(student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
                     }
                     break;
