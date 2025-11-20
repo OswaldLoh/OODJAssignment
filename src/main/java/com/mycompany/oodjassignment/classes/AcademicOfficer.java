@@ -1,10 +1,6 @@
 package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.*;
-
-
-import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class AcademicOfficer extends User {
     public AcademicOfficer() {
@@ -12,6 +8,7 @@ public class AcademicOfficer extends User {
     }
     public void searchStudent(Database database) {
         Scanner userInput = new Scanner(System.in);
+        int courseCount = 0;
         boolean studentFound;
         Student student;
         do {
@@ -25,8 +22,28 @@ public class AcademicOfficer extends User {
                 studentFound = true;
             }
         } while (!studentFound);
-        System.out.println(student.getLastName());
-        System.out.println("Work in progress here");
+        System.out.println();
+        System.out.println("----------------------");
+        System.out.println("Student ID: " + student.getStudentID());
+        System.out.println("Name: " + student.getFirstName() + " "+ student.getLastName());
+        System.out.println("Major: " + student.getMajor());
+        System.out.println("----------------------");
+        System.out.println("Failed Modules: ");
+        System.out.println();
+        for (Grades grade : database.getGradeDB().values()) {
+            if (grade.getStudentID().equals(student.getStudentID())) {
+                double courseGPA = grade.calculateGPA(database);
+                Course course = database.getCourseDB().get(grade.getCourseID());
+                if (courseGPA < 2.0) {
+                    courseCount++;
+                    System.out.println(courseCount + ". " + course.getCourseName() + "-" + course.getCourseID());
+                    System.out.println("   GPA: " + grade.calculateGPA(database));
+                }
+            }
+        }
+        if (courseCount == 0) {
+            System.out.println("Student has no failed modules.");
+        }
     }
 
     // Adding new recovery plan after checking existence of user ID ( Fully Working )
@@ -41,7 +58,7 @@ public class AcademicOfficer extends User {
         do {
             System.out.print("Please enter Course ID: ");
             targetCourseID = userInput.nextLine();
-            failedStudents = database.getFailedStudents(targetCourseID);
+            failedStudents = database.getFailedStudents(targetCourseID, database);
             if (failedStudents == null || failedStudents.isEmpty()) {
                 System.out.println("Error. Course ID " + targetCourseID + " is not found inside database, or may not have any failing students. Please try again.");
                 System.out.println();
@@ -133,7 +150,6 @@ public class AcademicOfficer extends User {
 
     @Override
     public void showMenu() {
-        System.out.println("Logged in as " + this.getRole() + " with user ID: " + this.getUserID());
         System.out.println("------------------------------");
         System.out.println("1. Add Recovery Plan");
         System.out.println("2. Update Recovery Plans (Haven't Done)");

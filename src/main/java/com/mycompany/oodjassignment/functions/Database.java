@@ -50,17 +50,23 @@ public class Database {
         return courseDB.get(courseID);
     }
     // HashMap getters
+    public HashMap<String, Course> getCourseDB() {
+        return courseDB;
+    }
+    public HashMap<String, Grades> getGradeDB() {
+        return gradesDB;
+    }
     public HashMap<String, RecoveryPlan> getRecPlanDB() {
         return recPlanDB;
         }
     public HashMap<String, RecoveryTask> getRecTaskDB() {
         return recTaskDB;
     }
-    public ArrayList<Student> getFailedStudents(String targetCourseID) {
+    public ArrayList<Student> getFailedStudents(String targetCourseID, Database database) {
         ArrayList<Student> failedStudentsList = new ArrayList<>();
         for (Grades grade : gradesDB.values()) {
             if (grade.getCourseID().equals(targetCourseID)) {
-                if (grade.calculateGPA(courseDB) < 2.0) {
+                if (grade.calculateGPA(database) < 2.0) {
                     Student student = studentDB.get(grade.getStudentID());
                     if (student != null) {
                         failedStudentsList.add(student);

@@ -44,6 +44,7 @@ public class CourseRecoverySystem {
                     System.out.println("Invalid selection. Please try again.");
                     break;
             }
+            System.out.println();
             System.out.print("Do you want to perform another action? (Y/N): ");
             String response = userInput.nextLine().trim().toUpperCase();
             repeat = response.equals("Y");

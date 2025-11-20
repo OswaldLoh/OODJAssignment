@@ -39,6 +39,9 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
 
         RecoveryTask newTask = new RecoveryTask();
         Scanner userInput = new Scanner(System.in);
+        System.out.println("Recommended Recovery Task");
+
+
         System.out.println("Select Recovery Task to be Added:");
         System.out.println("1. Assignment");
         System.out.println("2. Final Exam");

@@ -1,15 +1,12 @@
 package com.mycompany.oodjassignment.classes;
-
 import com.mycompany.oodjassignment.functions.CSVParser;
+import java.util.ArrayList;
 
 public class Student implements CSVParser<Student> {
-    private String studentID;
-    private String firstName;
-    private String lastName;
-    private String major;
-    private String email;
+    private String studentID, firstName, lastName, major, email;
     private int year;
     private static final String filename = "student_information.csv";
+    ArrayList<String> enrolledCourses;
 
     // constructors
     public Student() {};

@@ -1,27 +1,27 @@
 package com.mycompany.oodjassignment.classes;
-
 import com.mycompany.oodjassignment.functions.*;
-
-import java.util.HashMap;
+import java.util.*;
 
 public class Grades implements CSVParser<Grades> {
-    private String studentID, courseID;
+    private String gradeID, studentID, courseID;
     private double examMark, assignmentMark;
     private static final String filename = "student_grades.csv";
 
     // constructors
     public Grades () {};
-    public Grades(String studentID, String courseID, int examMark, int assignmentMark) {
+    public Grades(String gradeID, String studentID, String courseID, int examMark, int assignmentMark) {
+        this.gradeID = gradeID;
         this.studentID = studentID;
         this.courseID = courseID;
         this.examMark = examMark;
         this.assignmentMark = assignmentMark;
     }
     // getters
+    public String getGradeID() { return gradeID; }
     public String getStudentID() { return studentID; }
     public String getCourseID() { return courseID; }
-    public double getExamMark() { return examMark; }
     public double getAssignmentMark() { return assignmentMark; }
+    public double getExamMark() { return examMark; }
 
     // setters
     public void setStudentID(String studentID) { this.studentID = studentID; }
@@ -29,14 +29,11 @@ public class Grades implements CSVParser<Grades> {
     public void setExamMark(int examMark) { this.examMark = examMark; }
     public void setAssignmentMark(int assignmentMark) { this.assignmentMark = assignmentMark; }
 
-    public double calculateGPA(HashMap<String, Course> courseDB) {
-        double totalMark = 0, GPA = 0;
-        for (String key : courseDB.keySet()) {  // if the grade's course ID equals to courseID in hashmap
-            if (key.equals(courseID)) {
-                Course course = courseDB.get(key);
-                totalMark = (examMark/course.getExamWeight()) + (assignmentMark/course.getAssignmentWeight());
-            }
-        }
+    // methods
+    public double calculateGPA(Database database) {
+        double totalMark, GPA;
+        totalMark = getWeightedExamMark(database) + (getWeightedAssignmentMark(database));
+
         if (totalMark >= 80 && totalMark <= 100) {
             GPA = 4.00;
         } else if (totalMark >= 75 && totalMark <= 79) {
@@ -62,19 +59,29 @@ public class Grades implements CSVParser<Grades> {
         }
         return GPA;
     }
+    public double getWeightedExamMark(Database database) {
+        Course course = database.getCourse(courseID);
+        return (examMark * course.getExamWeight() / 100);
+    }
 
+    public double getWeightedAssignmentMark(Database database) {
+        Course course = database.getCourse(courseID);
+        return (assignmentMark* course.getAssignmentWeight() / 100);
+    }
+
+    // interface methods
     @Override
     public Grades fromCSV(String line) {
         String[] details = line.split(",");
-        return new Grades(details[0], details[1], Integer.parseInt(details[2]), Integer.parseInt(details[3]));
+        return new Grades(details[0], details[1], details[2], Integer.parseInt(details[3]), Integer.parseInt(details[4]));
     }
     @Override
     public String toCSV() {
-        return (studentID+","+courseID+","+examMark+","+assignmentMark);
+        return (gradeID+","+studentID+","+courseID+","+examMark+","+assignmentMark);
     }
     @Override
     public String getFileHeader() {
-        return "CourseID,CourseName,Credits,Semester,Instructor,ExamWeight,AssignmentWeight";
+        return "gradeID,studentID,courseID,examMark,assignmentMark";
     }
     @Override
     public String getFilename() {
