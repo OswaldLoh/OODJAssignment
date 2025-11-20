@@ -39,8 +39,17 @@ public class Database {
     public void removeRecoveryPlan(String planID) {
         recPlanDB.remove(planID);
     }
-    public void removeRecoverytask(String taskID) {
-        recTaskDB.remove(taskID);
+    public void removeRecoverytask(String targetPlanID) {
+        RecoveryTask targetRecTask = null;
+        for (RecoveryTask task : recTaskDB.values()) {
+            if (task.getPlanID().equals(targetPlanID)) {
+                targetRecTask = task;
+            }
+        }
+        if (targetRecTask != null) {
+            recTaskDB.remove(targetRecTask.getTaskID(),targetRecTask);
+        }
+
     }
     // Object getters
     public Grades getGrades(String targetStudentID, String targetCourseID) {

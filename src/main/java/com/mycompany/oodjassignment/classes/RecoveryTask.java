@@ -10,12 +10,6 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     public RecoveryTask() {
     }; // No arg constructor used to retrieve fromCSV method for object parsing
 
-    public RecoveryTask(String planID, String taskID) {
-        this.taskID = taskID;
-        this.planID = planID;
-        this.completion = false;
-    }; // Parameterized constructor used during manual addition of Recovery Plan
-
     public RecoveryTask(String taskID, String planID, String description, int duration, boolean completion) { // used for parsing possibly
         this.taskID = taskID;
         this.planID = planID;
@@ -52,9 +46,8 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     @Override
     public RecoveryTask fromCSV(String line) {
         String[] details = line.split(",");
-        int duration = Integer.parseInt(details[3]);
-        boolean completion = Boolean.parseBoolean(details[4]);
-        return new RecoveryTask(details[0],details[1],details[2],duration,completion);
+
+        return new RecoveryTask(details[0],details[1],details[2],Integer.parseInt(details[3]),Boolean.parseBoolean(details[4]));
     }
     @Override
     public String toCSV() {

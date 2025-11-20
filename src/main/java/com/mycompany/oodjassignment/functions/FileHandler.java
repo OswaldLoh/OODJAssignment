@@ -16,8 +16,8 @@ public class FileHandler {
                 String[] details = line.split(",");
                 resultHashMap.put(details[0], parseTarget.fromCSV(line));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException e) {
+            System.out.println("Warning! Filename: " + parseTarget.getFilename() + " may have no content inside!");
         }
         return resultHashMap;
     }

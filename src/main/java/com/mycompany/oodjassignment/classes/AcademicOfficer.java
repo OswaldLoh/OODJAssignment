@@ -68,8 +68,9 @@ public class AcademicOfficer extends User {
                 courseFound = true;
             }
         } while (!courseFound);
-
+        Course selectedCourse = database.getCourse(targetCourseID);
         // Displaying failed students for the user by iterating through the array list
+        System.out.println("Failed Students for Module: " + selectedCourse.getCourseID() + "-" + selectedCourse.getCourseName());
         for (Student student : failedStudents) {
             failStudentCount++;
             System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
@@ -96,7 +97,7 @@ public class AcademicOfficer extends User {
 
         // make new RecoveryPlan object
         Grades targetGrade = database.getGrades(targetStudentID,targetCourseID);
-        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,targetCourseID,userID,"0.00");
         RecoveryTask newTask = newPlan.addNewTask(targetGrade, database);     // Call instance to create RecoveryTask
         database.addRecoveryPlan(newPlan);
         database.addRecoveryTask(newTask);
@@ -145,6 +146,7 @@ public class AcademicOfficer extends User {
                 } else {
                     final int listIndex = planSelection - 1;
                     database.removeRecoveryPlan(studentPlanID.get(listIndex));
+                    database.removeRecoverytask(studentPlanID.get(listIndex));
                     planDelete = true;
                 }
             } while (!planDelete);
