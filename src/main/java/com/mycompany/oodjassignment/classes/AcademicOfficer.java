@@ -32,12 +32,13 @@ public class AcademicOfficer extends User {
         System.out.println();
         for (Grades grade : database.getGradeDB().values()) {
             if (grade.getStudentID().equals(student.getStudentID())) {
-                double courseGPA = grade.calculateGPA(database);
-                Course course = database.getCourseDB().get(grade.getCourseID());
+                Course course = database.getCourse(grade.getCourseID());
+                grade.setCourseObject(course);
+                double courseGPA = grade.calculateGPA();
                 if (courseGPA < 2.0) {
                     courseCount++;
                     System.out.println(courseCount + ". " + course.getCourseName() + "-" + course.getCourseID());
-                    System.out.println("   GPA: " + grade.calculateGPA(database));
+                    System.out.println("   GPA: " + grade.calculateGPA());
                 }
             }
         }
@@ -89,15 +90,17 @@ public class AcademicOfficer extends User {
         } while (!studentFound);
 
         // Create an instance of IDManager to generate next ID for PlanID
-        IDManager IDManager = new IDManager();
-        IDManager.getHighestTaskID(database.getRecPlanDB());
+        IDManager IDManager = new IDManager(database.getRecPlanDB());
+        IDManager.getHighestTaskID();
         String nextPlanID = "P"+IDManager.generateNewID();
 
         // make new RecoveryPlan object
+        Grades targetGrade = database.getGrades(targetStudentID,targetCourseID);
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
-        RecoveryTask newTask = newPlan.addNewTask(database);     // Call instance to create RecoveryTask
+        RecoveryTask newTask = newPlan.addNewTask(targetGrade, database);     // Call instance to create RecoveryTask
         database.addRecoveryPlan(newPlan);
         database.addRecoveryTask(newTask);
+        System.out.println("Recovery Plan and Task successfully added for Student " + targetStudentID);
     }
 
     // delete recovery plan

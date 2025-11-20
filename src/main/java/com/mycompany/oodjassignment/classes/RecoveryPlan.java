@@ -31,50 +31,40 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     public void setProgress(double progress) { this.progress = progress; }
 
     // methods
-    public RecoveryTask addNewTask(Database database) {
+    public RecoveryTask addNewTask(Grades Grade, Database database) {
         final String ASSIGNMENT = "Assignment";
         final String EXAM = "Exam";
         final String MODULE = "Module";
-        boolean validAnswer = true;
+
 
         RecoveryTask newTask = new RecoveryTask();
         Scanner userInput = new Scanner(System.in);
-        System.out.println("Recommended Recovery Task");
-
-
-        System.out.println("Select Recovery Task to be Added:");
-        System.out.println("1. Assignment");
-        System.out.println("2. Final Exam");
-        System.out.println("3. Module"); // assignment + final exam
-        System.out.print(">>>   ");
-        do {
-            int selection = userInput.nextInt();
-            switch (selection) {
-                case 1:
-                    newTask.setDescription(ASSIGNMENT);
-                    newTask.setDuration(50);
-                    break;
-                case 2:
-                    newTask.setDescription(EXAM);
-                    newTask.setDuration(30);
-                    break;
-                case 3:
-                    newTask.setDescription(MODULE);
-                    newTask.setDuration(100);
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    validAnswer = false;
-            }
-        } while (!validAnswer);
+        System.out.print("Recommended Recovery Task: ");
+        if (Grade.getWeightedAssignmentMark()< 40 && Grade.getWeightedAssignmentMark() < 40) {
+            System.out.println("Whole Module");
+            System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
+            System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
+            newTask.setDescription(MODULE);
+            newTask.setDuration(50);
+        } else if (Grade.getWeightedExamMark() < 40) {
+            System.out.println("Final Examination");
+            System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
+            newTask.setDescription(EXAM);
+            newTask.setDuration(30);
+        } else if (Grade.getWeightedAssignmentMark() < 40) {
+            System.out.println("Assignment");
+            System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
+            newTask.setDescription(ASSIGNMENT);
+            newTask.setDuration(50);
+        }
 
         // Creating IDManager object to generate new ID for recTask
-        IDManager recTaskIDManager = new IDManager();
-        recTaskIDManager.getHighestTaskID(database.getRecTaskDB());
+        IDManager recTaskIDManager = new IDManager(database.getRecTaskDB());
+        recTaskIDManager.getHighestTaskID();
         String nextTaskID = "T" + recTaskIDManager.generateNewID();
+
         newTask.setTaskID(nextTaskID);
         newTask.setPlanID(this.planID);
-        database.addRecoveryTask(newTask);
         return newTask;
     }
     public HashMap<String, RecoveryTask> deleteRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {

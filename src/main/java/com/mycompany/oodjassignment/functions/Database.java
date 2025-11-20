@@ -43,6 +43,16 @@ public class Database {
         recTaskDB.remove(taskID);
     }
     // Object getters
+    public Grades getGrades(String targetStudentID, String targetCourseID) {
+        Grades newGrade = new Grades();
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID) && grade.getCourseID().equals(targetCourseID)) {
+                newGrade = grade;
+                grade.setCourseObject(courseDB.get(targetCourseID));
+            }
+        }
+        return newGrade;
+    }
     public Student getStudent(String studentID) {
         return studentDB.get(studentID);
     }
@@ -66,7 +76,8 @@ public class Database {
         ArrayList<Student> failedStudentsList = new ArrayList<>();
         for (Grades grade : gradesDB.values()) {
             if (grade.getCourseID().equals(targetCourseID)) {
-                if (grade.calculateGPA(database) < 2.0) {
+                grade.setCourseObject(database.getCourse(grade.getCourseID()));
+                if (grade.calculateGPA() < 2.0) {
                     Student student = studentDB.get(grade.getStudentID());
                     if (student != null) {
                         failedStudentsList.add(student);

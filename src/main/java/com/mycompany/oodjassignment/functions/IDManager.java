@@ -4,11 +4,18 @@ import java.util.HashMap;
 
 public class IDManager {
     private int highestInt = 0;
+    private HashMap<String, ?> sourceHashMap;
 
+    // hashmap injector constructor
+    public IDManager(HashMap<String, ?> sourceHashMap) {
+        this.sourceHashMap = sourceHashMap;
+    }
+
+    // generate ID mechanism
     public int generateNewID() {
         return highestInt+1;
     }
-    public int getHighestTaskID(HashMap<String, ?> sourceHashMap) {
+    public int getHighestTaskID() {
         for (String key : sourceHashMap.keySet()) {
             int num = Integer.parseInt(key.substring(1));
             if (num > highestInt) {

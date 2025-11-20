@@ -6,6 +6,7 @@ public class Grades implements CSVParser<Grades> {
     private String gradeID, studentID, courseID;
     private double examMark, assignmentMark;
     private static final String filename = "student_grades.csv";
+    private Course course;
 
     // constructors
     public Grades () {};
@@ -15,6 +16,14 @@ public class Grades implements CSVParser<Grades> {
         this.courseID = courseID;
         this.examMark = examMark;
         this.assignmentMark = assignmentMark;
+    }
+    public Grades(String gradeID, String studentID, String courseID, int examMark, int assignmentMark, Course course) {
+        this.gradeID = gradeID;
+        this.studentID = studentID;
+        this.courseID = courseID;
+        this.examMark = examMark;
+        this.assignmentMark = assignmentMark;
+        this.course = course;
     }
     // getters
     public String getGradeID() { return gradeID; }
@@ -28,11 +37,12 @@ public class Grades implements CSVParser<Grades> {
     public void setCourseID(String courseID) { this.courseID = courseID; }
     public void setExamMark(int examMark) { this.examMark = examMark; }
     public void setAssignmentMark(int assignmentMark) { this.assignmentMark = assignmentMark; }
+    public void setCourseObject(Course course) { this.course = course; }
 
     // methods
-    public double calculateGPA(Database database) {
+    public double calculateGPA() {
         double totalMark, GPA;
-        totalMark = getWeightedExamMark(database) + (getWeightedAssignmentMark(database));
+        totalMark = getWeightedExamMark() + (getWeightedAssignmentMark());
 
         if (totalMark >= 80 && totalMark <= 100) {
             GPA = 4.00;
@@ -59,13 +69,11 @@ public class Grades implements CSVParser<Grades> {
         }
         return GPA;
     }
-    public double getWeightedExamMark(Database database) {
-        Course course = database.getCourse(courseID);
+    public double getWeightedExamMark() {
         return (examMark * course.getExamWeight() / 100);
     }
 
-    public double getWeightedAssignmentMark(Database database) {
-        Course course = database.getCourse(courseID);
+    public double getWeightedAssignmentMark() {
         return (assignmentMark* course.getAssignmentWeight() / 100);
     }
 
