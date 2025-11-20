@@ -41,21 +41,24 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
 
         RecoveryTask newTask = new RecoveryTask();
         Scanner userInput = new Scanner(System.in);
+        System.out.println("Student Grades");
+        System.out.println("-----------------------");
+        System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
+        System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
+        System.out.println("GPA: "+Grade.calculateGPA());
+        System.out.println();
         System.out.print("Recommended Recovery Task: ");
+
         if (Grade.getWeightedAssignmentMark()< 40 && Grade.getWeightedAssignmentMark() < 40) {
             System.out.println("Whole Module");
-            System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
-            System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
             newTask.setDescription(MODULE);
             newTask.setDuration(50);
         } else if (Grade.getWeightedExamMark() < 40) {
             System.out.println("Final Examination");
-            System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
             newTask.setDescription(EXAM);
             newTask.setDuration(30);
         } else if (Grade.getWeightedAssignmentMark() < 40) {
             System.out.println("Assignment");
-            System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
             newTask.setDescription(ASSIGNMENT);
             newTask.setDuration(50);
         }
