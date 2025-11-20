@@ -1,11 +1,75 @@
 package com.mycompany.oodjassignment.classes;
-import com.mycompany.oodjassignment.functions.*;
-import java.util.*;
 
+import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.IDManager;
+import java.util.ArrayList;
+import java.util.Scanner;
 public class AcademicOfficer extends User {
+    private static final long serialVersionUID = 1L;
+
+    private String department;
+    private String officeLocation;
+
     public AcademicOfficer() {
-        setRole("Academic Officer");
+        super();
+        setRole(UserRole.ACADEMIC_OFFICER);
+        this.department = "";
+        this.officeLocation = "";
     }
+
+    public AcademicOfficer(String userID,
+                           String username,
+                           String password,
+                           String fullName,
+                           String email) {
+        this(userID, username, password, fullName, email, "", "");
+    }
+
+    public AcademicOfficer(String userID,
+                           String username,
+                           String password,
+                           String fullName,
+                           String email,
+                           String department,
+                           String officeLocation) {
+        super(userID, username, password, fullName, email, UserRole.ACADEMIC_OFFICER);
+        this.department = department;
+        this.officeLocation = officeLocation;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getOfficeLocation() {
+        return officeLocation;
+    }
+
+    public void setOfficeLocation(String officeLocation) {
+        this.officeLocation = officeLocation;
+    }
+
+    @Override
+    public String getPermissions() {
+        return "Full access to student records, course recovery plans, eligibility "
+                + "checks, enrollment management, and academic reporting";
+    }
+
+    @Override
+    public String toFileString() {
+        return super.toFileString() + "|" + department + "|" + officeLocation;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("AcademicOfficer[ID=%s, Username=%s, Name=%s, Department=%s]",
+                getUserID(), getUsername(), getFullName(), department);
+    }
+
     public void searchStudent(Database database) {
         Scanner userInput = new Scanner(System.in);
         int courseCount = 0;
@@ -32,13 +96,12 @@ public class AcademicOfficer extends User {
         System.out.println();
         for (Grades grade : database.getGradeDB().values()) {
             if (grade.getStudentID().equals(student.getStudentID())) {
-                Course course = database.getCourse(grade.getCourseID());
-                grade.setCourseObject(course);
-                double courseGPA = grade.calculateGPA();
+                double courseGPA = grade.calculateGPA(database);
+                Course course = database.getCourseDB().get(grade.getCourseID());
                 if (courseGPA < 2.0) {
                     courseCount++;
                     System.out.println(courseCount + ". " + course.getCourseName() + "-" + course.getCourseID());
-                    System.out.println("   GPA: " + grade.calculateGPA());
+                    System.out.println("   GPA: " + grade.calculateGPA(database));
                 }
             }
         }
@@ -68,9 +131,8 @@ public class AcademicOfficer extends User {
                 courseFound = true;
             }
         } while (!courseFound);
-        Course selectedCourse = database.getCourse(targetCourseID);
+
         // Displaying failed students for the user by iterating through the array list
-        System.out.println("Failed Students for Module: " + selectedCourse.getCourseID() + "-" + selectedCourse.getCourseName());
         for (Student student : failedStudents) {
             failStudentCount++;
             System.out.println(failStudentCount+". "+student.getStudentID()+" "+student.getFirstName()+" "+student.getLastName());
@@ -91,17 +153,15 @@ public class AcademicOfficer extends User {
         } while (!studentFound);
 
         // Create an instance of IDManager to generate next ID for PlanID
-        IDManager IDManager = new IDManager(database.getRecPlanDB());
-        IDManager.getHighestTaskID();
+        IDManager IDManager = new IDManager();
+        IDManager.getHighestTaskID(database.getRecPlanDB());
         String nextPlanID = "P"+IDManager.generateNewID();
 
         // make new RecoveryPlan object
-        Grades targetGrade = database.getGrades(targetStudentID,targetCourseID);
-        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,targetCourseID,userID,"0.00");
-        RecoveryTask newTask = newPlan.addNewTask(targetGrade, database);     // Call instance to create RecoveryTask
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID,targetStudentID,userID,"0.00");
+        RecoveryTask newTask = newPlan.addNewTask(database);     // Call instance to create RecoveryTask
         database.addRecoveryPlan(newPlan);
         database.addRecoveryTask(newTask);
-        System.out.println("Recovery Plan and Task successfully added for Student " + targetStudentID);
     }
 
     // delete recovery plan
@@ -146,7 +206,6 @@ public class AcademicOfficer extends User {
                 } else {
                     final int listIndex = planSelection - 1;
                     database.removeRecoveryPlan(studentPlanID.get(listIndex));
-                    database.removeRecoverytask(studentPlanID.get(listIndex));
                     planDelete = true;
                 }
             } while (!planDelete);
