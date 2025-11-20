@@ -96,6 +96,12 @@ public class Database {
         }
         return failedStudentsList;
     }
+    // Testing
+    public boolean StudentExist(String targetStudentID) {
+        boolean studentExist;
+        studentExist = studentDB.containsKey(targetStudentID);
+        return studentExist;
+    }
 
     // RecoveryPlan methods
     public ArrayList<String> findStudentRecoveryPlan(String targetStudentID) {

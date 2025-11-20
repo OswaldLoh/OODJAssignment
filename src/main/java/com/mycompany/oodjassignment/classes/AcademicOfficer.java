@@ -9,19 +9,16 @@ public class AcademicOfficer extends User {
     public void searchStudent(Database database) {
         Scanner userInput = new Scanner(System.in);
         int courseCount = 0;
-        boolean studentFound;
-        Student student;
+        Student student = new Student();
+        String targetStudentID;
         do {
             System.out.print("Please enter Student ID: ");
-            String targetStudentID = userInput.nextLine();
-            student = database.getStudent(targetStudentID);
-            if (student == null) {
+            targetStudentID = userInput.nextLine();
+            if (!database.StudentExist(targetStudentID)) {
                 System.out.println("Student is not found inside database. Please try again.");
-                studentFound = false;
-            } else {
-                studentFound = true;
+                student = database.getStudent(targetStudentID);
             }
-        } while (!studentFound);
+        } while (!database.StudentExist(targetStudentID));
         System.out.println();
         System.out.println("----------------------");
         System.out.println("Student ID: " + student.getStudentID());
@@ -101,7 +98,8 @@ public class AcademicOfficer extends User {
         RecoveryTask newTask = newPlan.addNewTask(targetGrade, database);     // Call instance to create RecoveryTask
         database.addRecoveryPlan(newPlan);
         database.addRecoveryTask(newTask);
-        System.out.println("Recovery Plan and Task successfully added for Student " + targetStudentID);
+        System.out.println();
+        System.out.println("Recovery Plan and Task successfully added for Student " + targetStudentID + ".");
     }
 
     // delete recovery plan
