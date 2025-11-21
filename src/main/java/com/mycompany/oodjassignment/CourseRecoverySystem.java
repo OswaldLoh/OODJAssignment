@@ -40,6 +40,8 @@ public class CourseRecoverySystem {
                         testUser.searchStudent(database);
                         break;
                     case 5:
+                        Student student = database.getStudent("S002");
+                    case 6:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;
