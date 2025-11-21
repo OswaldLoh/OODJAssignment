@@ -201,10 +201,10 @@ public class DashboardFrame extends javax.swing.JFrame {
         boolean isAcademicOfficer = role == UserRole.ACADEMIC_OFFICER;
         boolean isCourseAdministrator = role == UserRole.COURSE_ADMINISTRATOR;
 
-        userManagementButton.setVisible(isAcademicOfficer);
-        eligibilityButton.setVisible(isAcademicOfficer);
-        academicReportButton.setVisible(isAcademicOfficer);
-        recoveryPlanButton.setVisible(isCourseAdministrator);
+        userManagementButton.setVisible(isAcademicOfficer || isCourseAdministrator);
+        eligibilityButton.setVisible(isAcademicOfficer || isCourseAdministrator);
+        academicReportButton.setVisible(isAcademicOfficer || isCourseAdministrator);
+        recoveryPlanButton.setVisible(isAcademicOfficer);
 
         buttonPanel.revalidate();
         buttonPanel.repaint();
