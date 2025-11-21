@@ -72,6 +72,10 @@ public class Database {
     public RecoveryPlan getRecoveryPlan(String planID) {
         return recPlanDB.get(planID);
     }
+    public RecoveryTask getRecoveryTask(String taskID) {
+        return recTaskDB.get(taskID);
+    }
+
     // HashMap getters
     public HashMap<String, Student> getStudentDB() {
         return studentDB;
@@ -115,11 +119,20 @@ public class Database {
     }
 
     // RecoveryPlan helper methods
-    public ArrayList<String> findStudentRecoveryPlan(String targetStudentID) {
-        ArrayList<String> studentPlanID = new ArrayList<>();
+    public ArrayList<RecoveryTask> findPlanRecoveryTask(String targetRecoveryPlanID) {
+        ArrayList<RecoveryTask> taskInPlan = new ArrayList<>();
+        for (RecoveryTask task : recTaskDB.values()) {
+            if ((targetRecoveryPlanID).equals(task.getPlanID())) {
+                taskInPlan.add(task);
+            }
+        }
+        return taskInPlan;
+    }
+    public ArrayList<RecoveryPlan> findStudentRecoveryPlan(String targetStudentID) {
+        ArrayList<RecoveryPlan> studentPlanID = new ArrayList<>();
         for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
             if ((targetStudentID).equals(plan.getStudentID())) {
-                studentPlanID.add(plan.getPlanID());
+                studentPlanID.add(plan);
             }
         }
         return studentPlanID;

@@ -3,7 +3,6 @@ package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.IDManager;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AcademicOfficer extends User {
@@ -133,6 +132,7 @@ public class AcademicOfficer extends User {
         do {
             System.out.print(">>>   ");
             int studentSelection = userInput.nextInt();
+            userInput.nextLine();
             if (studentSelection <= 0 || studentSelection > failedStudents.size()) {
                 System.out.println("Invalid selection. Please try again.");
                 System.out.println();
@@ -168,7 +168,7 @@ public class AcademicOfficer extends User {
             }
         } while (!database.studentExist(targetStudentID));
 
-        ArrayList<String> studentPlanID = database.findStudentRecoveryPlan(targetStudentID);
+        ArrayList<RecoveryPlan> studentPlan = database.findStudentRecoveryPlan(targetStudentID);
         int planCount = database.getStudentRecoveryPlanCount(targetStudentID);
 
         if (planCount == 0) {
@@ -178,8 +178,8 @@ public class AcademicOfficer extends User {
 
         int number = 1;
         System.out.println("Recovery Plans for Student " + targetStudentID);
-        for (String planID : studentPlanID) {
-            System.out.println(number + ". " + planID);
+        for (RecoveryPlan plan : studentPlan) {
+            System.out.println(number + ". " + plan.getPlanID());
             number += 1;
         }
 
@@ -189,12 +189,13 @@ public class AcademicOfficer extends User {
         do {
             System.out.print(">>>   ");
             int planSelection = userInput.nextInt();
-            if (planSelection <= 0 || planSelection > studentPlanID.size()) {
+            userInput.nextLine();
+            if (planSelection <= 0 || planSelection > studentPlan.size()) {
                 System.out.println("Invalid selection. Please try again.");
                 System.out.println();
             } else {
                 final int listIndex = planSelection - 1;
-                String planID = studentPlanID.get(listIndex);
+                String planID = studentPlan.get(listIndex).getPlanID();
                 database.removeRecoveryPlan(planID);
                 database.removeRecoverytask(planID);
                 planDelete = true;
@@ -203,7 +204,10 @@ public class AcademicOfficer extends User {
     }
     public void updateRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
-        String targetPlanID, targetStudentID;
+        String targetStudentID;
+        boolean planUpdate = false, taskUpdate = false;
+        int number = 1, planCount;
+        ArrayList<RecoveryPlan> studentPlan;
 
         do {
             System.out.print("Please enter Student ID: ");
@@ -211,55 +215,69 @@ public class AcademicOfficer extends User {
             if (!database.studentExist(targetStudentID)) {      // if student doesn't exist
                 System.out.println("Student is not found inside database. Please try again.");
             }
-        } while (!database.studentExist(targetStudentID));
-
-        ArrayList<String> studentPlanID = database.findStudentRecoveryPlan(targetStudentID);
-        int planCount = database.getStudentRecoveryPlanCount(targetStudentID);
-
-        if (planCount == 0) {
-            System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
-            return;
-        }
-
-        int number = 1;
-        System.out.println("Recovery Plans for Student " + targetStudentID);
-        for (String planID : studentPlanID) {
-            for (RecoveryPlan plan : database.getRecPlanDB().values()) {
-                if (plan.getPlanID().equals(planID)) {
-                    System.out.println(number + ". " + planID + "     " + "Progress: " + plan.getProgress());
-                    number += 1;
-                }
+            studentPlan = database.findStudentRecoveryPlan(targetStudentID);
+            planCount = studentPlan.size();
+            if (planCount == 0) {
+                System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
             }
-        }
-        System.out.println("Choose PlanID to update progress level");
+        } while (!database.studentExist(targetStudentID) || planCount == 0);
 
-        boolean planUpdate = false;
+        System.out.println("Recovery Plans for Student " + targetStudentID);
+        for (RecoveryPlan plan : studentPlan) {
+            System.out.println(number + ". " + plan.getPlanID() + "     " + "Progress: " + plan.getProgress());
+            number += 1;
+        }
+
+        System.out.println("Choose PlanID to update progress level");
         do {
             System.out.print(">>>   ");
             int planSelection = userInput.nextInt();
-            if (planSelection <= 0 || planSelection > studentPlanID.size()) {
+            userInput.nextLine();
+            if (planSelection <= 0 || planSelection > studentPlan.size()) {
                 System.out.println("Invalid selection. Please try again.");
                 System.out.println();
             } else {
-                boolean validNewProgress = false;
-                final int listIndex = planSelection - 1;
-                String planID = studentPlanID.get(listIndex);
-                System.out.println("Plan ID: " + planID + " selected.");
-                try {
-                    do {
-                        System.out.print("Please enter new progress level: ");
-                        double newProgress = userInput.nextDouble();
-                        if (newProgress < 0 || newProgress > 100) {
-                            System.out.println("Invalid progress level entered. Please try again.");
-                            System.out.println();
-                        } else {
-                            database.getRecoveryPlan(planID).setProgress(newProgress);
-                            validNewProgress = true;
-                        }
-                    } while (!validNewProgress);
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid progress level entered. Please try again.");
+                final int planListIndex = planSelection - 1;
+                String planID = studentPlan.get(planListIndex).getPlanID();
+                ArrayList<RecoveryTask> planTasks = database.findPlanRecoveryTask(planID);
+
+                System.out.println();
+                System.out.println("Recovery Tasks");
+
+                for (RecoveryTask task : planTasks) {
+                    System.out.println(task.getTaskID() + "    " + task.getDescription() + "     Completion: " + task.getCompletion());
                 }
+
+                do {
+                    System.out.print("Enter TaskID: ");
+                    String targetTaskID = userInput.nextLine();
+
+                    if (planTasks.contains(database.getRecoveryTask(targetTaskID))) {
+                        System.out.println("Please update completion");
+                        System.out.println("1. Completed");
+                        System.out.println("2. Incomplete");
+                        boolean validCompletionAnswer = false;
+                        do {
+                            System.out.print(">>>   ");
+                            int completeSelection = userInput.nextInt();
+                            userInput.nextLine();
+                            if (completeSelection == 1) {
+                                database.getRecoveryTask(targetTaskID).setCompletion(true);
+                                validCompletionAnswer = true;
+                            } else if (completeSelection == 2) {
+                                database.getRecoveryTask(targetTaskID).setCompletion(false);
+                                validCompletionAnswer = true;
+                            } else {
+                                System.out.println("Invalid selection. Please try again.");
+                                System.out.println();
+                            }
+                        } while (!validCompletionAnswer);
+                        taskUpdate = true;
+                    } else {
+                        System.out.println("Invalid selection. Please try again.");
+                        System.out.println();
+                    }
+                } while (!taskUpdate);
                 planUpdate = true;
             }
         } while (!planUpdate);
