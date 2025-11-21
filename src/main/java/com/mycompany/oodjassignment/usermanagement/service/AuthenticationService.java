@@ -70,13 +70,8 @@ public class AuthenticationService {
         return currentUser != null;
     }
     
-    public boolean changePassword(String oldPassword, String newPassword) {
+    public boolean changePassword(String newPassword) {
         if (currentUser == null) {
-            return false;
-        }
-        
-        String hashedOldPassword = PasswordUtil.simpleHash(oldPassword);
-        if (!currentUser.getPassword().equals(hashedOldPassword)) {
             return false;
         }
         
@@ -84,10 +79,13 @@ public class AuthenticationService {
             return false;
         }
         
+        return updateCurrentUserPassword(newPassword);
+    }
+    
+    private boolean updateCurrentUserPassword(String newPassword) {
         String hashedNewPassword = PasswordUtil.simpleHash(newPassword);
         currentUser.setPassword(hashedNewPassword);
         userManager.updateUser(currentUser);
-        
         return true;
     }
     
