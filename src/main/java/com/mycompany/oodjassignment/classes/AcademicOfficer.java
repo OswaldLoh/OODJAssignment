@@ -56,7 +56,9 @@ public class AcademicOfficer extends User {
         this.officeLocation = officeLocation;
     }
 
-    public void searchStudent(Database database) {
+
+    // Methods
+    public void searchStudent(Database database) {          // Search students and list failed components
         Scanner userInput = new Scanner(System.in);
         int courseCount = 0;
         Student student = new Student();
@@ -65,11 +67,12 @@ public class AcademicOfficer extends User {
         do {
             System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
-            if (!database.StudentExist(targetStudentID)) {
+            if (!database.StudentExist(targetStudentID)) {      // if student doesn't exist
                 System.out.println("Student is not found inside database. Please try again.");
-                student = database.getStudent(targetStudentID);
             }
         } while (!database.StudentExist(targetStudentID));
+
+        student = database.getStudent(targetStudentID);
 
         System.out.println();
         System.out.println("----------------------");
@@ -97,7 +100,7 @@ public class AcademicOfficer extends User {
         }
     }
 
-    public void addRecoveryPlan(Database database) {
+    public void addRecoveryPlan(Database database) {        // Add Recovery Plan
         Scanner userInput = new Scanner(System.in);
         int failStudentCount = 0;
         boolean courseFound;

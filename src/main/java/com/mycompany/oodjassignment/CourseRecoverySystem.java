@@ -38,8 +38,8 @@ public class CourseRecoverySystem {
                         testUser.deleteRecoveryPlan(database);
                         break;
                     case 4:
-                        
-                    case 6:
+
+                    case 5:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;
