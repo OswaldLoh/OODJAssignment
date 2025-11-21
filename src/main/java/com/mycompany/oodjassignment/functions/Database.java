@@ -69,6 +69,9 @@ public class Database {
         return courseDB.get(courseID);
     }
     // HashMap getters
+    public HashMap<String, Student> getStudentDB() {
+        return studentDB;
+    }
     public HashMap<String, Course> getCourseDB() {
         return courseDB;
     }
