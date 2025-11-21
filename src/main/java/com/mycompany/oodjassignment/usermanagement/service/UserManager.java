@@ -11,8 +11,8 @@ import java.util.List;
 
 public class UserManager {
     
-    private static final String USER_FILE = "data/users.txt";
-    private static final String DEFAULT_USER_RESOURCE = "/users.txt";
+    private static final String USER_FILE = "data/users.csv";
+    private static final String DEFAULT_USER_RESOURCE = "/users.csv";
     private List<User> users;
     
     public UserManager() {
@@ -107,27 +107,27 @@ public class UserManager {
     
     private User parseUserFromString(String line) {
         try {
-            String[] parts = line.split("\\|");
+            String[] parts = line.split(",", -1);
             if (parts.length < 9) {
                 return null;
             }
             
-            String userId = parts[0];
-            String username = parts[1];
-            String password = parts[2];
-            String fullName = parts[3];
-            String email = parts[4];
-            UserRole role = UserRole.valueOf(parts[5]);
-            UserStatus status = UserStatus.valueOf(parts[6]);
-            LocalDateTime createdDate = LocalDateTime.parse(parts[7], 
+            String userId = parts[0].trim();
+            String username = parts[1].trim();
+            String password = parts[2].trim();
+            String fullName = parts[3].trim();
+            String email = parts[4].trim();
+            UserRole role = UserRole.valueOf(parts[5].trim());
+            UserStatus status = UserStatus.valueOf(parts[6].trim());
+            LocalDateTime createdDate = LocalDateTime.parse(parts[7].trim(), 
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME);
-            LocalDateTime lastModifiedDate = LocalDateTime.parse(parts[8], 
+            LocalDateTime lastModifiedDate = LocalDateTime.parse(parts[8].trim(), 
                 DateTimeFormatter.ISO_LOCAL_DATE_TIME);
             
             User user;
             if (role == UserRole.ACADEMIC_OFFICER) {
-                String department = parts.length > 9 ? parts[9] : "";
-                String officeLocation = parts.length > 10 ? parts[10] : "";
+                String department = parts.length > 9 ? parts[9].trim() : "";
+                String officeLocation = parts.length > 10 ? parts[10].trim() : "";
                 AcademicOfficer officer = new AcademicOfficer(userId, username, 
                     password, fullName, email, department, officeLocation);
                 officer.setStatus(status);
@@ -135,8 +135,8 @@ public class UserManager {
                 officer.setLastModifiedDate(lastModifiedDate);
                 user = officer;
             } else {
-                String managedCourses = parts.length > 9 ? parts[9] : "";
-                String specialization = parts.length > 10 ? parts[10] : "";
+                String managedCourses = parts.length > 9 ? parts[9].trim() : "";
+                String specialization = parts.length > 10 ? parts[10].trim() : "";
                 CourseAdministrator admin = new CourseAdministrator(userId, username, 
                     password, fullName, email, managedCourses, specialization);
                 admin.setStatus(status);

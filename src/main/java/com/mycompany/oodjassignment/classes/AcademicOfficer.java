@@ -340,7 +340,7 @@ public class AcademicOfficer extends User {
 
     @Override
     public String toFileString() {
-        return super.toFileString() + "|" + department + "|" + officeLocation;
+        return super.toFileString() + "," + department + "," + officeLocation;
     }
 
     @Override

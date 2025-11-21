@@ -174,7 +174,7 @@ public abstract class User implements Serializable {
 
     public String toFileString() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-        return String.format("%s|%s|%s|%s|%s|%s|%s|%s|%s",
+        return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
                 userID,
                 username,
                 password,
