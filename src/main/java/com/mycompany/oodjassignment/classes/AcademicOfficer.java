@@ -3,6 +3,7 @@ package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.IDManager;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class AcademicOfficer extends User {
@@ -67,10 +68,10 @@ public class AcademicOfficer extends User {
         do {
             System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
-            if (!database.StudentExist(targetStudentID)) {      // if student doesn't exist
+            if (!database.studentExist(targetStudentID)) {      // if student doesn't exist
                 System.out.println("Student is not found inside database. Please try again.");
             }
-        } while (!database.StudentExist(targetStudentID));
+        } while (!database.studentExist(targetStudentID));
 
         student = database.getStudent(targetStudentID);
 
@@ -158,15 +159,14 @@ public class AcademicOfficer extends User {
     public void deleteRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         String targetStudentID;
-        Student student;
+
         do {
             System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
-            student = database.getStudent(targetStudentID);
-            if (student == null) {
+            if (!database.studentExist(targetStudentID)) {      // if student doesn't exist
                 System.out.println("Student is not found inside database. Please try again.");
             }
-        } while (student == null);
+        } while (!database.studentExist(targetStudentID));
 
         ArrayList<String> studentPlanID = database.findStudentRecoveryPlan(targetStudentID);
         int planCount = database.getStudentRecoveryPlanCount(targetStudentID);
@@ -182,6 +182,7 @@ public class AcademicOfficer extends User {
             System.out.println(number + ". " + planID);
             number += 1;
         }
+
         System.out.println("Choose PlanID to delete");
 
         boolean planDelete = false;
@@ -199,6 +200,69 @@ public class AcademicOfficer extends User {
                 planDelete = true;
             }
         } while (!planDelete);
+    }
+    public void updateRecoveryPlan(Database database) {
+        Scanner userInput = new Scanner(System.in);
+        String targetPlanID, targetStudentID;
+
+        do {
+            System.out.print("Please enter Student ID: ");
+            targetStudentID = userInput.nextLine();
+            if (!database.studentExist(targetStudentID)) {      // if student doesn't exist
+                System.out.println("Student is not found inside database. Please try again.");
+            }
+        } while (!database.studentExist(targetStudentID));
+
+        ArrayList<String> studentPlanID = database.findStudentRecoveryPlan(targetStudentID);
+        int planCount = database.getStudentRecoveryPlanCount(targetStudentID);
+
+        if (planCount == 0) {
+            System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
+            return;
+        }
+
+        int number = 1;
+        System.out.println("Recovery Plans for Student " + targetStudentID);
+        for (String planID : studentPlanID) {
+            for (RecoveryPlan plan : database.getRecPlanDB().values()) {
+                if (plan.getPlanID().equals(planID)) {
+                    System.out.println(number + ". " + planID + "     " + "Progress: " + plan.getProgress());
+                    number += 1;
+                }
+            }
+        }
+        System.out.println("Choose PlanID to update progress level");
+
+        boolean planUpdate = false;
+        do {
+            System.out.print(">>>   ");
+            int planSelection = userInput.nextInt();
+            if (planSelection <= 0 || planSelection > studentPlanID.size()) {
+                System.out.println("Invalid selection. Please try again.");
+                System.out.println();
+            } else {
+                boolean validNewProgress = false;
+                final int listIndex = planSelection - 1;
+                String planID = studentPlanID.get(listIndex);
+                System.out.println("Plan ID: " + planID + " selected.");
+                try {
+                    do {
+                        System.out.print("Please enter new progress level: ");
+                        double newProgress = userInput.nextDouble();
+                        if (newProgress < 0 || newProgress > 100) {
+                            System.out.println("Invalid progress level entered. Please try again.");
+                            System.out.println();
+                        } else {
+                            database.getRecoveryPlan(planID).setProgress(newProgress);
+                            validNewProgress = true;
+                        }
+                    } while (!validNewProgress);
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid progress level entered. Please try again.");
+                }
+                planUpdate = true;
+            }
+        } while (!planUpdate);
     }
 
     @Override

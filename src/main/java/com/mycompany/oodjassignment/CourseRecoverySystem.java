@@ -38,7 +38,7 @@ public class CourseRecoverySystem {
                         testUser.deleteRecoveryPlan(database);
                         break;
                     case 4:
-
+                        testUser.updateRecoveryPlan(database);
                     case 5:
                         System.out.println("Exiting program.");
                         repeat = false;

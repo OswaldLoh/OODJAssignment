@@ -4,7 +4,6 @@ import com.mycompany.oodjassignment.classes.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class Database {
     private RecoveryPlan recPlanInterface;
@@ -35,6 +34,7 @@ public class Database {
     public void addRecoveryTask(RecoveryTask recTask) {
         recTaskDB.put(recTask.getTaskID(),recTask);
     }
+
     // Object removers
     public void removeRecoveryPlan(String planID) {
         recPlanDB.remove(planID);
@@ -51,6 +51,7 @@ public class Database {
         }
 
     }
+
     // Object getters
     public Grades getGrades(String targetStudentID, String targetCourseID) {
         Grades newGrade = new Grades();
@@ -67,6 +68,9 @@ public class Database {
     }
     public Course getCourse(String courseID) {
         return courseDB.get(courseID);
+    }
+    public RecoveryPlan getRecoveryPlan(String planID) {
+        return recPlanDB.get(planID);
     }
     // HashMap getters
     public HashMap<String, Student> getStudentDB() {
@@ -101,14 +105,16 @@ public class Database {
         }
         return failedStudentsList;
     }
-    // Testing
-    public boolean StudentExist(String targetStudentID) {
-        boolean studentExist;
-        studentExist = studentDB.containsKey(targetStudentID);
-        return studentExist;
+    // Check existence in database
+    public boolean studentExist(String targetStudentID) {
+        return studentDB.containsKey(targetStudentID);
     }
 
-    // RecoveryPlan methods
+    public boolean planExist(String targetPlanID) {
+        return recPlanDB.containsKey(targetPlanID);
+    }
+
+    // RecoveryPlan helper methods
     public ArrayList<String> findStudentRecoveryPlan(String targetStudentID) {
         ArrayList<String> studentPlanID = new ArrayList<>();
         for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
