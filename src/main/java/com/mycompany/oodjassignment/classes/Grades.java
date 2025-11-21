@@ -1,6 +1,5 @@
 package com.mycompany.oodjassignment.classes;
-import com.mycompany.oodjassignment.functions.*;
-import java.util.*;
+import com.mycompany.oodjassignment.functions.CSVParser;
 
 public class Grades implements CSVParser<Grades> {
     private String gradeID, studentID, courseID;
