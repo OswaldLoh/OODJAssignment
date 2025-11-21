@@ -29,18 +29,16 @@ public class CourseRecoverySystem {
                 userInput.nextLine();
                 switch (selection) {
                     case 1:
-                        testUser.addRecoveryPlan(database);
+                        testUser.searchStudent(database);
                         break;
                     case 2:
+                        testUser.addRecoveryPlan(database);
                         break;
                     case 3:
                         testUser.deleteRecoveryPlan(database);
                         break;
                     case 4:
-                        testUser.searchStudent(database);
-                        break;
-                    case 5:
-                        Student student = database.getStudent("S002");
+                        
                     case 6:
                         System.out.println("Exiting program.");
                         repeat = false;

@@ -84,6 +84,8 @@ public class Database {
     public HashMap<String, RecoveryTask> getRecTaskDB() {
         return recTaskDB;
     }
+
+
     public ArrayList<Student> getFailedStudents(String targetCourseID, Database database) {
         ArrayList<Student> failedStudentsList = new ArrayList<>();
         for (Grades grade : gradesDB.values()) {
