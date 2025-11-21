@@ -3,20 +3,37 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
-
+import com.mycompany.oodjassignment.classes.User;
+import com.mycompany.oodjassignment.classes.UserRole;
+import com.mycompany.oodjassignment.classes.UserStatus;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+import com.mycompany.oodjassignment.usermanagement.service.UserManager;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 /**
  *
  * @author willy
  */
-public class UserManagementFrame1 extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserManagementFrame1.class.getName());
+public class UserManagementFrame extends javax.swing.JFrame {
+        private AuthenticationService authService;
+        private UserManager userManager;
+        private DefaultTableModel tableModel;
 
-    /**
-     * Creates new form UserManagementFrame1
-     */
-    public UserManagementFrame1() {
+        private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserManagementFrame.class.getName());
+
+        /**
+         * Creates new form UserManagementFrame2
+         */
+    public UserManagementFrame(AuthenticationService authService) {
+        this.authService = authService;
+        this.userManager = new UserManager();
         initComponents();
+        setLocationRelativeTo(null);
+        setupTable();
+        setupFilterComboBox();
+        setupCurrentUserLabel();
+        loadUsers();
     }
 
     /**
@@ -28,21 +45,566 @@ public class UserManagementFrame1 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jPanel2 = new javax.swing.JPanel();
+        topPanel = new javax.swing.JPanel();
+        headerPanel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        searchPanel = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
+        searchButton = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        filterComboBox = new javax.swing.JComboBox<>();
+        refreshButton = new javax.swing.JButton();
+        returnButton = new javax.swing.JButton();
+        tablePanel = new javax.swing.JPanel();
+        scrollPane = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        buttonPanel = new javax.swing.JPanel();
+        addUserButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        activateButton = new javax.swing.JButton();
+        deactivateButton = new javax.swing.JButton();
+        deleteButton = new javax.swing.JButton();
+        viewLogsButton = new javax.swing.JButton();
+        changePasswordButton = new javax.swing.JButton();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1200, 700));
+        setSize(new java.awt.Dimension(1200, 700));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel2.setLayout(new java.awt.BorderLayout());
+
+        topPanel.setBackground(new java.awt.Color(219, 71, 251));
+        topPanel.setForeground(new java.awt.Color(219, 71, 251));
+        topPanel.setPreferredSize(new java.awt.Dimension(800, 120));
+        topPanel.setRequestFocusEnabled(false);
+        topPanel.setLayout(new java.awt.BorderLayout());
+
+        headerPanel.setBackground(new java.awt.Color(219, 71, 251));
+        headerPanel.setPreferredSize(new java.awt.Dimension(1189, 60));
+
+        jLabel1.setFont(new java.awt.Font("Trebuchet MS", 1, 26)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 255, 204));
+        jLabel1.setText("User Management");
+
+        jLabel2.setFont(new java.awt.Font("Trebuchet MS", 0, 16)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(204, 255, 204));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel2.setText("Logged in as: ");
+        jLabel2.setToolTipText("");
+
+        javax.swing.GroupLayout headerPanelLayout = new javax.swing.GroupLayout(headerPanel);
+        headerPanel.setLayout(headerPanelLayout);
+        headerPanelLayout.setHorizontalGroup(
+            headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 819, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        headerPanelLayout.setVerticalGroup(
+            headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(headerPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(headerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(headerPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(6, 6, 6))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
+
+        topPanel.add(headerPanel, java.awt.BorderLayout.PAGE_START);
+
+        searchPanel.setPreferredSize(new java.awt.Dimension(800, 40));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Search:");
+
+        searchField.setColumns(20);
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+
+        searchButton.setText("Search");
+        searchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchButtonActionPerformed(evt);
+            }
+        });
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Filter:");
+
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All Users", "Active Only", "Deactivated", "Academic Officers", "Course Administrators." }));
+        filterComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filterComboBoxActionPerformed(evt);
+            }
+        });
+
+        refreshButton.setText("Refresh");
+        refreshButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                refreshButtonActionPerformed(evt);
+            }
+        });
+
+        returnButton.setBackground(new java.awt.Color(0, 204, 204));
+        returnButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        returnButton.setText("Return");
+        returnButton.setBorderPainted(false);
+        returnButton.setOpaque(true);
+        returnButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                returnButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(searchButton)
+                .addGap(83, 83, 83)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(refreshButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE)
+                .addComponent(returnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
+        );
+        searchPanelLayout.setVerticalGroup(
+            searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(searchPanelLayout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(searchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4)
+                    .addComponent(filterComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(refreshButton, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(returnButton, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(7, Short.MAX_VALUE))
+        );
+
+        topPanel.add(searchPanel, java.awt.BorderLayout.CENTER);
+
+        jPanel2.add(topPanel, java.awt.BorderLayout.PAGE_START);
+
+        tablePanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        tablePanel.setPreferredSize(new java.awt.Dimension(800, 300));
+        tablePanel.setLayout(new java.awt.BorderLayout());
+
+        jTable1.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jTable1.setRowHeight(30);
+        scrollPane.setViewportView(jTable1);
+
+        tablePanel.add(scrollPane, java.awt.BorderLayout.CENTER);
+
+        jPanel2.add(tablePanel, java.awt.BorderLayout.CENTER);
+
+        buttonPanel.setPreferredSize(new java.awt.Dimension(906, 65));
+
+        addUserButton.setBackground(new java.awt.Color(34, 193, 165));
+        addUserButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        addUserButton.setForeground(new java.awt.Color(255, 255, 255));
+        addUserButton.setText("Add User");
+        addUserButton.setBorderPainted(false);
+        addUserButton.setOpaque(true);
+        addUserButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUserButtonActionPerformed(evt);
+            }
+        });
+
+        updateButton.setBackground(new java.awt.Color(34, 193, 165));
+        updateButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        updateButton.setForeground(new java.awt.Color(255, 255, 255));
+        updateButton.setText("Update User");
+        updateButton.setBorderPainted(false);
+        updateButton.setOpaque(true);
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
+        activateButton.setBackground(new java.awt.Color(34, 193, 165));
+        activateButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        activateButton.setForeground(new java.awt.Color(255, 255, 255));
+        activateButton.setText("Activate");
+        activateButton.setBorderPainted(false);
+        activateButton.setOpaque(true);
+        activateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                activateButtonActionPerformed(evt);
+            }
+        });
+
+        deactivateButton.setBackground(new java.awt.Color(34, 193, 165));
+        deactivateButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        deactivateButton.setForeground(new java.awt.Color(255, 255, 255));
+        deactivateButton.setText("Deactivate");
+        deactivateButton.setBorderPainted(false);
+        deactivateButton.setOpaque(true);
+        deactivateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deactivateButtonActionPerformed(evt);
+            }
+        });
+
+        deleteButton.setBackground(new java.awt.Color(34, 193, 165));
+        deleteButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        deleteButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteButton.setText("Delete");
+        deleteButton.setBorderPainted(false);
+        deleteButton.setOpaque(true);
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        viewLogsButton.setBackground(new java.awt.Color(34, 193, 165));
+        viewLogsButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        viewLogsButton.setForeground(new java.awt.Color(255, 255, 255));
+        viewLogsButton.setText("View Login Logs");
+        viewLogsButton.setBorderPainted(false);
+        viewLogsButton.setOpaque(true);
+        viewLogsButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewLogsButtonActionPerformed(evt);
+            }
+        });
+
+        changePasswordButton.setBackground(new java.awt.Color(34, 193, 165));
+        changePasswordButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        changePasswordButton.setForeground(new java.awt.Color(255, 255, 255));
+        changePasswordButton.setText("Change Password");
+        changePasswordButton.setBorderPainted(false);
+        changePasswordButton.setOpaque(true);
+        changePasswordButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changePasswordButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout buttonPanelLayout = new javax.swing.GroupLayout(buttonPanel);
+        buttonPanel.setLayout(buttonPanelLayout);
+        buttonPanelLayout.setHorizontalGroup(
+            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(addUserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(activateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(deactivateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(viewLogsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(changePasswordButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        buttonPanelLayout.setVerticalGroup(
+            buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(buttonPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(buttonPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addUserButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(activateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deactivateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(deleteButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(viewLogsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(changePasswordButton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(buttonPanel, java.awt.BorderLayout.PAGE_END);
+
+        getContentPane().add(jPanel2, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+   
+    private void setupTable() {
+        String[] columnNames = {"User ID", "Username", "Full Name", "Email", "Role", "Status", "Created Date"};
+        tableModel = new DefaultTableModel(columnNames, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        jTable1.setModel(tableModel);
+        
+        jTable1.getTableHeader().setFont(new java.awt.Font("Arial", java.awt.Font.BOLD, 13));
+        jTable1.getTableHeader().setBackground(new java.awt.Color(70, 130, 180));
+        jTable1.getTableHeader().setForeground(java.awt.Color.BLACK);
+    }
+
+    private void setupFilterComboBox() {
+        filterComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{
+            "All Users", "Active Only", "Deactivated", 
+            "Academic Officers", "Course Administrators"
+        }));
+    }
+
+    private void setupCurrentUserLabel() {
+        if (authService != null && authService.getCurrentUser() != null) {
+            User currentUser = authService.getCurrentUser();
+            jLabel2.setText("Logged in as: " + currentUser.getFullName() + 
+                          " (" + currentUser.getRole().getDisplayName() + ")");
+        }
+    }
+    
+    private void loadUsers() {
+        if (tableModel == null) return;
+        tableModel.setRowCount(0);
+        List<User> users = userManager.getAllUsers();
+
+        for (User user : users) {
+            Object[] row = {
+                user.getUserId(),
+                user.getUsername(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getRole().getDisplayName(),
+                user.getStatus(),
+                user.getCreatedDate().toLocalDate()
+            };
+            tableModel.addRow(row);
+        }
+    }
+
+    private void performSearch() {
+        String keyword = searchField.getText().trim();
+        if (keyword.isEmpty()) {
+            loadUsers();
+            return;
+        }
+
+        tableModel.setRowCount(0);
+        List<User> users = userManager.searchUsers(keyword);
+
+        for (User user : users) {
+            Object[] row = {
+                user.getUserId(),
+                user.getUsername(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getRole().getDisplayName(),
+                user.getStatus(),
+                user.getCreatedDate().toLocalDate()
+            };
+            tableModel.addRow(row);
+        }
+    }
+
+    private void applyFilter() {
+        String filter = (String) filterComboBox.getSelectedItem();
+        tableModel.setRowCount(0);
+        List<User> users;
+
+        switch (filter) {
+            case "Active Only":
+                users = userManager.getActiveUsers();
+                break;
+            case "Deactivated":
+                users = userManager.getAllUsers();
+                users.removeIf(u -> u.getStatus() != UserStatus.DEACTIVATED);
+                break;
+            case "Academic Officers":
+                users = userManager.getUsersByRole(UserRole.ACADEMIC_OFFICER);
+                break;
+            case "Course Administrators":
+                users = userManager.getUsersByRole(UserRole.COURSE_ADMINISTRATOR);
+                break;
+            default:
+                users = userManager.getAllUsers();
+        }
+
+        for (User user : users) {
+            Object[] row = {
+                user.getUserId(),
+                user.getUsername(),
+                user.getFullName(),
+                user.getEmail(),
+                user.getRole().getDisplayName(),
+                user.getStatus(),
+                user.getCreatedDate().toLocalDate()
+            };
+            tableModel.addRow(row);
+        }
+    }
+    private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
+        performSearch();
+    }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void returnButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_returnButtonActionPerformed
+        DashboardFrame dashboardFrame = new DashboardFrame(authService);
+        dashboardFrame.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_returnButtonActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        performSearch();
+    }//GEN-LAST:event_searchFieldActionPerformed
+
+    private void activateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_activateButtonActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+            if (selectedRow == -1) {
+                JOptionPane.showMessageDialog(this, "Please select a user to activate",
+                    "No Selection", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String userId = (String) tableModel.getValueAt(selectedRow, 0);
+            if (userManager.activateUser(userId)) {
+                JOptionPane.showMessageDialog(this, "User activated successfully",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadUsers();
+            }          
+    }//GEN-LAST:event_activateButtonActionPerformed
+
+    private void deactivateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deactivateButtonActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a user to deactivate",
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String userId = (String) tableModel.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to deactivate this user?",
+            "Confirm Deactivation", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (userManager.deactivateUser(userId)) {
+                JOptionPane.showMessageDialog(this, "User deactivated successfully",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadUsers();
+            }
+        }
+    }//GEN-LAST:event_deactivateButtonActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a user to delete",
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String userId = (String) tableModel.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this,
+            "Are you sure you want to permanently delete this user?\nThis action cannot be undone!",
+            "Confirm Deletion", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            if (userManager.deleteUser(userId)) {
+                JOptionPane.showMessageDialog(this, "User deleted successfully",
+                    "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadUsers();
+            }
+        }
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void viewLogsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewLogsButtonActionPerformed
+        LoginLogDialog dialog = new LoginLogDialog(this, authService);
+        dialog.setVisible(true);
+    }//GEN-LAST:event_viewLogsButtonActionPerformed
+
+    private void changePasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePasswordButtonActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a user to change password",
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String userId = (String) tableModel.getValueAt(selectedRow, 0);
+        User user = userManager.getUserById(userId);
+        if (user == null) {
+            JOptionPane.showMessageDialog(this, "Unable to find the selected user.",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        PasswordChangeDialog dialog = new PasswordChangeDialog(this, userManager, user);
+        dialog.setVisible(true);
+        if (dialog.isPasswordChanged()) {
+            loadUsers();
+        }
+    }//GEN-LAST:event_changePasswordButtonActionPerformed
+
+    private void addUserButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUserButtonActionPerformed
+        AddUserDialog dialog = new AddUserDialog(this, userManager);
+        dialog.setVisible(true);
+        if (dialog.isUserAdded()) {
+            loadUsers();
+        }
+    }//GEN-LAST:event_addUserButtonActionPerformed
+
+    private void refreshButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refreshButtonActionPerformed
+        loadUsers();
+    }//GEN-LAST:event_refreshButtonActionPerformed
+
+    private void filterComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filterComboBoxActionPerformed
+        applyFilter();
+    }//GEN-LAST:event_filterComboBoxActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a user to update",
+                "No Selection", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String userId = (String) tableModel.getValueAt(selectedRow, 0);
+        User user = userManager.getUserById(userId);
+
+        UpdateUserDialog dialog = new UpdateUserDialog(this, userManager, user);
+        dialog.setVisible(true);
+        if (dialog.isUserUpdated()) {
+            loadUsers();
+        }
+    }//GEN-LAST:event_updateButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -66,9 +628,34 @@ public class UserManagementFrame1 extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new UserManagementFrame1().setVisible(true));
+        // Note: This frame requires AuthenticationService. Use from DashboardFrame instead.
+        // java.awt.EventQueue.invokeLater(() -> new UserManagementFrame(null).setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton activateButton;
+    private javax.swing.JButton addUserButton;
+    private javax.swing.JPanel buttonPanel;
+    private javax.swing.JButton changePasswordButton;
+    private javax.swing.JButton deactivateButton;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JComboBox<String> filterComboBox;
+    private javax.swing.JPanel headerPanel;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JButton refreshButton;
+    private javax.swing.JButton returnButton;
+    private javax.swing.JScrollPane scrollPane;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JTextField searchField;
+    private javax.swing.JPanel searchPanel;
+    private javax.swing.JPanel tablePanel;
+    private javax.swing.JPanel topPanel;
+    private javax.swing.JButton updateButton;
+    private javax.swing.JButton viewLogsButton;
     // End of variables declaration//GEN-END:variables
 }
