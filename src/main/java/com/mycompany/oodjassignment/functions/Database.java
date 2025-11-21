@@ -119,6 +119,23 @@ public class Database {
     }
 
     // RecoveryPlan helper methods
+    public void updatePlanProgress(String planID) {
+        double totalTaskCount = 0;
+        double completeCount = 0;
+        double newProgress;
+        for (RecoveryTask task : recTaskDB.values()) {
+            if (planID.equals(task.getPlanID())) {
+                if (task.getCompletion()) {
+                    completeCount++;
+                }
+                totalTaskCount++;
+            }
+        }
+        newProgress = completeCount/totalTaskCount * 100;
+        getRecoveryPlan(planID).setProgress(newProgress);
+    }
+
+
     public ArrayList<RecoveryTask> findPlanRecoveryTask(String targetRecoveryPlanID) {
         ArrayList<RecoveryTask> taskInPlan = new ArrayList<>();
         for (RecoveryTask task : recTaskDB.values()) {

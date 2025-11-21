@@ -41,6 +41,9 @@ public class CourseRecoverySystem {
                         testUser.updateRecoveryPlan(database);
                         break;
                     case 5:
+                        testUser.addRecoveryTask(database);
+                        break;
+                    case 6:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;
