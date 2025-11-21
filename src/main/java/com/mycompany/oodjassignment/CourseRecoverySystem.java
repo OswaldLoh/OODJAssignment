@@ -40,6 +40,12 @@ public class CourseRecoverySystem {
                         testUser.searchStudent(database);
                         break;
                     case 5:
+                        System.out.print("Please choose Student:");
+                        String targetStudentID = userInput.nextLine();
+                        System.out.print("Choose course:");
+                        String targetCourseID = userInput.nextLine();
+                        break;
+                    case 6:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;

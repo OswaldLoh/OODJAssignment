@@ -74,16 +74,17 @@ public class AcademicOfficer extends User {
     public void searchStudent(Database database) {
         Scanner userInput = new Scanner(System.in);
         int courseCount = 0;
-        Student student;
+        Student student = new Student();
         String targetStudentID;
+
         do {
             System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
-            student = database.getStudent(targetStudentID);
-            if (student == null) {
+            if (!database.StudentExist(targetStudentID)) {
                 System.out.println("Student is not found inside database. Please try again.");
+                student = database.getStudent(targetStudentID);
             }
-        } while (student == null);
+        } while (!database.StudentExist(targetStudentID));
 
         System.out.println();
         System.out.println("----------------------");
