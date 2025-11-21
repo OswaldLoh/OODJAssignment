@@ -5,11 +5,13 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.AuthenticationFailedException;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.PasswordAuthentication;
+import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
@@ -19,7 +21,7 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendEmail {
 
-    private final String senderEmail = "markyisnice@gmail.com"; // the app password only can be generated when email is quite old
+    private final String senderEmail = "markyisnice@gmail.coma"; // the app password only can be generated when email is quite old
     private final String senderPassword = "dbyv ofcy vzia hngt"; // this is the app password for gmail ( app pass dif with gmail pass )
     private String recipientEmail;
     private String fileLocation;
@@ -50,7 +52,7 @@ public class SendEmail {
     // method
     public void Notification(String subject,String content){
 
-        // SMTP server settings for Gmail
+        // SMTP server configuration using Gmail
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -65,7 +67,7 @@ public class SendEmail {
         });
 
         try {
-            // Create the email message
+            // Set the recipient and sender email address
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(senderEmail));
             message.setRecipients(
@@ -73,24 +75,34 @@ public class SendEmail {
                     InternetAddress.parse(recipientEmail)
             );
 
+            // Set the subject and content for the email
             message.setSubject(subject);
             message.setText(content);
 
-            // Send the message
-            Transport.send(message);
+            //Send message    
+            System.out.println("message in sending...");
+            Transport.send(message);      
 
-            System.out.println("Email sent successfully!");
+            System.out.println("Email have been send successfully!");
         } 
         
-        catch (MessagingException e){
-            e.printStackTrace();
+        // Using the more detailed exception handling to catch the specific email sending issues
+        catch (AuthenticationFailedException e) {
+            System.out.println("Authentication have been failed ( Check the username and the password ) ");
+        } 
+        catch (SendFailedException e) {
+            System.out.println("Fail to send the message" );
+        }
+        // Using the more detailed exception handling to catch the specific email sending issues
+        catch (MessagingException e) {
+            System.out.println("Error: \n" + e.getMessage());
         }
 
     }
 
     public void Pdf(String subject,String content,String fileLocation){
         
-        // SMTP server settings for Gmail
+        // SMTP server configuration using Gmail
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -105,7 +117,7 @@ public class SendEmail {
         });
 
         try {
-            // Create the email message
+            // Set the recipient and sender email address
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(senderEmail));
             message.setRecipients(
@@ -113,42 +125,47 @@ public class SendEmail {
                     InternetAddress.parse(recipientEmail)
             );
 
-            // Subject for the email
+            // Set the subject for the email
             message.setSubject(subject);
 
-            //Create MimeBodyPart object and set your message text        
-            BodyPart messageBodyPart1 = new MimeBodyPart();     
-            messageBodyPart1.setText("This is message body");          
-
-            //Create new MimeBodyPart object and set DataHandler object to this object        
-            MimeBodyPart messageBodyPart2 = new MimeBodyPart();      
+            // Set the file attachment to the email       
+            MimeBodyPart messageAttach = new MimeBodyPart();      
             DataSource source = new FileDataSource(fileLocation);    
-            messageBodyPart2.setDataHandler(new DataHandler(source));    
-            messageBodyPart2.setFileName(fileLocation);             
+            messageAttach.setDataHandler(new DataHandler(source));    
+            messageAttach.setFileName(fileLocation);             
+            
+            // Set the content for the email        
+            BodyPart messageBody = new MimeBodyPart();     
+            messageBody.setText(content);          
 
-            //Create Multipart object and add MimeBodyPart objects to this object        
+            // Combine the message body and attachment into a multipart        
             Multipart multipart = new MimeMultipart();    
-            multipart.addBodyPart(messageBodyPart1);     
-            multipart.addBodyPart(messageBodyPart2);      
+            multipart.addBodyPart(messageAttach);      
+            multipart.addBodyPart(messageBody);     
 
             //Set the multipart object to the message object
             message.setContent(multipart );        
 
             //Send message    
+            System.out.println("message in sending...");
             Transport.send(message);      
-            System.out.println("message sent....");   
-            // Send the message
-            Transport.send(message);
 
-            System.out.println("Email sent successfully!");
+            System.out.println("Email have been send successfully!");
         } 
         
-        catch (MessagingException e){
-            e.printStackTrace();
+        // Using the more detailed exception handling to catch the specific email sending issues
+        catch (AuthenticationFailedException e) {
+            System.out.println("Authentication failed ( Check the username and the password )" );
+        } 
+        catch (SendFailedException e) {
+            System.out.println("Fail to send the message" );
+        }
+        // Using the more detailed exception handling to catch the specific email sending issues
+        catch (MessagingException e) {
+            System.out.println("Error: \n" + e.getMessage());
         }
 
     }
-
 
 }
 
