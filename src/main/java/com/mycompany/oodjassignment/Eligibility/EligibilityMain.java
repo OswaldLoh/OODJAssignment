@@ -5,13 +5,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.List;
 
-/**
- * Console-only test runner for the Eligibility & Enrolment module.
- * This version allows you to run and test all logic WITHOUT any GUI.
- *
- * It loads CSV files, calculates CGPA, checks eligibility, and allows
- * manual enrolment through console input.
- */
 public class EligibilityMain {
 
     public static void main(String[] args) {
