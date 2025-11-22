@@ -1,10 +1,7 @@
 package com.mycompany.oodjassignment.functions;
 
-import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +9,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.mycompany.oodjassignment.classes.Course;
@@ -22,6 +20,7 @@ public class ReportGenerator {
     
     private String reportID;
     private String filePath;
+    private final Database database = new Database();
 
     // constructor
     public ReportGenerator(String reportID, String filePath) {
@@ -57,8 +56,9 @@ public class ReportGenerator {
             PdfWriter.getInstance(document, new FileOutputStream(this.filePath));
             document.open();
             
-            // Get student information
-            String fullName = getStudentNameById(studentId);
+            // Get student information using existing database method
+            Student student = this.database.getStudent(studentId);
+            String fullName = student.getFirstName() + " " + student.getLastName();
             
             // Add title
             Font titleFont = new Font(Font.FontFamily.TIMES_ROMAN, 18, Font.BOLD);
@@ -70,52 +70,130 @@ public class ReportGenerator {
             document.add(new Paragraph(" "));
             document.add(new Paragraph("Student Name: " + fullName));
             document.add(new Paragraph("Student ID: " + studentId));
+            document.add(new Paragraph("Program: " + student.getMajor()));
             document.add(new Paragraph(" "));
             
-            // Load and filter grades for this student
-            List<Grades> studentGrades = loadStudentGrades(studentId);
+            // Load and filter grades for this student using existing database method
+            List<Grades> studentGrades = new ArrayList<>();
+            for (Grades grade : database.getGradeDB().values()) {
+                if (grade.getStudentID().equals(studentId)) {
+                    // Get and set the course object for proper GPA calculation
+                    Course course = database.getCourse(grade.getCourseID());
+                    if (course != null) {
+                        grade.setCourseObject(course);
+                    }
+                    studentGrades.add(grade);
+                }
+            }
             
             // Create table for grades
-            PdfPTable table = new PdfPTable(4); // Course Name, Grade, GPA, Status
-            table.addCell("Course Name");
-            table.addCell("Grade");
-            table.addCell("GPA");
-            table.addCell("Status");
+            PdfPTable table = new PdfPTable(5); // adjust it to 5 for 5 coloumn
+
+            // Adjust the width of the coloumns
+            table.setWidths(new float[]{1.2f, 2.5f, 1.0f, 0.8f, 1.0f}); 
+
+            // Set the table max with the document width
+            table.setWidthPercentage(100f); // need to set to 100 percent cause the defualt is 80 percent
             
-            double totalGPA = 0.0;
-            int validCourses = 0;
+            // Create header cells with center alignment ( Better Visual for User)
+            PdfPCell headerCell1 = new PdfPCell(new Paragraph("Module Code"));
+            headerCell1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(headerCell1);
             
+            PdfPCell headerCell2 = new PdfPCell(new Paragraph("Module"));
+            headerCell2.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(headerCell2);
+            
+            PdfPCell headerCell3 = new PdfPCell(new Paragraph("Credit Hours"));
+            headerCell3.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(headerCell3);
+            
+            PdfPCell headerCell4 = new PdfPCell(new Paragraph("Grade"));
+            headerCell4.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(headerCell4);
+            
+            PdfPCell headerCell5 = new PdfPCell(new Paragraph("Grade Point"));
+            headerCell5.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+            table.addCell(headerCell5);
+            
+            double totalQualityPoints = 0.0;
+            int totalCreditHours = 0;
+            
+            // Insert data rows from hashmap inside the grade 
             for (Grades grade : studentGrades) {
-                // Get course name by course ID
-                String courseName = getCourseNameById(grade.getCourseID());
+                // Get course information using existing database method
+                Course course = database.getCourse(grade.getCourseID());
+                String courseCode = course.getCourseID();
+                String courseName = course.getCourseName() ;
                 
-                // Get the course object to set it in the grade
-                Course course = getCourseById(grade.getCourseID());
-                grade.setCourseObject(course);
-                
-                // Calculate GPA for this grade
+                // Calculate GPA 
                 double gpa = grade.calculateGPA();
                 
-                // Determine status based on total mark
+                // Set the letter grade based on total marks
                 double totalMark = grade.getWeightedExamMark() + grade.getWeightedAssignmentMark();
-                String status = totalMark >= 50 ? "PASS" : "FAIL";
                 
-                table.addCell(courseName);
-                table.addCell(String.format("%.2f", totalMark));
-                table.addCell(String.format("%.2f", gpa));
-                table.addCell(status);
+                String letterGrade;
+                if (totalMark >= 80 && totalMark <= 100) {
+                    letterGrade = "A";
+                } else if (totalMark >= 75 && totalMark <= 79) {
+                    letterGrade = "A-";
+                } else if (totalMark >= 70 && totalMark <= 74) {
+                    letterGrade = "B+";
+                } else if (totalMark >= 65 && totalMark <= 69) {
+                    letterGrade = "B";
+                } else if (totalMark >= 60 && totalMark <= 64) {
+                    letterGrade = "B-";
+                } else if (totalMark >= 55 && totalMark <= 59) {
+                    letterGrade = "C+";
+                } else if (totalMark >= 50 && totalMark <= 54) {
+                    letterGrade = "C";
+                } else if (totalMark >= 40 && totalMark <= 49) {
+                    letterGrade = "D";
+                } else {
+                    letterGrade = "F";
+                }
+
+                // Get credit hours from course using the proper getter method
+                int courseCredit = 0;
+                if (course != null) {
+                    courseCredit = course.getCredit();
+                }
                 
-                totalGPA += gpa;
-                validCourses++;
+                // Create data cells with center alignment
+                PdfPCell cell1 = new PdfPCell(new Paragraph(courseCode));
+                cell1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                table.addCell(cell1);
+                
+                PdfPCell cell2 = new PdfPCell(new Paragraph(courseName));
+                cell2.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                table.addCell(cell2);
+                
+                PdfPCell cell3 = new PdfPCell(new Paragraph(String.valueOf(courseCredit)));
+                cell3.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                table.addCell(cell3);
+                
+                PdfPCell cell4 = new PdfPCell(new Paragraph(letterGrade));
+                cell4.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                table.addCell(cell4);
+                
+                PdfPCell cell5 = new PdfPCell(new Paragraph(String.format("%.2f", gpa)));
+                cell5.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+                table.addCell(cell5);
+                
+                // Calculate quality points for GPA calculation (credit * gpa)
+                totalQualityPoints += courseCredit * gpa;
+                totalCreditHours += courseCredit;
             }
             
             document.add(table);
             
-            // Add total GPA
-            if (validCourses > 0) {
-                double averageGPA = totalGPA / validCourses;
-                document.add(new Paragraph(" "));
-                document.add(new Paragraph("Average GPA: " + String.format("%.2f", averageGPA)));
+            // Calculate and display total credit hours and cumulative GPA
+            document.add(new Paragraph(" "));
+            document.add(new Paragraph("Total Credit Hours: " + totalCreditHours));
+            
+            if (totalCreditHours > 0) {
+                double cumulativeGPA = totalQualityPoints / totalCreditHours;
+                document.add(new Paragraph("Cumulative GPA: " + String.format("%.2f", cumulativeGPA)));
             }
             
             document.close();
@@ -124,90 +202,6 @@ public class ReportGenerator {
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    private String getStudentNameById(String studentId) {
-        try {
-            List<Student> allStudents = loadAllRecords(new Student());
-            
-            for (Student student : allStudents) {
-                if (student.getStudentID().equals(studentId)) {
-                    return student.getFirstName() + " " + student.getLastName();
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading student data: " + e.getMessage());
-        }
-        
-        return "Student ID: " + studentId; // Fallback if not found
-    }
-
-    // Helper method to load grades for a specific student
-    private List<Grades> loadStudentGrades(String studentId) {
-        try {
-            List<Grades> allGrades = loadAllRecords(new Grades());
-            List<Grades> studentGrades = new ArrayList<>();
-            
-            for (Grades grade : allGrades) {
-                if (grade.getStudentID().equals(studentId)) {
-                    studentGrades.add(grade);
-                }
-            }
-            
-            return studentGrades;
-        } catch (Exception e) {
-            System.out.println("Error loading student grades: " + e.getMessage());
-            return new ArrayList<>(); // Return empty list if error occurs
-        }
-    }
-
-    // Helper method to get course by ID
-    private Course getCourseById(String courseID) {
-        // Load courses from the CSV file and find the matching course
-        try {
-            List<Course> allCourses = loadAllRecords(new Course());
-            
-            for (Course course : allCourses) {
-                if (course.getCourseID().equals(courseID)) {
-                    return course;
-                }
-            }
-        } catch (Exception e) {
-            System.out.println("Error loading course data: " + e.getMessage());
-        }
-        
-        return null; // Return null if not found
-    }
-
-    // Helper method to get course name by ID
-    private String getCourseNameById(String courseID) {
-        Course course = getCourseById(courseID);
-        if (course != null) {
-            return course.getCourseName();
-        }
-        
-        return "Course ID: " + courseID; // Fallback if not found
-    }
-
-    // Generic method to load all records from CSV for any class implementing CSVParser
-    private <T> List<T> loadAllRecords(CSVParser<T> parser) throws IOException {
-        List<T> records = new ArrayList<>();
-        String filename = parser.getFilename();
-        
-        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            // Skip header line if it exists
-            String header = br.readLine();
-            
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (!line.trim().isEmpty()) {
-                    T record = parser.fromCSV(line);
-                    records.add(record);
-                }
-            }
-        }
-        
-        return records;
     }
 
 
