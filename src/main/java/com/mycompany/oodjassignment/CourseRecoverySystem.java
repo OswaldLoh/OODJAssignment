@@ -24,30 +24,47 @@ public class CourseRecoverySystem {
         do {
             try {
                 testUser.showMenu();
-                selection = InputValidation.readInt(">>>   ",1,9);
-                switch (selection) {
+                int secondSelection;
+                int firstSelection = InputValidation.readInt(">>>   ",1,4);
+                switch (firstSelection) {
                     case 1:
                         testUser.searchStudent(database);
                         break;
                     case 2:
-                        testUser.addRecoveryPlan(database);
+                        testUser.showRecoveryPlanMenu();
+                        secondSelection = InputValidation.readInt(">>>   ",1,5);
+                        switch (secondSelection) {
+                            case 1:
+                                testUser.addRecoveryPlan(database);
+                                break;
+                            case 2:
+                                testUser.updateRecoveryPlan(database);
+                                break;
+                            case 3:
+                                testUser.deleteRecoveryPlan(database);
+                                break;
+                            case 4:
+                                testUser.monitorRecoveryPlan(database);
+                                break;
+                            case 5:
+                                break;
+                        }
                         break;
                     case 3:
-                        testUser.deleteRecoveryPlan(database);
+                        testUser.showRecoveryTaskMenu();
+                        secondSelection = InputValidation.readInt(">>>   ",1,3);
+                        switch (secondSelection) {
+                            case 1:
+                                testUser.addRecoveryTask(database);
+                                break;
+                            case 2:
+                                testUser.deleteRecoveryTask(database);
+                                break;
+                            case 3:
+                                break;
+                        }
                         break;
                     case 4:
-                        testUser.updateRecoveryPlan(database);
-                        break;
-                    case 5:
-                        testUser.addRecoveryTask(database);
-                        break;
-                    case 6:
-                        testUser.deleteRecoveryTask(database);
-                        break;
-                    case 7:
-                        testUser.monitorRecoveryPlan(database);
-                        break;
-                    case 8:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;

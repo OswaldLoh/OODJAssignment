@@ -188,6 +188,10 @@ public class AcademicOfficer extends User {
         System.out.println("---------------------");
         // Display recovery plans registered under student
         ArrayList<RecoveryPlan> targetStudentPlans = database.getStudentRecoveryPlan(targetStudentID);
+        if (targetStudentPlans.isEmpty()) {
+            System.out.println("Error. Student '" +targetStudentID+ "' has no active recovery plans.");
+            return;
+        }
          for (RecoveryPlan plan : targetStudentPlans) {
             System.out.println(planCount+". " + plan.getPlanID() + "      CourseID: " + plan.getCourseID()+ "        Progress: " + plan.getProgress());
         }
@@ -207,17 +211,25 @@ public class AcademicOfficer extends User {
          }
          System.out.println("Overall Recovery Plan Progress: " + targetPlan.getProgress());
     }
+
+    public void showRecoveryPlanMenu() {
+        System.out.println("1. Add Recovery Plan");
+        System.out.println("2. Update Recovery Plan");
+        System.out.println("3. Delete Recovery Plan");
+        System.out.println("4. Monitor Recovery Plan");
+        System.out.println("5. Back");
+    }
+    public void showRecoveryTaskMenu() {
+        System.out.println("1. Add Recovery Task");
+        System.out.println("2. Delete Recovery Task");
+        System.out.println("3. Back");
+    }
     @Override
     public void showMenu() {
-        System.out.println("------------------------------");
-        System.out.println("1. Search Student and show Failed Components");
-        System.out.println("2. Add Recovery Plan");
-        System.out.println("3. Delete Recovery Plan");
-        System.out.println("4. Update Recovery Plan");
-        System.out.println("5. Add Recovery Task");
-        System.out.println("6. Delete Recovery Task");
-        System.out.println("7. Monitor Recovery Plan");
-        System.out.println("8. Exit");
+        System.out.println("1. Search Student");
+        System.out.println("2. Recovery Plans");
+        System.out.println("3. Recovery Tasks");
+        System.out.println("4. Exit");
     }
 
     @Override
