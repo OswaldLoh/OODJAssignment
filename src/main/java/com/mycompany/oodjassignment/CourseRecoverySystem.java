@@ -24,9 +24,7 @@ public class CourseRecoverySystem {
         do {
             try {
                 testUser.showMenu();
-                System.out.print(">>>   ");
-                selection = userInput.nextInt();
-                userInput.nextLine();
+                selection = InputValidation.readInt(">>>   ",1,6);
                 switch (selection) {
                     case 1:
                         testUser.searchStudent(database);
