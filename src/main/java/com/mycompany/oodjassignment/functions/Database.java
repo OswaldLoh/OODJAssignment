@@ -93,6 +93,14 @@ public class Database {
         return recTaskDB;
     }
 
+    public  ArrayList<Grades> getStudentAllGrades(String targetStudentID) {
+        ArrayList<Grades> studentGrades = new ArrayList<>();
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID));
+            studentGrades.add(grade);
+        }
+        return studentGrades;
+    }
 
     public ArrayList<Student> getFailedStudents(String targetCourseID, Database database) {
         ArrayList<Student> failedStudentsList = new ArrayList<>();
