@@ -38,7 +38,7 @@ public class CourseResult implements Serializable {
 
         this.finalScore = examComponent + assignmentComponent;
 
-        // Simple grading scheme. This can be adjusted to match the institution's policy.
+        // Simple grading scheme. 
         if (finalScore >= 80) {
             letterGrade = "A";
             gradePoint = 4.0;
