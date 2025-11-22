@@ -56,7 +56,7 @@ public class CourseAdministrator extends User {
 
     @Override
     public String toFileString() {
-        return super.toFileString() + "|" + managedCourses + "|" + specialization;
+        return super.toFileString() + "," + managedCourses + "," + specialization;
     }
 
     @Override

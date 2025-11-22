@@ -6,18 +6,19 @@ public class Grades implements CSVParser<Grades> {
     private String gradeID, studentID, courseID;
     private double examMark, assignmentMark;
     private static final String filename = "student_grades.csv";
+    private int semester;
     private Course course;
 
     // constructors
     public Grades () {};
-    public Grades(String gradeID, String studentID, String courseID, int examMark, int assignmentMark) {
+    public Grades(String gradeID, String studentID, String courseID, int semester, int examMark, int assignmentMark) {
         this.gradeID = gradeID;
         this.studentID = studentID;
         this.courseID = courseID;
         this.examMark = examMark;
         this.assignmentMark = assignmentMark;
     }
-    public Grades(String gradeID, String studentID, String courseID, int examMark, int assignmentMark, Course course) {
+    public Grades(String gradeID, String studentID, String courseID, int semester, int examMark, int assignmentMark, Course course) {
         this.gradeID = gradeID;
         this.studentID = studentID;
         this.courseID = courseID;
@@ -31,6 +32,7 @@ public class Grades implements CSVParser<Grades> {
     public String getCourseID() { return courseID; }
     public double getAssignmentMark() { return assignmentMark; }
     public double getExamMark() { return examMark; }
+    public int getSemester() { return semester; }
 
     // setters
     public void setStudentID(String studentID) { this.studentID = studentID; }
@@ -81,15 +83,15 @@ public class Grades implements CSVParser<Grades> {
     @Override
     public Grades fromCSV(String line) {
         String[] details = line.split(",");
-        return new Grades(details[0], details[1], details[2], Integer.parseInt(details[3]), Integer.parseInt(details[4]));
+        return new Grades(details[0], details[1], details[2],Integer.parseInt(details[3]), Integer.parseInt(details[4]), Integer.parseInt(details[5]));
     }
     @Override
     public String toCSV() {
-        return (gradeID+","+studentID+","+courseID+","+examMark+","+assignmentMark);
+        return (gradeID+","+studentID+","+courseID+","+semester+","+examMark+","+assignmentMark);
     }
     @Override
     public String getFileHeader() {
-        return "gradeID,studentID,courseID,examMark,assignmentMark";
+        return "gradeID,studentID,courseID,semester,examMark,assignmentMark";
     }
     @Override
     public String getFilename() {
