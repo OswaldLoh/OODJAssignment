@@ -39,7 +39,7 @@ public class Database {
     public void removeRecoveryPlan(String planID) {
         recPlanDB.remove(planID);
     }
-    public void removeRecoverytask(String targetPlanID) {
+    public void removeRecoveryTask(String targetPlanID) {
         RecoveryTask targetRecTask = null;
         for (RecoveryTask task : recTaskDB.values()) {
             if (task.getPlanID().equals(targetPlanID)) {
@@ -96,27 +96,13 @@ public class Database {
     public  ArrayList<Grades> getStudentAllGrades(String targetStudentID) {
         ArrayList<Grades> studentGrades = new ArrayList<>();
         for (Grades grade : gradesDB.values()) {
-            if (grade.getStudentID().equals(targetStudentID));
-            studentGrades.add(grade);
+            if (grade.getStudentID().equals(targetStudentID)) {
+                studentGrades.add(grade);
+            }
         }
         return studentGrades;
     }
 
-    public ArrayList<Student> getFailedStudents(String targetCourseID, Database database) {
-        ArrayList<Student> failedStudentsList = new ArrayList<>();
-        for (Grades grade : gradesDB.values()) {
-            if (grade.getCourseID().equals(targetCourseID)) {
-                grade.setCourseObject(database.getCourse(grade.getCourseID()));
-                if (grade.calculateGPA() < 2.0) {
-                    Student student = studentDB.get(grade.getStudentID());
-                    if (student != null) {
-                        failedStudentsList.add(student);
-                    }
-                }
-            }
-        }
-        return failedStudentsList;
-    }
     // Check existence in database
     public boolean studentExist(String targetStudentID) {
         return studentDB.containsKey(targetStudentID);

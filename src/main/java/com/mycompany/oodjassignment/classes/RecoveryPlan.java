@@ -41,7 +41,7 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
 
 
         RecoveryTask newTask = new RecoveryTask();
-        Scanner userInput = new Scanner(System.in);
+        System.out.println();
         System.out.println("Student Grades");
         System.out.println("-----------------------");
         System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");

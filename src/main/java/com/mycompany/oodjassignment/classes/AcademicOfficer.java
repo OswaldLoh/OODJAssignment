@@ -86,6 +86,7 @@ public class AcademicOfficer extends User {
         ArrayList<Grades> targetStudentGrades = database.getStudentAllGrades(targetStudentID);
         for (Grades grade : targetStudentGrades) {
             Course course = database.getCourse(grade.getCourseID());
+            grade.setCourseObject(course);
             if (grade.calculateGPA() < 2.0) {
                 failedCourseCount++;
                 System.out.println(failedCourseCount + ". " + course.getCourseName() + "-" + course.getCourseID());
@@ -113,25 +114,30 @@ public class AcademicOfficer extends User {
             }
         } while (!database.studentExist(targetStudentID));
 
+        // Student found, finding all grades for the student
         ArrayList<Grades> targetStudentGrades = database.getStudentAllGrades(targetStudentID);
         ArrayList<Course> failedCourses = new ArrayList<>();
 
         // Displaying failed modules of student
+        System.out.println();
         System.out.println("Failed Modules for Student " + targetStudentID);
         for (Grades grade : targetStudentGrades) {
             Course course = database.getCourse(grade.getCourseID());
+            grade.setCourseObject(course);
             if (grade.calculateGPA() < 2.0) {
                 failedCourseCount++;
-                System.out.println(failedCourseCount + ". " + course.getCourseName() + "-" + course.getCourseID());
-                System.out.println("   GPA: " + grade.calculateGPA());
+                System.out.println(failedCourseCount + ". " + course.getCourseName() + "-" + course.getCourseID() + "    GPA: " + grade.calculateGPA());
                 failedCourses.add(course);
             }
-        } if (failedCourseCount == 0) {
+        }
+        if (failedCourses.isEmpty()) {
             System.out.println("Error. Student has no failed modules.");
             return;
         }
 
         // Ask user to pick which course to add recovery plan ( Second Menu )
+        System.out.println();
+        System.out.println("Please choose course to add Recovery Plan");
         do {
             System.out.print(">>>   ");
             int courseSelection = userInput.nextInt();
@@ -146,7 +152,7 @@ public class AcademicOfficer extends User {
             }
         } while (!courseSelected);
 
-        // generate new Plan ID
+        // Generate new Plan ID
         IDManager idManager = new IDManager(database.getRecPlanDB());
         idManager.getHighestTaskID();
         String nextPlanID = "P" + idManager.generateNewID();
@@ -164,7 +170,9 @@ public class AcademicOfficer extends User {
     public void deleteRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         String targetStudentID;
+        int number = 1;
 
+        // Ask user for student ID ( First Menu )
         do {
             System.out.print("Please enter Student ID: ");
             targetStudentID = userInput.nextLine();
@@ -174,14 +182,13 @@ public class AcademicOfficer extends User {
         } while (!database.studentExist(targetStudentID));
 
         ArrayList<RecoveryPlan> studentPlan = database.findStudentRecoveryPlan(targetStudentID);
-        int planCount = database.getStudentRecoveryPlanCount(targetStudentID);
+        int planCount = studentPlan.size();
 
         if (planCount == 0) {
             System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
             return;
         }
 
-        int number = 1;
         System.out.println("Recovery Plans for Student " + targetStudentID);
         for (RecoveryPlan plan : studentPlan) {
             System.out.println(number + ". " + plan.getPlanID());
@@ -202,17 +209,18 @@ public class AcademicOfficer extends User {
                 final int listIndex = planSelection - 1;
                 String planID = studentPlan.get(listIndex).getPlanID();
                 database.removeRecoveryPlan(planID);
-                database.removeRecoverytask(planID);
+                database.removeRecoveryTask(planID);
+                System.out.println("Plan " + planID + " has been successfully deleted.");
                 planDelete = true;
             }
         } while (!planDelete);
     }
+
     public void updateRecoveryPlan(Database database) {
         Scanner userInput = new Scanner(System.in);
         String targetStudentID;
         boolean planUpdate = false, taskUpdate = false;
         int number = 1, planCount;
-        ArrayList<RecoveryPlan> studentPlan;
 
         do {
             System.out.print("Please enter Student ID: ");
@@ -220,12 +228,13 @@ public class AcademicOfficer extends User {
             if (!database.studentExist(targetStudentID)) {      // if student doesn't exist
                 System.out.println("Student is not found inside database. Please try again.");
             }
-            studentPlan = database.findStudentRecoveryPlan(targetStudentID);
-            planCount = studentPlan.size();
-            if (planCount == 0) {                               // if student has no recovery plans registered
-                System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
-            }
-        } while (!database.studentExist(targetStudentID) || planCount == 0);
+        } while (!database.studentExist(targetStudentID));
+
+        ArrayList<RecoveryPlan> studentPlan = database.findStudentRecoveryPlan(targetStudentID);
+        planCount = studentPlan.size();
+        if (planCount == 0) {                               // if student has no recovery plans registered
+            System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
+        }
 
         System.out.println("Recovery Plans for Student " + targetStudentID);    // displaying recovery plans registered under student
         for (RecoveryPlan plan : studentPlan) {
