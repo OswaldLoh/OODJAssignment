@@ -137,15 +137,23 @@ public class AcademicOfficer extends User {
                 System.out.println("Invalid selection. Please try again.");
                 System.out.println();
             } else {
+                studentFound = true;
                 final int listIndex = studentSelection - 1;
                 targetStudentID = failedStudents.get(listIndex).getStudentID();
-                studentFound = true;
+                for (RecoveryPlan plan: database.getRecPlanDB().values()) {
+                    if (plan.getStudentID().equals(targetStudentID) && plan.getCourseID().equals(targetCourseID)) {
+                        System.out.println("Error. Student " + targetStudentID + " already has a recovery plan for Course " + targetCourseID + ".");
+                        studentFound = false;
+                    }
+                }
             }
+
         } while (!studentFound);
 
         IDManager idManager = new IDManager(database.getRecPlanDB());
         idManager.getHighestTaskID();
         String nextPlanID = "P" + idManager.generateNewID();
+
 
         Grades targetGrade = database.getGrades(targetStudentID, targetCourseID);
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, targetCourseID, userID, "0.00");

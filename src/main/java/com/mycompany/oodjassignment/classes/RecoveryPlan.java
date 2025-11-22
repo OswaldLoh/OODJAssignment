@@ -22,6 +22,7 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     // getters
     public String getPlanID() { return planID; }
     public String getStudentID() { return studentID; }
+    public String getCourseID() { return courseID; }
     public String getCreatedBy() { return createdBy; }
     public double getProgress() { return progress; }
 
