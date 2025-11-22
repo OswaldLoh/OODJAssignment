@@ -48,7 +48,7 @@ public class Student extends Person implements Serializable {
     }
 
     // Returns all course results associated with this student.
-     
+
     public List<CourseResult> getResults() {
         return results;
     }
