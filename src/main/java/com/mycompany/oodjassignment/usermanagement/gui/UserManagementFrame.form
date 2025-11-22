@@ -348,8 +348,8 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="viewLogsButton" min="-2" pref="145" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="changePasswordButton" min="-2" pref="145" max="-2" attributes="0"/>
-                      <EmptySpace pref="28" max="32767" attributes="0"/>
+                      <Component id="changePasswordButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="25" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
