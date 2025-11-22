@@ -50,7 +50,7 @@ public class InputValidation {
         String targetPlanID;
         boolean planFound = false;
         do {
-            targetPlanID = InputValidation.readString("Please enter Student ID: ");
+            targetPlanID = InputValidation.readString("Please enter Plan ID: ");
             if (database.planExist(targetPlanID)) {
                 planFound = true;
             } else {

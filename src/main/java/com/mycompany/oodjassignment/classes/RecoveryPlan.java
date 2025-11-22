@@ -34,35 +34,35 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     public void setProgress(double progress) { this.progress = progress; }
 
     // methods
-    public RecoveryTask addNewTask(Grades Grade, Database database) {
-        final String ASSIGNMENT = "Assignment";
-        final String EXAM = "Exam";
-        final String MODULE = "Module";
-
-
+    public void addNewTask(Database database) {
+        Grades grade = database.getGrades(studentID,courseID);
         RecoveryTask newTask = new RecoveryTask();
+        if (grade.calculateGPA() > 2.0) {
+            System.out.println("Student is not eligible for Recovery Plan.");
+            System.out.println("GPA: " + grade.calculateGPA());
+            return;
+        }
         System.out.println();
         System.out.println("Student Grades");
         System.out.println("-----------------------");
-        System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
-        System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
-        System.out.println("GPA: "+Grade.calculateGPA());
+        System.out.println("Assignment Mark: " + grade.getWeightedAssignmentMark() + "/100");
+        System.out.println("Final Examination Mark: " + grade.getWeightedExamMark()+ "/100");
+        System.out.println("GPA: "+grade.calculateGPA());
         System.out.println();
         System.out.print("Recommended Recovery Task: ");
 
-        if (Grade.getWeightedAssignmentMark()< 40 && Grade.getWeightedAssignmentMark() < 40) {
+        if (grade.getWeightedAssignmentMark()< 40 && grade.getWeightedAssignmentMark() < 40) {
             System.out.println("Whole Module");
-            newTask.setDescription(MODULE);
-            newTask.setDuration(50);
-        } else if (Grade.getWeightedExamMark() < 40) {
+        } else if (grade.getWeightedExamMark() < 40) {
             System.out.println("Final Examination");
-            newTask.setDescription(EXAM);
-            newTask.setDuration(30);
-        } else if (Grade.getWeightedAssignmentMark() < 40) {
+        } else if (grade.getWeightedAssignmentMark() < 40) {
             System.out.println("Assignment");
-            newTask.setDescription(ASSIGNMENT);
-            newTask.setDuration(50);
         }
+
+        String newDescription = InputValidation.readString("Enter Description: ");
+        newTask.setDescription(newDescription);
+        int newDuration = InputValidation.readInt("Enter duration for this task (days): ");
+        newTask.setDuration(newDuration);
 
         // Creating IDManager object to generate new ID for recTask
         IDManager recTaskIDManager = new IDManager(database.getRecTaskDB());
@@ -71,12 +71,65 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
 
         newTask.setTaskID(nextTaskID);
         newTask.setPlanID(this.planID);
-        return newTask;
+        database.addRecoveryTask(newTask);
     }
-    public HashMap<String, RecoveryTask> deleteRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {
-        return recTaskDB;
+    public void deleteRecoveryTask(Database database) {
+        boolean validPlan = false;
+        int taskCount = 1;
+        do {
+            ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);
+            if (planTasks.size() == 1) {
+                System.out.println("Error. You cannot delete the last remaining recovery task under this recovery plan.");
+                System.out.println();
+            } else {
+                validPlan = true;
+                for (RecoveryTask task : planTasks) {
+                    System.out.println(taskCount+". "+ task.getTaskID() + "      Completed? : " + task.getCompletion());
+                }
+                System.out.println();
+                int index = InputValidation.readInt("Choose Recovery Task to delete: ",1,planTasks.size());
+                String targetTaskID = planTasks.get(index).getTaskID();
+                database.removeRecoveryTask(targetTaskID);
+                System.out.println();
+                System.out.println("Recovery Task '" + targetTaskID + "' has been successfully deleted.");
+            }
+        } while (!validPlan);
     }
-
+    public void updateRecoveryTask(Database database) {
+        int taskCount = 1;
+        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);
+        for (RecoveryTask task : planTasks) {
+            System.out.println(taskCount+". "+ task.getTaskID() + "      Completed? : " + task.getCompletion());
+        }
+        System.out.println();
+        int index = InputValidation.readInt("Choose Recovery Task to update: ",1,planTasks.size());
+        String targetTaskID = planTasks.get(index).getTaskID();
+        System.out.println();
+        System.out.println("Please enter detail to modify");
+        System.out.println("1. Description");
+        System.out.println("2. Duration:");
+        System.out.println("3. Completion Status");
+        int detailSelection = InputValidation.readInt(">>>   ",1,3);
+        switch(detailSelection) {
+            case 1:
+                String newDescription = InputValidation.readString("Please enter new description: ");
+                database.getRecoveryTask(targetTaskID).setDescription(newDescription);
+            case 2:
+                int newDuration = InputValidation.readInt("Please enter new duration: ");
+                database.getRecoveryTask(targetTaskID).setDuration(newDuration);
+            case 3:
+                System.out.println("Please choose completion status:");
+                System.out.println("1. Completed");
+                System.out.println("2. Incomplete");
+                int completedSelection = InputValidation.readInt(">>>   ",1,2);
+                if (completedSelection == 1) {
+                    database.getRecoveryTask(targetTaskID).setCompletion(true);
+                } else if (completedSelection == 2) {
+                    database.getRecoveryTask(targetTaskID).setCompletion(false);
+                }
+        }
+        System.out.println("Recovery Task has been updated successfully.");
+    }
     @Override
     public RecoveryPlan fromCSV(String line) {
         String[] details = line.split(",");

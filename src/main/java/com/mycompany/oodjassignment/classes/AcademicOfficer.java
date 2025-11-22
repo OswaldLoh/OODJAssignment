@@ -1,18 +1,12 @@
 package com.mycompany.oodjassignment.classes;
-
-import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.functions.IDManager;
-import com.mycompany.oodjassignment.functions.InputValidation;
-
-import java.util.ArrayList;
-import java.util.Scanner;
+import com.mycompany.oodjassignment.functions.*;
+import java.util.*;
 
 public class AcademicOfficer extends User {
     private static final long serialVersionUID = 1L;
 
     private String department;
     private String officeLocation;
-
 
     // constructors
     public AcademicOfficer() {
@@ -58,14 +52,11 @@ public class AcademicOfficer extends User {
         this.officeLocation = officeLocation;
     }
 
-
     // Methods
     public void searchStudent(Database database) {          // Search students and list failed components
         int failedCourseCount = 0;
-
         String targetStudentID = InputValidation.validateStudentID(database);
         Student student = database.getStudent(targetStudentID);         // student found, fetching the student object
-
         System.out.println();
         System.out.println("----------------------");
         System.out.println("Student ID: " + student.getStudentID());
@@ -74,7 +65,6 @@ public class AcademicOfficer extends User {
         System.out.println("----------------------");
         System.out.println("Failed Modules: ");
         System.out.println();
-
         ArrayList<Grades> targetStudentGrades = database.getStudentAllGrades(targetStudentID);
         for (Grades grade : targetStudentGrades) {
             Course course = database.getCourse(grade.getCourseID());
@@ -90,17 +80,14 @@ public class AcademicOfficer extends User {
         }
     }
 
+
+
     public void addRecoveryPlan(Database database) {        // Add Recovery Plan
         int failedCourseCount = 0;
         Course selectedCourse;
-
-        // Ask user for student ID to add recovery plan ( First Menu )
-        String targetStudentID = InputValidation.validateStudentID(database);
-
-        // Student found, finding all grades for the student
-        ArrayList<Grades> targetStudentGrades = database.getStudentAllGrades(targetStudentID);
+        String targetStudentID = InputValidation.validateStudentID(database);                   // Ask user for student ID to add recovery plan ( First Menu )
+        ArrayList<Grades> targetStudentGrades = database.getStudentAllGrades(targetStudentID);  // Student found, finding all grades for the student
         ArrayList<Course> failedCourses = new ArrayList<>();
-
         // Displaying failed modules of student
         System.out.println();
         System.out.println("Failed Modules for Student " + targetStudentID);
@@ -117,43 +104,43 @@ public class AcademicOfficer extends User {
             System.out.println("Error. Student has no failed modules.");
             return;
         }
+        ArrayList<RecoveryPlan> studentExistingPlans = database.getStudentRecoveryPlan(targetStudentID);
 
         // Ask user to pick which course to add recovery plan ( Second Menu )
         System.out.println();
         System.out.println("Please choose course to add Recovery Plan.");
-
         int courseSelection = InputValidation.readInt(">>>   ",1,failedCourses.size());
         selectedCourse = failedCourses.get(courseSelection-1);
 
-        // Generate new Plan ID
-        IDManager idManager = new IDManager(database.getRecPlanDB());
+        for (RecoveryPlan plan : studentExistingPlans) {
+            if (plan.getStudentID().equals(targetStudentID) && plan.getCourseID().equals(selectedCourse.getCourseID())) {
+                System.out.println("Error. Student '" + targetStudentID +"' already has a recovery plan for this course.");
+                return;
+            }
+        }
+        IDManager idManager = new IDManager(database.getRecPlanDB());       // Generate new Plan ID
         idManager.getHighestTaskID();
         String nextPlanID = "P" + idManager.generateNewID();
 
-        Grades targetGrade = database.getGrades(targetStudentID, selectedCourse.getCourseID());
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, selectedCourse.getCourseID(), userID, "0.00");
-        RecoveryTask newTask = newPlan.addNewTask(targetGrade, database);
         database.addRecoveryPlan(newPlan);
-        database.addRecoveryTask(newTask);
+        newPlan.addNewTask(database);
         System.out.println();
         System.out.println("Recovery Plan and Task successfully added for Student " + targetStudentID + ".");
     }
 
+
     public void deleteRecoveryPlan(Database database) {
         int number = 1;
 
-        // Ask user for student ID ( First Menu )
-        String targetStudentID = InputValidation.validateStudentID(database);
-        Student student = database.getStudent(targetStudentID);         // student found, fetching the student object
-
-        ArrayList<RecoveryPlan> studentPlan = database.findStudentRecoveryPlan(targetStudentID);
+        String targetStudentID = InputValidation.validateStudentID(database);           // Ask user for student ID ( First Menu )
+        ArrayList<RecoveryPlan> studentPlan = database.getStudentRecoveryPlan(targetStudentID);
         int planCount = studentPlan.size();
-
         if (planCount == 0) {
             System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
             return;
         }
-
+        // Displaying the RecoveryPlans for student
         System.out.println("Recovery Plans for Student " + targetStudentID);
         for (RecoveryPlan plan : studentPlan) {
             System.out.println(number + ". " + plan.getPlanID());
@@ -164,80 +151,61 @@ public class AcademicOfficer extends User {
         int planSelection = InputValidation.readInt(">>>   ",1,studentPlan.size());
         String planID = studentPlan.get(planSelection-1).getPlanID();
         database.removeRecoveryPlan(planID);
-        database.removeRecoveryTask(planID);
+        database.removeAllRecoveryTask(planID);
         System.out.println("Plan " + planID + " has been successfully deleted.");
     }
 
     public void updateRecoveryPlan(Database database) {
-        Scanner userInput = new Scanner(System.in);
-        boolean taskUpdate = false;
-        int number = 1, planCount;
-
-        String targetStudentID = InputValidation.validateStudentID(database);
-
-        ArrayList<RecoveryPlan> studentPlan = database.findStudentRecoveryPlan(targetStudentID);
-        planCount = studentPlan.size();
-        if (planCount == 0) {                               // if student has no recovery plans registered
-            System.out.println("Error. Student " + targetStudentID + " has no recovery plans.");
-        }
-
-        System.out.println("Recovery Plans for Student " + targetStudentID);    // displaying recovery plans registered under student
-        for (RecoveryPlan plan : studentPlan) {
-            System.out.println(number + ". " + plan.getPlanID() + "     " + "Progress: " + plan.getProgress());
-            number += 1;
-        }
-
-        int planSelection = InputValidation.readInt("Choose PlanID to update progress level: ",1,studentPlan.size());
-        String planID = studentPlan.get(planSelection-1).getPlanID();
-        ArrayList<RecoveryTask> planTasks = database.findPlanRecoveryTask(planID);
-        System.out.println("Recovery Tasks");
-        for (RecoveryTask task : planTasks) {
-            System.out.println(task.getTaskID() + "    " + task.getDescription() + "     Completion: " + task.getCompletion());
-        }
-
-        do {                                                   // second menu loop asking for task ID
-            String targetTaskID = InputValidation.readString("Enter TaskID: ");
-            if (planTasks.contains(database.getRecoveryTask(targetTaskID))) {       // if the input is valid and is registered under the PlanID
-                System.out.println("Please update completion");
-                System.out.println("1. Completed");
-                System.out.println("2. Incomplete");
-                int completeSelection = InputValidation.readInt(">>>   ",1,2);
-                if (completeSelection == 1) {
-                    database.getRecoveryTask(targetTaskID).setCompletion(true);
-                } else if (completeSelection == 2) {
-                    database.getRecoveryTask(targetTaskID).setCompletion(false);
-                }
-                taskUpdate = true;
-            } else {                                            // if taskID input is invalid
-                System.out.println("Invalid selection. Please try again.");
-                System.out.println();
-            }
-        } while (!taskUpdate);
-        database.updatePlanProgress(planID);
-    }
-    public void addRecoveryTask(Database database) {
-        System.out.println();
-        System.out.println("Adding new Recovery Task.");
-
-        String targetPlanID = InputValidation.validatePlanID(database);         // Get user input for PlanID and validate existence
-
-        RecoveryTask newTask = new RecoveryTask();                              // Create new RecoveryTask object
-
-        IDManager recTaskIDManager = new IDManager(database.getRecTaskDB());        // Generate new TaskID
-        recTaskIDManager.getHighestTaskID();
-
-
-        String description = InputValidation.readString("Task Description: ");         // Prompt for new task description
-        newTask.setDescription(description);
-        int duration = InputValidation.readInt("Duration (days): ");              // Prompt for new task duration
-        newTask.setDuration(duration);
-
-        newTask.setTaskID("T" + recTaskIDManager.generateNewID());
-        newTask.setPlanID(targetPlanID);
-        newTask.setCompletion(false);
-
-        database.addRecoveryTask(newTask);
+        System.out.println("--- Update Recovery Task ---");
+        String targetPlanID = InputValidation.validatePlanID(database);
+        RecoveryPlan targetPlan = database.getRecoveryPlan(targetPlanID);
+        targetPlan.updateRecoveryTask(database);
         database.updatePlanProgress(targetPlanID);
+    }
+
+    public void addRecoveryTask(Database database) {
+        System.out.println("--- Add Recovery Task ---");
+        String targetPlanID = InputValidation.validatePlanID(database);         // Get user input for PlanID and validate existence
+        RecoveryPlan targetPlan = database.getRecoveryPlan(targetPlanID);                             // Create new RecoveryTask object
+        targetPlan.addNewTask(database);
+        database.updatePlanProgress(targetPlanID);
+    }
+
+    public void deleteRecoveryTask(Database database) {
+        System.out.println("--- Delete Recovery Task ---");
+        String targetPlanID= InputValidation.validatePlanID(database);
+        RecoveryPlan targetPlan = database.getRecoveryPlan(targetPlanID);
+        targetPlan.deleteRecoveryTask(database);
+        database.updatePlanProgress(targetPlanID);
+    }
+
+    public void  monitorRecoveryPlan(Database database) {
+        int planCount = 1, taskCount = 1;
+        System.out.println("--- Monitor Recovery Plan --- ");
+        String targetStudentID = InputValidation.validateStudentID(database);       // Ask user for Student ID and check existence
+
+        System.out.println("Showing Recovery Plans for Student '" + targetStudentID +  "' :");
+        System.out.println("---------------------");
+        // Display recovery plans registered under student
+        ArrayList<RecoveryPlan> targetStudentPlans = database.getStudentRecoveryPlan(targetStudentID);
+         for (RecoveryPlan plan : targetStudentPlans) {
+            System.out.println(planCount+". " + plan.getPlanID() + "      CourseID: " + plan.getCourseID()+ "        Progress: " + plan.getProgress());
+        }
+         int planSelection = InputValidation.readInt(">>>   ",1,targetStudentPlans.size());
+         RecoveryPlan targetPlan = targetStudentPlans.get(planSelection-1);
+
+        System.out.println("Showing Recovery Task for Student '" + targetPlan.getPlanID() +  "' :");
+        System.out.println("---------------------");
+         // Display recovery tasks registered under the recovery plan
+         ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlan.getPlanID());
+
+         for (RecoveryTask task : planTasks) {
+             System.out.println(taskCount+". "+ task.getTaskID() + "      Completed? : " + task.getCompletion());
+             System.out.println("Task Description: " + task.getDescription());
+             System.out.println();
+             taskCount++;
+         }
+         System.out.println("Overall Recovery Plan Progress: " + targetPlan.getProgress());
     }
     @Override
     public void showMenu() {
@@ -247,7 +215,9 @@ public class AcademicOfficer extends User {
         System.out.println("3. Delete Recovery Plan");
         System.out.println("4. Update Recovery Plan");
         System.out.println("5. Add Recovery Task");
-        System.out.println("6. Exit");
+        System.out.println("6. Delete Recovery Task");
+        System.out.println("7. Monitor Recovery Plan");
+        System.out.println("8. Exit");
     }
 
     @Override

@@ -24,7 +24,7 @@ public class CourseRecoverySystem {
         do {
             try {
                 testUser.showMenu();
-                selection = InputValidation.readInt(">>>   ",1,6);
+                selection = InputValidation.readInt(">>>   ",1,9);
                 switch (selection) {
                     case 1:
                         testUser.searchStudent(database);
@@ -42,6 +42,12 @@ public class CourseRecoverySystem {
                         testUser.addRecoveryTask(database);
                         break;
                     case 6:
+                        testUser.deleteRecoveryTask(database);
+                        break;
+                    case 7:
+                        testUser.monitorRecoveryPlan(database);
+                        break;
+                    case 8:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;
