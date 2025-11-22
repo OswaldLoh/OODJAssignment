@@ -13,7 +13,7 @@ import com.mycompany.oodjassignment.functions.Database;
 public class ReportGenerator extends javax.swing.JFrame {                
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReportGenerator.class.getName());
-    private Database database = new Database();
+    private final Database database = new Database();
 
     /**
      * Creates new form ReportGenerator1
@@ -235,7 +235,7 @@ public class ReportGenerator extends javax.swing.JFrame {
         }
         
         // Check if the student ID exists in the database of student grade
-        else if (!database.StudentExist(studentId)) {
+        else if (!database.studentExist(studentId)) {
             javax.swing.JOptionPane.showMessageDialog(this, "Please enter a valid Student ID.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
