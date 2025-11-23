@@ -1,9 +1,13 @@
 package com.mycompany.oodjassignment.functions;
 
-import com.mycompany.oodjassignment.classes.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import com.mycompany.oodjassignment.classes.Course;
+import com.mycompany.oodjassignment.classes.Grades;
+import com.mycompany.oodjassignment.classes.RecoveryPlan;
+import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.classes.Student;
 
 public class Database {
     private RecoveryPlan recPlanInterface;
@@ -114,6 +118,21 @@ public class Database {
         return studentDB.containsKey(targetStudentID);
     }
 
+    public boolean studentSemesterExist(String targetStudentID, String targetSemester) {
+        if (!studentExist(targetStudentID)) {
+            return false;
+        }
+
+        // Check if the student has grades for the specified semester
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID) && 
+                grade.getSemester() == Integer.parseInt(targetSemester)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean planExist(String targetPlanID) {
         return recPlanDB.containsKey(targetPlanID);
     }
@@ -162,6 +181,100 @@ public class Database {
             }
         }
         return planCount;
+    }
+    
+    // Check if a student has grades for a specific year (at least one semester)
+    public boolean studentYearExist(String targetStudentID, int targetYear) {
+        if (!studentExist(targetStudentID)) {
+            return false;
+        }
+
+        // Check if the student has grades for at least one semester in the target year
+        // Assuming 2 semesters per year (Year 1: Sem 1 & 2, Year 2: Sem 3 & 4, etc.)
+        int startSemester = (targetYear - 1) * 2 + 1;  // First semester of the year
+        int endSemester = startSemester + 1;           // Last semester of the year
+        
+        boolean hasDataInYear = false;
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID) && 
+                grade.getSemester() >= startSemester && 
+                grade.getSemester() <= endSemester) {
+                hasDataInYear = true;
+                break;
+            }
+        }
+        return hasDataInYear;
+    }
+    
+    // Calculate CGPA for a specific academic year
+    public double calculateCGPAByYear(String targetStudentID, int targetYear) {
+        if (!studentExist(targetStudentID)) {
+            throw new IllegalArgumentException("Student ID does not exist: " + targetStudentID);
+        }
+        
+        double totalGPA = 0.0;
+        int courseCount = 0;
+        
+        // Determine which semesters belong to the target year
+        // Assuming 2 semesters per year (Year 1: Sem 1 & 2, Year 2: Sem 3 & 4, etc.)
+        int startSemester = (targetYear - 1) * 2 + 1;  // First semester of the year
+        int endSemester = startSemester + 1;           // Last semester of the year
+        
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID) && 
+                grade.getSemester() >= startSemester && 
+                grade.getSemester() <= endSemester) {
+                
+                // Set course object for proper GPA calculation
+                grade.setCourseObject(courseDB.get(grade.getCourseID()));
+                
+                // Add the GPA from this course to the total
+                totalGPA += grade.calculateGPA();
+                courseCount++;
+            }
+        }
+        
+        // Return average GPA for the year, or 0.0 if no courses found
+        return courseCount > 0 ? totalGPA / courseCount : 0.0;
+    }
+    
+    // Calculate overall CGPA for all years
+    public double calculateOverallCGPA(String targetStudentID) {
+        if (!studentExist(targetStudentID)) {
+            throw new IllegalArgumentException("Student ID does not exist: " + targetStudentID);
+        }
+        
+        double totalGPA = 0.0;
+        int courseCount = 0;
+        
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID)) {
+                // Set course object for proper GPA calculation
+                grade.setCourseObject(courseDB.get(grade.getCourseID()));
+                
+                // Add the GPA from this course to the total
+                totalGPA += grade.calculateGPA();
+                courseCount++;
+            }
+        }
+        
+        // Return average GPA for all courses taken by the student
+        return courseCount > 0 ? totalGPA / courseCount : 0.0;
+    }
+    
+    // Get all available years for a student
+    public java.util.Set<Integer> getAvailableYears(String targetStudentID) {
+        java.util.Set<Integer> years = new java.util.HashSet<>();
+        
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID)) {
+                // Calculate which year this semester belongs to
+                int year = (int) Math.ceil(grade.getSemester() / 2.0);
+                years.add(year);
+            }
+        }
+        
+        return years;
     }
 }
 

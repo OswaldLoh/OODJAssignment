@@ -1,6 +1,5 @@
 package com.mycompany.oodjassignment.classes;
-import com.mycompany.oodjassignment.functions.*;
-import java.util.*;
+import com.mycompany.oodjassignment.functions.CSVParser;
 
 public class Grades implements CSVParser<Grades> {
     private String gradeID, studentID, courseID;
@@ -15,6 +14,7 @@ public class Grades implements CSVParser<Grades> {
         this.gradeID = gradeID;
         this.studentID = studentID;
         this.courseID = courseID;
+        this.semester = semester;
         this.examMark = examMark;
         this.assignmentMark = assignmentMark;
     }
@@ -22,6 +22,7 @@ public class Grades implements CSVParser<Grades> {
         this.gradeID = gradeID;
         this.studentID = studentID;
         this.courseID = courseID;
+        this.semester = semester;
         this.examMark = examMark;
         this.assignmentMark = assignmentMark;
         this.course = course;
@@ -70,6 +71,42 @@ public class Grades implements CSVParser<Grades> {
             GPA = 0.00;
         }
         return GPA;
+    }
+
+    public String getLetterGrade() {
+        double totalMark;
+        String letterGrade;
+        totalMark = getWeightedExamMark() + (getWeightedAssignmentMark());
+        if (totalMark >= 80 && totalMark <= 100) {
+            letterGrade = "A";
+        } 
+        else if (totalMark >= 75 && totalMark <= 79) {
+            letterGrade = "A-";
+        } 
+        else if (totalMark >= 70 && totalMark <= 74) {
+            letterGrade = "B+";
+        } 
+        else if (totalMark >= 65 && totalMark <= 69) {
+            letterGrade = "B";
+        } 
+        else if (totalMark >= 60 && totalMark <= 64) {
+            letterGrade = "B-";
+        } 
+        else if (totalMark >= 55 && totalMark <= 59) {
+            letterGrade = "C+";
+        } 
+        else if (totalMark >= 50 && totalMark <= 54) {
+            letterGrade = "C";
+        } 
+        else if (totalMark >= 40 && totalMark <= 49) {
+            letterGrade = "D";
+        } 
+        else {
+            letterGrade = "F";
+        }
+
+        return letterGrade;
+
     }
     public double getWeightedExamMark() {
         return (examMark * course.getExamWeight() / 100);
