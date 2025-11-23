@@ -1,4 +1,9 @@
 taskID,planID,description,duration,completion
-T4,P3,nigger,35,true
-T2,P2,Module,50,false
+T4,P4,Module,50,false
+T5,P5,Exam,30,true
+T6,P5,Testing purposes,30,false
+T10,P7,Task 2,30,false
+T7,P6,Testing 2,600,false
+T8,P7,Duplicate Test,30,true
+T9,P7,Test 1,30,false
 T3,P3,Module,50,false

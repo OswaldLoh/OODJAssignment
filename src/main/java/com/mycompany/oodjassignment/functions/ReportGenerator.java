@@ -1,26 +1,24 @@
 package com.mycompany.oodjassignment.functions;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.mycompany.oodjassignment.classes.*;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.mycompany.oodjassignment.classes.Course;
-import com.mycompany.oodjassignment.classes.Grades;
-import com.mycompany.oodjassignment.classes.Student;
-
 public class ReportGenerator {
     
     private String reportID;
     private String filePath;
-    private final Database database = new Database();
+    private Database database = new Database();
 
     // constructor
     public ReportGenerator(String reportID, String filePath) {
@@ -46,6 +44,10 @@ public class ReportGenerator {
     }
 
     // method
+    public void displayReport(){
+        
+    }
+
     // Semester based report generation    
     public void generateReport(String studentId, int semester){
         Document document = new Document();

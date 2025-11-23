@@ -1,4 +1,4 @@
-package Eligibility;
+package com.mycompany.oodjassignment.Eligibility;
 
 import java.io.Serializable;
 import java.util.ArrayList;

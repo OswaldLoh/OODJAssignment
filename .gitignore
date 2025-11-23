@@ -1,0 +1,70 @@
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ generated files
+*.ctxt
+*.java~
+
+# Packaging
+target/
+*.jar
+*.war
+*.ear
+
+# IDE
+.DS_Store
+.vscode/
+.idea/
+*.iws
+nbproject/private/
+*~
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
+
+# Maven
+log/
+*.orig
+target/
+
+# Eclipse
+.settings/
+.classpath
+.project
+*.pydevproject
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini

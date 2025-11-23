@@ -1,4 +1,4 @@
-package Eligibility;
+package com.mycompany.oodjassignment.Eligibility;
 
 import java.io.Serializable;
 
@@ -38,7 +38,7 @@ public class CourseResult implements Serializable {
 
         this.finalScore = examComponent + assignmentComponent;
 
-        // Simple grading scheme. 
+        // Simple grading scheme.
         if (finalScore >= 80) {
             letterGrade = "A";
             gradePoint = 4.0;

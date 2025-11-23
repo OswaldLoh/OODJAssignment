@@ -43,17 +43,12 @@ public class Database {
     public void removeRecoveryPlan(String planID) {
         recPlanDB.remove(planID);
     }
-    public void removeRecoverytask(String targetPlanID) {
-        RecoveryTask targetRecTask = null;
-        for (RecoveryTask task : recTaskDB.values()) {
-            if (task.getPlanID().equals(targetPlanID)) {
-                targetRecTask = task;
-            }
+    public void removeRecoveryTask(String taskID) { recTaskDB.remove(taskID); }
+    public void removeAllRecoveryTask(String targetPlanID) {
+        ArrayList<RecoveryTask> taskPlans = getPlanRecoveryTask(targetPlanID);
+        for (RecoveryTask task : taskPlans) {
+            recTaskDB.remove(task.getTaskID());
         }
-        if (targetRecTask != null) {
-            recTaskDB.remove(targetRecTask.getTaskID(),targetRecTask);
-        }
-
     }
 
     // Object getters
@@ -97,23 +92,21 @@ public class Database {
         return recTaskDB;
     }
 
-
-    public ArrayList<Student> getFailedStudents(String targetCourseID, Database database) {
-        ArrayList<Student> failedStudentsList = new ArrayList<>();
+    public  ArrayList<Grades> getStudentAllGrades(String targetStudentID) {
+        ArrayList<Grades> studentGrades = new ArrayList<>();
         for (Grades grade : gradesDB.values()) {
-            if (grade.getCourseID().equals(targetCourseID)) {
-                grade.setCourseObject(database.getCourse(grade.getCourseID()));
-                if (grade.calculateGPA() < 2.0) {
-                    Student student = studentDB.get(grade.getStudentID());
-                    if (student != null) {
-                        failedStudentsList.add(student);
-                    }
-                }
+            if (grade.getStudentID().equals(targetStudentID)) {
+                studentGrades.add(grade);
             }
         }
-        return failedStudentsList;
+        return studentGrades;
     }
+
     // Check existence in database
+    public boolean courseExist(String targetCourseID) {
+        return courseDB.containsKey(targetCourseID);
+    }
+
     public boolean studentExist(String targetStudentID) {
         return studentDB.containsKey(targetStudentID);
     }
@@ -154,8 +147,7 @@ public class Database {
         getRecoveryPlan(planID).setProgress(newProgress);
     }
 
-
-    public ArrayList<RecoveryTask> findPlanRecoveryTask(String targetRecoveryPlanID) {
+    public ArrayList<RecoveryTask> getPlanRecoveryTask(String targetRecoveryPlanID) {
         ArrayList<RecoveryTask> taskInPlan = new ArrayList<>();
         for (RecoveryTask task : recTaskDB.values()) {
             if ((targetRecoveryPlanID).equals(task.getPlanID())) {
@@ -164,23 +156,14 @@ public class Database {
         }
         return taskInPlan;
     }
-    public ArrayList<RecoveryPlan> findStudentRecoveryPlan(String targetStudentID) {
-        ArrayList<RecoveryPlan> studentPlanID = new ArrayList<>();
+    public ArrayList<RecoveryPlan> getStudentRecoveryPlan(String targetStudentID) {
+        ArrayList<RecoveryPlan> studentPlans = new ArrayList<>();
         for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
             if ((targetStudentID).equals(plan.getStudentID())) {
-                studentPlanID.add(plan);
+                studentPlans.add(plan);
             }
         }
-        return studentPlanID;
-    }
-    public int getStudentRecoveryPlanCount(String targetStudentID) {
-        int planCount = 0;
-        for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
-            if ((targetStudentID).equals(plan.getStudentID())) {
-                planCount += 1;
-            }
-        }
-        return planCount;
+        return studentPlans;
     }
     
     // Check if a student has grades for a specific year (at least one semester)

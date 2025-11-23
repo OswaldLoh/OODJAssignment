@@ -22,6 +22,7 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     // getters
     public String getPlanID() { return planID; }
     public String getStudentID() { return studentID; }
+    public String getCourseID() { return courseID; }
     public String getCreatedBy() { return createdBy; }
     public double getProgress() { return progress; }
 
@@ -31,50 +32,6 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     public void setCourseID(String courseID) { this.courseID = courseID; }
     public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
     public void setProgress(double progress) { this.progress = progress; }
-
-    // methods
-    public RecoveryTask addNewTask(Grades Grade, Database database) {
-        final String ASSIGNMENT = "Assignment";
-        final String EXAM = "Exam";
-        final String MODULE = "Module";
-
-
-        RecoveryTask newTask = new RecoveryTask();
-        Scanner userInput = new Scanner(System.in);
-        System.out.println("Student Grades");
-        System.out.println("-----------------------");
-        System.out.println("Assignment Mark: " + Grade.getWeightedAssignmentMark() + "/100");
-        System.out.println("Final Examination Mark: " + Grade.getWeightedExamMark()+ "/100");
-        System.out.println("GPA: "+Grade.calculateGPA());
-        System.out.println();
-        System.out.print("Recommended Recovery Task: ");
-
-        if (Grade.getWeightedAssignmentMark()< 40 && Grade.getWeightedAssignmentMark() < 40) {
-            System.out.println("Whole Module");
-            newTask.setDescription(MODULE);
-            newTask.setDuration(50);
-        } else if (Grade.getWeightedExamMark() < 40) {
-            System.out.println("Final Examination");
-            newTask.setDescription(EXAM);
-            newTask.setDuration(30);
-        } else if (Grade.getWeightedAssignmentMark() < 40) {
-            System.out.println("Assignment");
-            newTask.setDescription(ASSIGNMENT);
-            newTask.setDuration(50);
-        }
-
-        // Creating IDManager object to generate new ID for recTask
-        IDManager recTaskIDManager = new IDManager(database.getRecTaskDB());
-        recTaskIDManager.getHighestTaskID();
-        String nextTaskID = "T" + recTaskIDManager.generateNewID();
-
-        newTask.setTaskID(nextTaskID);
-        newTask.setPlanID(this.planID);
-        return newTask;
-    }
-    public HashMap<String, RecoveryTask> deleteRecoveryTask(HashMap<String, RecoveryTask> recTaskDB) {
-        return recTaskDB;
-    }
 
     @Override
     public RecoveryPlan fromCSV(String line) {

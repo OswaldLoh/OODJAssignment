@@ -8,8 +8,7 @@ public class CourseRecoverySystem {
     public static void main(String[]args) {
         // dummy login
         Database database = new Database();
-        AcademicOfficer testUser = new AcademicOfficer();
-        testUser.setUserID("A01");
+        AcademicOfficer testUser = new AcademicOfficer("A01", database, new RecoveryPlanManager(database));
 
         // creating utility objects
         Scanner userInput = new Scanner(System.in);
@@ -24,26 +23,47 @@ public class CourseRecoverySystem {
         do {
             try {
                 testUser.showMenu();
-                System.out.print(">>>   ");
-                selection = userInput.nextInt();
-                userInput.nextLine();
-                switch (selection) {
+                int secondSelection;
+                int firstSelection = InputValidation.readInt(">>>   ",1,4);
+                switch (firstSelection) {
                     case 1:
-                        testUser.searchStudent(database);
+                        testUser.searchStudent();
                         break;
                     case 2:
-                        testUser.addRecoveryPlan(database);
+                        testUser.showRecoveryPlanMenu();
+                        secondSelection = InputValidation.readInt(">>>   ",1,5);
+                        switch (secondSelection) {
+                            case 1:
+                                testUser.addRecoveryPlan();
+                                break;
+                            case 2:
+                                testUser.updateRecoveryPlan();
+                                break;
+                            case 3:
+                                testUser.deleteRecoveryPlan();
+                                break;
+                            case 4:
+                                testUser.monitorRecoveryPlan();
+                                break;
+                            case 5:
+                                break;
+                        }
                         break;
                     case 3:
-                        testUser.deleteRecoveryPlan(database);
+                        testUser.showRecoveryTaskMenu();
+                        secondSelection = InputValidation.readInt(">>>   ",1,3);
+                        switch (secondSelection) {
+                            case 1:
+                                testUser.addRecoveryTask();
+                                break;
+                            case 2:
+                                testUser.deleteRecoveryTask();
+                                break;
+                            case 3:
+                                break;
+                        }
                         break;
                     case 4:
-                        testUser.updateRecoveryPlan(database);
-                        break;
-                    case 5:
-                        testUser.addRecoveryTask(database);
-                        break;
-                    case 6:
                         System.out.println("Exiting program.");
                         repeat = false;
                         continue;
