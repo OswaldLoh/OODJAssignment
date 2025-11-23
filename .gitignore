@@ -1,34 +1,70 @@
-### Maven #########################
-/target/
-pom.xml.tag
-pom.xml.releaseBackup
-pom.xml.versionsBackup
-release.properties
-dependency-reduced-pom.xml
-
-### NetBeans ######################
-# User-specific properties (CRITICAL to ignore)
-/nbproject/private/
-
-# Generated build files (if not using pure Maven)
-/build/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-# Profiler snapshots
-*.nps
-
-### IntelliJ IDEA (Just in case) ##
-.idea/
-*.iml
-*.iws
-
-### Java/OS Junk ##################
+# Compiled class file
 *.class
+
+# Log file
 *.log
+
+# BlueJ generated files
+*.ctxt
+*.java~
+
+# Packaging
+target/
+*.jar
+*.war
+*.ear
+
+# IDE
+.DS_Store
+.vscode/
+.idea/
+*.iws
+nbproject/private/
+*~
+*.swp
+*.swo
+
+# OS
 .DS_Store
 Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
 
-data/
+# Maven
+log/
+*.orig
+target/
+
+# Eclipse
+.settings/
+.classpath
+.project
+*.pydevproject
+
+# NetBeans
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+build/
+
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Mac
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Icon?
+desktop.ini
