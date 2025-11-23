@@ -12,11 +12,7 @@ public class LoginLog implements Serializable {
     private final boolean successful;
     private final String ipAddress;
 
-    public LoginLog(String username,
-                    String action,
-                    LocalDateTime timestamp,
-                    boolean successful,
-                    String ipAddress) {
+    public LoginLog(String username, String action, LocalDateTime timestamp, boolean successful, String ipAddress) {
         this.username = username;
         this.action = action;
         this.timestamp = timestamp;
@@ -48,11 +44,7 @@ public class LoginLog implements Serializable {
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         return String.format("[%s] %s - %s by %s from %s",
-                timestamp.format(formatter),
-                action,
-                successful ? "SUCCESS" : "FAILED",
-                username,
-                ipAddress);
+                timestamp.format(formatter), action, successful ? "SUCCESS" : "FAILED", username, ipAddress);
     }
 }
 

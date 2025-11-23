@@ -188,13 +188,11 @@ public class LoginFrame extends javax.swing.JFrame {
 private void performLogin() {
     String username = usernameField.getText().trim();
     String password = new String(passwordField.getPassword());
-    
     if (username.isEmpty() || password.isEmpty()) {
         statusLabel.setText("Please enter username and password");
         statusLabel.setForeground(Color.RED);
         return;
     }
-    
     if (authService.login(username, password)) {
         User currentUser = authService.getCurrentUser();
         statusLabel.setText("Login successful! Welcome " + currentUser.getFullName());
@@ -212,14 +210,13 @@ private void performLogin() {
     }
 }
 
-private void showPasswordResetDialog() {
+private void showPasswordReset() {
     String email = JOptionPane.showInputDialog(
         this,
         "Enter your email address for password recovery:",
         "Password Recovery",
         JOptionPane.QUESTION_MESSAGE
     );
-    
     if (email != null && !email.trim().isEmpty()) {
         String tempPassword = authService.recoverPassword(email.trim());
         if (tempPassword != null) {
@@ -227,7 +224,7 @@ private void showPasswordResetDialog() {
                 this,
                 "Temporary password: " + tempPassword + "\n" +
                 "Please use this to login and change your password.\n" +
-                "(In production, this would be sent via email)",
+                "Sending Password through Email...",
                 "Password Reset Successful",
                 JOptionPane.INFORMATION_MESSAGE
             );
@@ -235,7 +232,7 @@ private void showPasswordResetDialog() {
             JOptionPane.showMessageDialog(
                 this,
                 "No account found with this email address",
-                "Password Reset Failed",
+                "Failed to reser password",
                 JOptionPane.ERROR_MESSAGE
             );
         }
@@ -252,7 +249,7 @@ private void showPasswordResetDialog() {
 
     private void resetPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetPasswordButtonActionPerformed
         // TODO add your handling code here:
-        showPasswordResetDialog();
+        showPasswordReset();
     }//GEN-LAST:event_resetPasswordButtonActionPerformed
 
     private void passwordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordFieldActionPerformed
@@ -260,30 +257,6 @@ private void showPasswordResetDialog() {
         performLogin();
     }//GEN-LAST:event_passwordFieldActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;

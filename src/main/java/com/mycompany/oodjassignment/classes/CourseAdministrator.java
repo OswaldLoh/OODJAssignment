@@ -12,21 +12,11 @@ public class CourseAdministrator extends User {
         this.specialization = "";
     }
 
-    public CourseAdministrator(String userID,
-                               String username,
-                               String password,
-                               String fullName,
-                               String email) {
+    public CourseAdministrator(String userID, String username, String password, String fullName, String email) {
         this(userID, username, password, fullName, email, "", "");
     }
 
-    public CourseAdministrator(String userID,
-                               String username,
-                               String password,
-                               String fullName,
-                               String email,
-                               String managedCourses,
-                               String specialization) {
+    public CourseAdministrator(String userID, String username, String password, String fullName, String email, String managedCourses, String specialization) {
         super(userID, username, password, fullName, email, UserRole.COURSE_ADMINISTRATOR);
         this.managedCourses = managedCourses;
         this.specialization = specialization;

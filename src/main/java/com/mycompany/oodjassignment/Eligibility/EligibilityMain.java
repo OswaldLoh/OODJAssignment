@@ -106,7 +106,7 @@ public class EligibilityMain extends JFrame {
         btnEnrol.addActionListener(e -> enrolSelectedStudent());
 
         // Basic frame settings.
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 500);
         setLocationRelativeTo(null); // Center on screen.
     }

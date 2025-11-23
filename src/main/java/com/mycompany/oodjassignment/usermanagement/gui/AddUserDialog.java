@@ -412,7 +412,7 @@ private void setupComponents() {
     }
     
     String userId = userManager.generateNextUserId(role);
-    String hashedPassword = PasswordUtil.simpleHash(password);
+    String hashedPassword = PasswordUtil.hashPassword(password);
     
     User newUser;
     if (role == UserRole.ACADEMIC_OFFICER) {

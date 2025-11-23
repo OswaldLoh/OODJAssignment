@@ -12,7 +12,7 @@ import java.util.List;
 
 public class AuthenticationService {
     
-    private static final String LOGIN_LOG_FILE = "data/login_logs.dat";
+    private static final String LOG_FILE = "data/login_logs.dat";
     private User currentUser;
     private UserManager userManager;
     
@@ -27,7 +27,7 @@ public class AuthenticationService {
         if (!dir.exists()) {
             dir.mkdirs();
         }
-        File logFile = new File(LOGIN_LOG_FILE);
+        File logFile = new File(LOG_FILE);
         System.out.println("Login logs will be stored at: " + logFile.getAbsolutePath());
     }
     
@@ -44,7 +44,7 @@ public class AuthenticationService {
             return false;
         }
         
-        String hashedPassword = PasswordUtil.simpleHash(password);
+        String hashedPassword = PasswordUtil.hashPassword(password);
         if (!user.getPassword().equals(hashedPassword)) {
             logLoginAttempt(username, "LOGIN", false);
             return false;
@@ -78,29 +78,14 @@ public class AuthenticationService {
         if (!PasswordUtil.isPasswordStrong(newPassword)) {
             return false;
         }
-        
-        return updateCurrentUserPassword(newPassword);
+        return updateUserPassword(newPassword);
     }
     
-    private boolean updateCurrentUserPassword(String newPassword) {
-        String hashedNewPassword = PasswordUtil.simpleHash(newPassword);
+    private boolean updateUserPassword(String newPassword) {
+        String hashedNewPassword = PasswordUtil.hashPassword(newPassword);
         currentUser.setPassword(hashedNewPassword);
         userManager.updateUser(currentUser);
         return true;
-    }
-    
-    public String resetPassword(String username) {
-        User user = userManager.getUserByUsername(username);
-        if (user == null) {
-            return null;
-        }
-        
-        String tempPassword = PasswordUtil.generateTemporaryPassword();
-        String hashedPassword = PasswordUtil.simpleHash(tempPassword);
-        user.setPassword(hashedPassword);
-        userManager.updateUser(user);
-        
-        return tempPassword;
     }
     
     public String recoverPassword(String email) {
@@ -108,9 +93,8 @@ public class AuthenticationService {
         if (user == null) {
             return null;
         }
-        
         String tempPassword = PasswordUtil.generateTemporaryPassword();
-        String hashedPassword = PasswordUtil.simpleHash(tempPassword);
+        String hashedPassword = PasswordUtil.hashPassword(tempPassword);
         user.setPassword(hashedPassword);
         userManager.updateUser(user);
         
@@ -118,8 +102,7 @@ public class AuthenticationService {
     }
     
     private void logLoginAttempt(String username, String action, boolean successful) {
-        LoginLog log = new LoginLog(username, action, LocalDateTime.now(), 
-                                    successful, "localhost");
+        LoginLog log = new LoginLog(username, action, LocalDateTime.now(), successful, "localhost");
         
         List<LoginLog> logs = readLoginLogs();
         logs.add(log);
@@ -127,7 +110,7 @@ public class AuthenticationService {
     }
     
     public List<LoginLog> readLoginLogs() {
-        File file = new File(LOGIN_LOG_FILE);
+        File file = new File(LOG_FILE);
         if (!file.exists()) {
             return new ArrayList<>();
         }
@@ -141,7 +124,7 @@ public class AuthenticationService {
     
     private void writeLoginLogs(List<LoginLog> logs) {
         try (ObjectOutputStream oos = new ObjectOutputStream(
-                new FileOutputStream(LOGIN_LOG_FILE))) {
+                new FileOutputStream(LOG_FILE))) {
             oos.writeObject(logs);
         } catch (IOException e) {
             e.printStackTrace();

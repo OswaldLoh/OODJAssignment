@@ -7,6 +7,7 @@ package com.mycompany.oodjassignment.usermanagement.gui;
 import com.mycompany.oodjassignment.classes.User;
 import com.mycompany.oodjassignment.classes.UserRole;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+import com.mycompany.oodjassignment.Eligibility.EligibilityMain;
 import javax.swing.JOptionPane;
 /**
  *
@@ -228,8 +229,9 @@ public class DashboardFrame extends javax.swing.JFrame {
 
 
     private void eligibilityButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eligibilityButtonActionPerformed
-        // TODO add your handling code here:
-        showComingSoonDialog("Eligibility & Enrollment");
+        // Open the Eligibility & Enrollment GUI
+        EligibilityMain eligibilityFrame = new EligibilityMain();
+        eligibilityFrame.setVisible(true);
     }//GEN-LAST:event_eligibilityButtonActionPerformed
 
     private void academicReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_academicReportButtonActionPerformed
