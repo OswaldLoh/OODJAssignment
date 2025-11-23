@@ -16,9 +16,6 @@ public class RecoveryTasksMenu {
         BackButton.addActionListener(e -> {
             JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.RecoveryTaskMenuPanel);
             AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
-            academicOfficerMainMenu.
-            currentFrame.dispose();
-            openMainMenu();
         });
 
     }
