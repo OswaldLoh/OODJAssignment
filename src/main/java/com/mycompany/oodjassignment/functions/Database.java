@@ -99,6 +99,10 @@ public class Database {
     }
 
     // Check existence in database
+    public boolean courseExist(String targetCourseID) {
+        return courseDB.containsKey(targetCourseID);
+    }
+
     public boolean studentExist(String targetStudentID) {
         return studentDB.containsKey(targetStudentID);
     }

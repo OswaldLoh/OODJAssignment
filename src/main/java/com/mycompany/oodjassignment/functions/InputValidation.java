@@ -60,5 +60,20 @@ public class InputValidation {
         } while (!planFound);
         return targetPlanID;
     }
+
+    public static String validateCourseID(Database database) {
+        String targetCourseID;
+        boolean planFound = false;
+        do {
+            targetCourseID = InputValidation.readString("Please enter Course ID: ");
+            if (database.courseExist(targetCourseID)) {
+                planFound = true;
+            } else {
+                System.out.println("Error: Course ID '" + targetCourseID + "' not found. Please try again.");
+                System.out.println();
+            }
+        } while (!planFound);
+        return targetCourseID;
+    }
 }
 

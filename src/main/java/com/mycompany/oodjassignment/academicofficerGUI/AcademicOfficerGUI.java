@@ -25,48 +25,57 @@ public class AcademicOfficerGUI {
     public AcademicOfficerGUI(Database database) {
         this.database = database;
 
+        searchStudentsButton.addActionListener(e -> {
+            openSearchStudentMenu();
+        });
         recoveryPlanMenuButton.addActionListener(e -> {
             openRecoveryPlanMenu();
         });
         recoveryTasksMenuButton.addActionListener(e -> {
             openRecoveryTaskMenu();
         });
+        exitButton.addActionListener(e -> {
+            closeCurrentMenu();
+        });
     }
+    private void openSearchStudentMenu() {
+        JFrame searchStudentMenuFrame = new JFrame("Search Students");
+        SearchStudentMenu searchStudentMenu = new SearchStudentMenu(database);
+        searchStudentMenuFrame.setContentPane(searchStudentMenu.getSearchStudentMenuPanel());
+        searchStudentMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        searchStudentMenuFrame.setSize(800,600);
+        searchStudentMenuFrame.setVisible(true);
+        closeCurrentMenu();
 
+    }
     private void openRecoveryPlanMenu() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.mainPanel);
         JFrame recoveryPlanMenuFrame = new JFrame("Recovery Plan Menu");
         RecoveryPlanMenu recoveryPlanMenu = new RecoveryPlanMenu(database);
         recoveryPlanMenuFrame.setContentPane(recoveryPlanMenu.getRecoveryPlanMenuPanel());
         recoveryPlanMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanMenuFrame.setSize(800, 600);
         recoveryPlanMenuFrame.setVisible(true);
-        currentFrame.dispose();
+        closeCurrentMenu();
     }
 
     private void openRecoveryTaskMenu() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.mainPanel);
         JFrame recoveryTaskMenuFrame = new JFrame("Recovery Task Menu");
         RecoveryTasksMenu recoveryTasksMenu = new RecoveryTasksMenu(database);
         recoveryTaskMenuFrame.setContentPane(recoveryTasksMenu.getRecoveryTaskMenuPanel());
         recoveryTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryTaskMenuFrame.setSize(800, 600);
         recoveryTaskMenuFrame.setVisible(true);
-        currentFrame.dispose();
-    }
-
-    private void openMainMenu() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.mainPanel);
-        JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
-        mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
-        mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainMenuFrame.setSize(800,600);
-        mainMenuFrame.setVisible(true);
-        currentFrame.dispose();
+        closeCurrentMenu();
     }
 
     public JPanel getMainPanel() {
         return mainPanel;
     }
+
+    // Helper methods
+    private void closeCurrentMenu() {
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.mainPanel);
+        currentFrame.dispose();
+    }
 }
+

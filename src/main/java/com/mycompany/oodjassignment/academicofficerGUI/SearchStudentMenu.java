@@ -13,5 +13,30 @@ public class SearchStudentMenu {
 
     public SearchStudentMenu(Database database) {
         this.database = database;
+        backButton.addActionListener(e -> {
+            closeCurrentMenu();
+            openMainMenu();
+        });
+    }
+
+
+
+    private void openMainMenu() {
+        JFrame mainMenuFrame = new JFrame("Academic Officer System");
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
+        mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
+        mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainMenuFrame.setSize(800,600);
+        mainMenuFrame.setVisible(true);
+        closeCurrentMenu();
+    }
+
+    private void closeCurrentMenu() {
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.SearchStudentPanel);
+        currentFrame.dispose();
+    }
+
+    public JPanel getSearchStudentMenuPanel() {
+        return SearchStudentPanel;
     }
 }

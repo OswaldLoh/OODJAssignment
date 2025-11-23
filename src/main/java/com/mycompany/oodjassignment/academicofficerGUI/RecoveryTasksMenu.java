@@ -13,9 +13,13 @@ public class RecoveryTasksMenu {
 
     public RecoveryTasksMenu(Database database) {
         this.database = database;
+
+        // back button - back to main menu
         BackButton.addActionListener(e -> {
             JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.RecoveryTaskMenuPanel);
             AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
+            currentFrame.dispose();
+            openMainMenu();
         });
 
     }
@@ -24,13 +28,11 @@ public class RecoveryTasksMenu {
     }
 
     private void openMainMenu() {
-
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
         AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(800,600);
         mainMenuFrame.setVisible(true);
-
     }
 }
