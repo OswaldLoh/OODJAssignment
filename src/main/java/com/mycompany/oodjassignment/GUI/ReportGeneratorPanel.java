@@ -5,20 +5,21 @@
 package com.mycompany.oodjassignment.GUI;
 
 import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.ReportGenerator;
 
 /**
  *
  * @author ASUS
  */
-public class ReportGenerator extends javax.swing.JFrame {                
+public class ReportGeneratorPanel extends javax.swing.JFrame {                
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReportGenerator.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReportGeneratorPanel.class.getName());
     private final Database database = new Database();
 
     /**
      * Creates new form ReportGenerator1
      */
-    public ReportGenerator() {
+    public ReportGeneratorPanel() {
         initComponents();
     }
 
@@ -152,7 +153,7 @@ public class ReportGenerator extends javax.swing.JFrame {
 
         jComboBox2.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox2.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Year 1", "Year 2", "Year 3", " " }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semester 1", "Semester 2", "Semester 3", "Semester 4", "Semester 5", "Semester 6", "Year 1", "Year 2", "Year 3"}));
         jComboBox2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -240,20 +241,13 @@ public class ReportGenerator extends javax.swing.JFrame {
             return;
         }
         
-        // Check if the combo box is set to "Yearly Report" mode by checking if it contains text that's not just numbers
+        
         String selectedOption = (String) jComboBox2.getSelectedItem();
         
-        if (selectedOption != null && selectedOption.toLowerCase().contains("year")) {
+        // validating option for yearly report
+        if (selectedOption.toLowerCase().contains("year")) {
             // Generate yearly report
-            // Extract year number from the selected option (e.g., "Year 1", "Year 2", etc.)
-            int year = -1;
-            try {
-                // Extract the number after "Year " in the string
-                year = Integer.parseInt(selectedOption.replaceAll("[^0-9]", ""));
-            } catch (NumberFormatException e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Invalid year selection. Please select a valid year.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                return;
-            }
+            int year = Integer.parseInt(selectedOption.replaceAll("[^0-9]", ""));
             
             // Validate if the student has data for the selected year using the database method
             if (!database.studentYearExist(studentId, year)) {
@@ -266,7 +260,7 @@ public class ReportGenerator extends javax.swing.JFrame {
                     java.util.List<Integer> sortedYears = new java.util.ArrayList<>(availableYears);
                     java.util.Collections.sort(sortedYears);
                     for (int i = 0; i < sortedYears.size(); i++) {
-                        availableYearsStr += "Year " + sortedYears.get(i);
+                        availableYearsStr += sortedYears.get(i);
                         if (i < sortedYears.size() - 1) {
                             availableYearsStr += ", ";
                         }
@@ -287,73 +281,64 @@ public class ReportGenerator extends javax.swing.JFrame {
                 reportGenerator.generateYearlyReport(studentId, year);
                 
                 javax.swing.JOptionPane.showMessageDialog(this, "Yearly report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
+            } 
+            
+            catch (Exception e) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
-        } else {
-            // Generate semester report (existing functionality)
-            int selectedSemester = -1; // Default to no semester filter
-            
-            // Extract semester number from the selected option
-            if (selectedOption != null && !selectedOption.trim().isEmpty() && !selectedOption.equals(" ")) {
-                try {
-                    // Extract only the numeric part from the semester option
-                    selectedSemester = Integer.parseInt(selectedOption.trim().replaceAll("[^0-9]", ""));
-                } catch (NumberFormatException e) {
-                    javax.swing.JOptionPane.showMessageDialog(this, "Invalid semester selection. Please select a valid semester.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
-            }
+        } 
+        
+        else {
+            // Generate semester report (existing functionality)            
+            int selectedSemester = Integer.parseInt(selectedOption.trim().replaceAll("[^0-9]", ""));
             
             // If a specific semester is selected, check if the student has grades for that semester
-            if (selectedSemester != -1) {
-                if (!database.studentSemesterExist(studentId, String.valueOf(selectedSemester))) {
-                    // Find available semesters for this student to inform the user
-                    java.util.Set<String> availableSemesters = new java.util.HashSet<>();
-                    for (com.mycompany.oodjassignment.classes.Grades grade : database.getGradeDB().values()) {
-                        if (grade.getStudentID().equals(studentId)) {
-                            availableSemesters.add(String.valueOf(grade.getSemester()));
-                        }
+            if (!database.studentSemesterExist(studentId, String.valueOf(selectedSemester))) {
+                // Find available semesters for this student to inform the user
+                java.util.Set<String> availableSemesters = new java.util.HashSet<>();
+                for (com.mycompany.oodjassignment.classes.Grades grade : database.getGradeDB().values()) {
+                    if (grade.getStudentID().equals(studentId)) {
+                        availableSemesters.add(String.valueOf(grade.getSemester()));
                     }
-                    
-                    String availableSemestersStr = "No courses found in the selected semester.";
-                    if (!availableSemesters.isEmpty()) {
-                        availableSemestersStr += " Available semesters: ";
-                        java.util.List<String> sortedSemesters = new java.util.ArrayList<>(availableSemesters);
-                        java.util.Collections.sort(sortedSemesters);
-                        for (int i = 0; i < sortedSemesters.size(); i++) {
-                            availableSemestersStr += "Semester " + sortedSemesters.get(i);
-                            if (i < sortedSemesters.size() - 1) {
-                                availableSemestersStr += ", ";
-                            }
-                        }
-                    }
-                    javax.swing.JOptionPane.showMessageDialog(this, availableSemestersStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                    return;
                 }
+                
+                String availableSemestersStr = "No courses found in the selected semester.";
+                if (!availableSemesters.isEmpty()) {
+                    availableSemestersStr += " Available semesters: ";
+                    java.util.List<String> sortedSemesters = new java.util.ArrayList<>(availableSemesters);
+                    java.util.Collections.sort(sortedSemesters);
+                    for (int i = 0; i < sortedSemesters.size(); i++) {
+                        availableSemestersStr += sortedSemesters.get(i);
+                        if (i < sortedSemesters.size() - 1) {
+                            availableSemestersStr += ", ";
+                        }
+                    }
+                }
+                javax.swing.JOptionPane.showMessageDialog(this, availableSemestersStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                return;
             }
+            
             
             // Generate the report with the selected semester
             try {
                 // Create a report generator instance and generate the report
                 String filePath = "student_report_" + studentId;
+
                 if (selectedSemester != -1) {
                     filePath += "_sem" + selectedSemester;
                 }
+
                 filePath += ".pdf";
                 
-                com.mycompany.oodjassignment.functions.ReportGenerator reportGenerator = 
-                    new com.mycompany.oodjassignment.functions.ReportGenerator("REPORT_" + studentId, filePath);
+                ReportGenerator reportGenerator = new ReportGenerator("REPORT_" + studentId, filePath);
                 
-                if (selectedSemester != -1) {
-                    reportGenerator.generateReport(studentId, selectedSemester);
-                } else {
-                    reportGenerator.generateReport(studentId);
-                }
+                reportGenerator.generateReport(studentId, selectedSemester);
                 
                 javax.swing.JOptionPane.showMessageDialog(this, "Report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-            } catch (Exception e) {
+            } 
+            
+            catch (Exception e) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
@@ -390,7 +375,7 @@ public class ReportGenerator extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ReportGenerator().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new ReportGeneratorPanel().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

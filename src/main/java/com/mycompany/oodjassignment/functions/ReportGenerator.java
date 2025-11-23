@@ -46,14 +46,7 @@ public class ReportGenerator {
     }
 
     // method
-    public void displayReport(){
-        
-    }
-
-    public void generateReport(String studentId){
-        generateReport(studentId, -1); // Call with -1 to indicate no semester filtering
-    }
-    
+    // Semester based report generation    
     public void generateReport(String studentId, int semester){
         Document document = new Document();
         try {
@@ -75,12 +68,7 @@ public class ReportGenerator {
             document.add(new Paragraph("Student Name: " + fullName));
             document.add(new Paragraph("Student ID: " + studentId));
             document.add(new Paragraph("Program: " + student.getMajor()));
-            
-            // Add semester information if filtering by semester
-            if(semester != -1) {
-                document.add(new Paragraph("Semester: " + semester));
-            }
-            
+            document.add(new Paragraph("Semester: " + semester));
             document.add(new Paragraph(" "));
             
             // Load and filter grades for this student using existing database method
@@ -88,15 +76,13 @@ public class ReportGenerator {
             for (Grades grade : database.getGradeDB().values()) {
                 if (grade.getStudentID().equals(studentId)) {
                     // Filter by semester if a specific semester is requested
-                    if(semester != -1 && grade.getSemester() != semester) {
-                        continue; // Skip grades that don't match the requested semester
+                    if(grade.getSemester() != semester) {
+                        continue; 
                     }
                     
                     // Get and set the course object for proper GPA calculation
                     Course course = database.getCourse(grade.getCourseID());
-                    if (course != null) {
-                        grade.setCourseObject(course);
-                    }
+                    grade.setCourseObject(course);
                     studentGrades.add(grade);
                 }
             }
@@ -141,17 +127,13 @@ public class ReportGenerator {
                 String courseCode = course.getCourseID();
                 String courseName = course.getCourseName() ;
                 
-                // Calculate GPA 
+                // Get GPA and letter grade
                 double gpa = grade.calculateGPA();
-                
                 String letterGrade = grade.getLetterGrade();
 
                 // Get credit hours from course using the proper getter method
-                int courseCredit = 0;
-                if (course != null) {
-                    courseCredit = course.getCredit();
-                }
-                
+                int courseCredit = course.getCredit();
+                                
                 // Create data cells with center alignment
                 PdfPCell cell1 = new PdfPCell(new Paragraph(courseCode));
                 cell1.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
@@ -197,7 +179,7 @@ public class ReportGenerator {
         }
     }
     
-    // Method to generate report for an entire academic year (both semesters)
+    // Yearly based report generation
     public void generateYearlyReport(String studentId, int year){
         Document document = new Document();
         try {
@@ -220,13 +202,11 @@ public class ReportGenerator {
             document.add(new Paragraph("Student ID: " + studentId));
             document.add(new Paragraph("Program: " + student.getMajor()));
             document.add(new Paragraph("Academic Year: "+ year));
-            
             document.add(new Paragraph(" "));
             
             // Determine which semesters belong to the target year
-            // Assuming 2 semesters per year (Year 1: Sem 1 & 2, Year 2: Sem 3 & 4, etc.)
-            int startSemester = (year - 1) * 2 + 1;  // First semester of the year
-            int endSemester = startSemester + 1;      // Last semester of the year
+            int startSemester = (year - 1) * 2 + 1;  
+            int endSemester = startSemester + 1;      
             
             // Load and filter grades for this student for the entire year using existing database method
             for (int currentSemester = startSemester; currentSemester <= endSemester; currentSemester++) {
@@ -238,9 +218,7 @@ public class ReportGenerator {
                         
                         // Get and set the course object for proper GPA calculation
                         Course course = database.getCourse(grade.getCourseID());
-                        if (course != null) {
-                            grade.setCourseObject(course);
-                        }
+                        grade.setCourseObject(course);
                         semesterGrades.add(grade);
                     }
                 }
@@ -248,13 +226,12 @@ public class ReportGenerator {
                 // Only add section if there are grades for this semester
                 if (!semesterGrades.isEmpty()) {
                     // Add semester header
-                    Font semesterHeaderFont = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD);
+                    Font semesterHeaderFont = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
                     Paragraph semesterHeader = new Paragraph("Semester " + currentSemester, semesterHeaderFont);
                     document.add(semesterHeader);
-                    document.add(new Paragraph(" ")); // Space before table
-                    
+                    document.add(new Paragraph(" ")); 
                     // Create table for semester grades
-                    PdfPTable semesterTable = new PdfPTable(5); // 5 columns: Module Code, Module, Credit Hours, Grade, Grade Point
+                    PdfPTable semesterTable = new PdfPTable(5); // adjust it into 5 for 5 coloumn
 
                     // Adjust the width of the columns
                     semesterTable.setWidths(new float[]{1.2f, 2.5f, 1.0f, 0.8f, 1.0f}); 
@@ -300,10 +277,7 @@ public class ReportGenerator {
                         String letterGrade = grade.getLetterGrade();
                         
                         // Get credit hours from course using the proper getter method
-                        int courseCredit = 0;
-                        if (course != null) {
-                            courseCredit = course.getCredit();
-                        }
+                        int courseCredit = course.getCredit();
                         
                         // Create data cells with center alignment
                         PdfPCell cell1 = new PdfPCell(new Paragraph(courseCode));
@@ -367,10 +341,8 @@ public class ReportGenerator {
             
             for (Grades grade : allYearGrades) {
                 Course course = database.getCourse(grade.getCourseID());
-                int courseCredit = 0;
-                if (course != null) {
-                    courseCredit = course.getCredit();
-                }
+                int courseCredit = course.getCredit();
+                
                 double gpa = grade.calculateGPA();
                 totalQualityPoints += courseCredit * gpa;
                 totalCreditHours += courseCredit;
@@ -390,6 +362,5 @@ public class ReportGenerator {
             e.printStackTrace();
         }
     }
-
 
 }

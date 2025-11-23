@@ -15,7 +15,7 @@ public class Test {
 
     public static void testReportGenerator(){
         ReportGenerator reportGen = new ReportGenerator("R001", "academic_report.pdf");
-        reportGen.generateReport("S001");
+        reportGen.generateReport("S001", 1);
     }
 
     
