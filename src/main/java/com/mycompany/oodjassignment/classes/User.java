@@ -23,12 +23,7 @@ public abstract class User implements Serializable {
         this.lastModifiedDate = LocalDateTime.now();
     }
 
-    protected User(String userID,
-                   String username,
-                   String password,
-                   String name,
-                   String email,
-                   UserRole role) {
+    protected User(String userID, String username, String password, String name, String email, UserRole role) {
         this();
         this.userID = userID;
         this.username = username != null ? username : userID;
@@ -175,25 +170,15 @@ public abstract class User implements Serializable {
     public String toFileString() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",
-                userID,
-                username,
-                password,
-                name,
-                email,
-                role != null ? role.name() : "",
-                status != null ? status.name() : "",
-                createdDate != null ? createdDate.format(formatter) : "",
+                userID, username, password, name, email, role != null ? role.name() : "",
+                status != null ? status.name() : "", createdDate != null ? createdDate.format(formatter) : "",
                 lastModifiedDate != null ? lastModifiedDate.format(formatter) : "");
     }
 
     @Override
     public String toString() {
         return String.format("User[ID=%s, Username=%s, Name=%s, Role=%s, Status=%s]",
-                userID,
-                username,
-                name,
-                role,
-                status);
+                userID, username, name, role, status);
     }
 
     private void touch() {
