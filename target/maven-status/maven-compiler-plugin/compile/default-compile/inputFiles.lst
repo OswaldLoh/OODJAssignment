@@ -17,7 +17,7 @@ D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oo
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\functions\IDManager.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\functions\ReportGenerator.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\functions\SendEmail.java
-D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\GUI\ReportGenerator.java
+D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\GUI\ReportGeneratorPanel.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\Main.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\Test.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\usermanagement\gui\AddUserDialog.java
@@ -30,3 +30,7 @@ D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oo
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\usermanagement\service\AuthenticationService.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\usermanagement\service\UserManager.java
 D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\com\mycompany\oodjassignment\usermanagement\util\PasswordUtil.java
+D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\Eligibility\Course.java
+D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\Eligibility\CourseResult.java
+D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\Eligibility\Person.java
+D:\Uni\Year 2\Uni - Sem 3\OOP Java\OODJAssignment\src\main\java\Eligibility\Student.java
