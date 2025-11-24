@@ -21,7 +21,7 @@ public class RecoveryPlanMenu {
         this.database = database;
         addRecoveryPlanButton.addActionListener(e -> {
             closeCurrentMenu();
-            openAddRecoveryPlanMenu(userID);
+
         });
         backButton.addActionListener(e -> {
             closeCurrentMenu();
@@ -33,15 +33,6 @@ public class RecoveryPlanMenu {
         return recoveryPlanMenuPanel;
     }
 
-    private void openAddRecoveryPlanMenu(String userID) {
-        JFrame addRecoveryPlan = new JFrame("Academic Officer System");
-        AddRecoveryPlanMenu addRecoveryPlanMenu = new AddRecoveryPlanMenu(database);
-        addRecoveryPlan.setContentPane(addRecoveryPlanMenu.getAddRecoveryPlanPanel());
-        addRecoveryPlan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addRecoveryPlan.setSize(800, 600);
-        addRecoveryPlan.setLocationRelativeTo(null);
-        addRecoveryPlan.setVisible(true);
-    }
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
         AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);

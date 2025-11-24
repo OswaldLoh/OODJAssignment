@@ -6,8 +6,8 @@ import java.awt.*;
 
 /**
  * Custom cell renderer used to highlight eligible students in green
- * and non-eligible students in light red. Helps lecturers visually
- * identify students who need attention.
+ * and non-eligible students in light red.
+ * Helps visually identify students who need attention.
  */
 public class EligibilityCellRenderer extends DefaultTableCellRenderer {
 
