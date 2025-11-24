@@ -1,34 +1,38 @@
 package com.mycompany.oodjassignment.Eligibility;
 
+import com.mycompany.oodjassignment.classes.Student;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.List;
 
 /**
- * Table model for displaying student eligibility information in a JTable.
- * Uses data from Student objects and EligibilityChecker.
+ * TableModel used by JTable to display eligibility information.
+ * This separates UI logic from business logic and ensures the table
+ * updates cleanly when we filter or search.
  */
 public class EligibilityTableModel extends AbstractTableModel {
 
+    // Column headers displayed in the JTable
     private final String[] columns = {"Student ID", "Name", "CGPA", "Failed Courses", "Eligible"};
 
-    private List<Student> students;
-    private EligibilityChecker eligibilityChecker;
+    private List<Student> students;           // Current list shown to the user
+    private EligibilityChecker checker;       // Performs eligibility calculations
 
-    // Constructor takes a list of students and an eligibility checker.
-
+    /**
+     * Constructor receives the student list and the shared EligibilityChecker.
+     */
     public EligibilityTableModel(List<Student> students, EligibilityChecker checker) {
         this.students = students;
-        this.eligibilityChecker = checker;
+        this.checker = checker;
     }
 
-    // Allows the GUI to reset the list of students (ex:after filtering).
-
+    /**
+     * Updates the student list when filters are applied.
+     */
     public void setStudents(List<Student> students) {
         this.students = students;
-        fireTableDataChanged(); // Notifies JTable that the data has changed.
+        fireTableDataChanged(); // refresh table display
     }
-
-    // Returns the Student object at a given row index.
 
     public Student getStudentAt(int rowIndex) {
         if (rowIndex < 0 || rowIndex >= students.size()) {
@@ -52,22 +56,23 @@ public class EligibilityTableModel extends AbstractTableModel {
         return columns[column];
     }
 
-    // Provides values for each cell in the table based on the student list.
-
+    /**
+     * Returns the value for each cell in the table based on the student object.
+     */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Student s = students.get(rowIndex);
-        double cgpa = s.calculateCGPA();
-        int fails = s.countFailedCourses();
-        boolean eligible = eligibilityChecker.isEligible(s);
+
+        double cgpa = checker.getCGPA(s);
+        int fails = checker.getFailedCourses(s);
+        boolean eligible = checker.isEligible(s);
 
         switch (columnIndex) {
             case 0:
-                return s.getId();
+                return s.getStudentID();
             case 1:
-                return s.getFullName();
+                return s.getFirstName() + " " + s.getLastName();
             case 2:
-                // Format CGPA to 2 decimal places for display.
                 return String.format("%.2f", cgpa);
             case 3:
                 return fails;
@@ -78,11 +83,12 @@ public class EligibilityTableModel extends AbstractTableModel {
         }
     }
 
+    /**
+     * Specifies data type for each column to improve JTable rendering.
+     */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        // CGPA is shown as String because of formatting, failed courses as Integer.
-        if (columnIndex == 2) return String.class;
-        if (columnIndex == 3) return Integer.class;
+        if (columnIndex == 3) return Integer.class; // failed courses
         return String.class;
     }
 }

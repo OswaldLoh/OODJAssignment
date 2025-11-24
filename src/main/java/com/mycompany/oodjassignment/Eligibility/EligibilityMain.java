@@ -1,67 +1,72 @@
 package com.mycompany.oodjassignment.Eligibility;
 
+import com.mycompany.oodjassignment.classes.Student;
+import com.mycompany.oodjassignment.functions.Database;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Main GUI application for the Eligibility Check & Enrolment.
- * Features:
- *  - Load data from CSV files
- *  - Calculate and display CGPA and failed courses
- *  - Show eligibility (Yes/No) with color highlighting
- *  - Search and filter students
- *  - Progression analytics (counts + average CGPA)
- *  - Enrol eligible students and save records to binary file
+ * Main GUI for the Eligibility Check & Enrolment module.
+ * Integrates searching, filtering, analytics, highlighting,
+ * and saving enrolment decisions.
  */
 public class EligibilityMain extends JFrame {
 
-    private Map<String, Student> allStudentsMap;       // All students loaded from file.
-    private List<Student> displayedStudents;           // Current list shown in the table.
+    private final Database db;              // shared project database
+    private final EligibilityChecker checker;
 
-    private EligibilityChecker eligibilityChecker;     // Business logic to determine eligibility.
-    private EligibilityTableModel tableModel;          // Model for JTable.
-    private JTable table;                              // Table to display students.
+    private Map<String, Student> allStudentsMap;
+    private List<Student> displayedStudents;
 
-    private JTextField txtSearch;                      // Text field for ID/Name search.
-    private JCheckBox chkShowOnlyIneligible;           // Checkbox to filter only non-eligible.
-    private JLabel lblSelectedInfo;                    // Label to show info about selected student.
+    private EligibilityTableModel tableModel;
+    private JTable table;
 
-    // Constructor sets up the whole GUI and loads data.
+    private JTextField txtSearch;
+    private JCheckBox chkShowOnlyIneligible;
+    private JLabel lblSelectedInfo;
 
+    /**
+     * Constructor initializes the Database and creates the full GUI.
+     */
     public EligibilityMain() {
         super("Eligibility Check & Enrolment");
 
-        eligibilityChecker = new EligibilityChecker();
-        loadData(); // Load CSV data into memory.
-
-        // Initially, display all students.
+        db = new Database();                       // loads all CSV data automatically
+        checker = new EligibilityChecker(db);      // performs the eligibility logic
+        allStudentsMap = db.getStudentDB();
         displayedStudents = new ArrayList<>(allStudentsMap.values());
+        // Sort students by StudentID in ascending order
+        displayedStudents.sort(Comparator.comparing(Student::getStudentID));
 
-        // Set up table model and JTable.
-        tableModel = new EligibilityTableModel(displayedStudents, eligibilityChecker);
+
+        initComponents();
+
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(900, 500);
+        setLocationRelativeTo(null);
+    }
+
+    /**
+     * Builds UI components: search bar, table, buttons, listeners.
+     */
+    private void initComponents() {
+        tableModel = new EligibilityTableModel(displayedStudents, checker);
         table = new JTable(tableModel);
         table.setDefaultRenderer(Object.class, new EligibilityCellRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // Search input and controls.
+        // top search panel
         txtSearch = new JTextField(20);
         JButton btnSearch = new JButton("Search");
         chkShowOnlyIneligible = new JCheckBox("Show only NOT eligible");
         JButton btnClear = new JButton("Clear Filter");
 
-        // Analytics and enrolment buttons.
-        JButton btnAnalytics = new JButton("Progression Analytics");
-        JButton btnEnrol = new JButton("Enrol Selected");
-
-        lblSelectedInfo = new JLabel("Select a student to view details.");
-
-        // Top panel for search/filter controls.
         JPanel topPanel = new JPanel();
         topPanel.add(new JLabel("Search (ID/Name):"));
         topPanel.add(txtSearch);
@@ -69,73 +74,37 @@ public class EligibilityMain extends JFrame {
         topPanel.add(chkShowOnlyIneligible);
         topPanel.add(btnClear);
 
-        // Bottom panel for status label and action buttons.
-        JPanel bottomPanel = new JPanel(new BorderLayout());
+        // bottom panel: analytics + enrol
+        JButton btnAnalytics = new JButton("Progression Analytics");
+        JButton btnEnrol = new JButton("Enrol Selected");
+        lblSelectedInfo = new JLabel("Select a student to view details.");
+
         JPanel btnPanel = new JPanel();
         btnPanel.add(btnAnalytics);
         btnPanel.add(btnEnrol);
 
+        JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.add(lblSelectedInfo, BorderLayout.CENTER);
         bottomPanel.add(btnPanel, BorderLayout.EAST);
 
-        // Add panels and table to the main frame.
+        // add to frame
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Event listeners for buttons and selection changes.
-
-        // Perform search and filter when Search button is clicked or checkbox changes.
+        // event handlers
         btnSearch.addActionListener(e -> applyFilter());
         chkShowOnlyIneligible.addActionListener(e -> applyFilter());
+        btnClear.addActionListener(e -> resetFilter());
 
-        // Clear filter and show all students again.
-        btnClear.addActionListener(e -> {
-            txtSearch.setText("");
-            chkShowOnlyIneligible.setSelected(false);
-            resetFilter();
-        });
-
-        // Update label when the selected row in the table changes.
         table.getSelectionModel().addListSelectionListener(e -> updateSelectedInfo());
 
-        // Show progression analytics popup.
         btnAnalytics.addActionListener(e -> showAnalytics());
-
-        // Enrol the selected student if eligible.
         btnEnrol.addActionListener(e -> enrolSelectedStudent());
-
-        // Basic frame settings.
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(900, 500);
-        setLocationRelativeTo(null); // Center on screen.
     }
 
     /**
-     * Loads students, courses, and grades from CSV files.
-     * If any error occurs, an empty map is created and an error message is shown.
-     */
-    private void loadData() {
-        try {
-            Map<String, Student> students = CSVLoader.loadStudents("student_information.csv");
-            Map<String, Course> courses = CSVLoader.loadCourses("course_assessment_information.csv");
-            CSVLoader.loadGradesIntoStudents("student_grades.csv", students, courses);
-
-            this.allStudentsMap = students;
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this,
-                    "Error loading CSV files: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            this.allStudentsMap = new LinkedHashMap<>();
-        }
-    }
-
-    /**
-     * Applies search and filter conditions to the student list.
-     * - Filters by ID or name substring
-     * - filters to show only non-eligible students
+     * Applies search + ineligible-only filters using student fields.
      */
     private void applyFilter() {
         String keyword = txtSearch.getText().trim().toLowerCase();
@@ -143,35 +112,40 @@ public class EligibilityMain extends JFrame {
 
         List<Student> filtered = allStudentsMap.values().stream()
                 .filter(s -> {
-                    // Search by ID or full name.
                     boolean matchesKeyword =
                             keyword.isEmpty()
-                                    || s.getId().toLowerCase().contains(keyword)
-                                    || s.getFullName().toLowerCase().contains(keyword);
+                                    || s.getStudentID().toLowerCase().contains(keyword)
+                                    || (s.getFirstName() + " " + s.getLastName()).toLowerCase().contains(keyword);
 
-                    // Optionally restrict to non-eligible students only.
-                    boolean matchesEligibility = true;
-                    if (onlyIneligible) {
-                        matchesEligibility = !eligibilityChecker.isEligible(s);
-                    }
+                    boolean matchesEligibility =
+                            !onlyIneligible || !checker.isEligible(s);
 
                     return matchesKeyword && matchesEligibility;
                 })
                 .collect(Collectors.toList());
 
         displayedStudents = filtered;
+        // Sort result
+        displayedStudents.sort(Comparator.comparing(Student::getStudentID));
         tableModel.setStudents(displayedStudents);
     }
 
-    // Resets the table to show all students without any filters.
-
+    /**
+     * Restores full student list.
+     */
     private void resetFilter() {
+        txtSearch.setText("");
+        chkShowOnlyIneligible.setSelected(false);
+        // Convert HashMap → List
         displayedStudents = new ArrayList<>(allStudentsMap.values());
+        // Sort students by StudentID in ascending order
+        displayedStudents.sort(Comparator.comparing(Student::getStudentID));
         tableModel.setStudents(displayedStudents);
     }
 
-    // Updates the bottom status label with information about the currently selected student.
-
+    /**
+     * Updates label showing selected student's academic performance.
+     */
     private void updateSelectedInfo() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -180,62 +154,46 @@ public class EligibilityMain extends JFrame {
         }
 
         Student s = tableModel.getStudentAt(row);
-        double cgpa = s.calculateCGPA();
-        int fails = s.countFailedCourses();
-        boolean eligible = eligibilityChecker.isEligible(s);
+        double cgpa = checker.getCGPA(s);
+        int fails = checker.getFailedCourses(s);
+        boolean eligible = checker.isEligible(s);
 
         lblSelectedInfo.setText(String.format(
-                "Selected: %s | CGPA: %.2f | Failed: %d | Eligible: %s",
-                s.toString(), cgpa, fails, eligible ? "YES" : "NO"));
+                "Selected: %s (%s %s) | CGPA: %.2f | Failed: %d | Eligible: %s",
+                s.getStudentID(), s.getFirstName(), s.getLastName(),
+                cgpa, fails, eligible ? "YES" : "NO"));
     }
 
     /**
-     * Shows aggregated statistics of the student population:
-     * - Total number of students
-     * - Number of eligible / non-eligible students
-     * - Average CGPA
+     * Shows general analytics for the entire student population.
      */
     private void showAnalytics() {
-        if (allStudentsMap.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "No data available.",
-                    "Analytics",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
         int total = allStudentsMap.size();
         int eligibleCount = 0;
-        int notEligibleCount = 0;
-        double totalCgpa = 0.0;
+        double totalCgpa = 0;
 
         for (Student s : allStudentsMap.values()) {
-            double cgpa = s.calculateCGPA();
+            double cgpa = checker.getCGPA(s);
             totalCgpa += cgpa;
 
-            if (eligibilityChecker.isEligible(s)) {
+            if (checker.isEligible(s)) {
                 eligibleCount++;
-            } else {
-                notEligibleCount++;
             }
         }
 
-        double avgCgpa = total == 0 ? 0.0 : totalCgpa / total;
+        int notEligibleCount = total - eligibleCount;
+        double avgCgpa = total == 0 ? 0 : totalCgpa / total;
 
         String msg = String.format(
                 "Total students: %d\nEligible: %d\nNot Eligible: %d\nAverage CGPA: %.2f",
                 total, eligibleCount, notEligibleCount, avgCgpa);
 
-        JOptionPane.showMessageDialog(this,
-                msg,
-                "Progression Analytics",
+        JOptionPane.showMessageDialog(this, msg, "Progression Analytics",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
-     * Attempts to enrol the selected student.
-     * - Only allows enrolment if the student is eligible.
-     * - Saves an EnrolmentRecord to a binary file if successful.
+     * Creates and stores an enrolment record for the selected student.
      */
     private void enrolSelectedStudent() {
         int row = table.getSelectedRow();
@@ -248,36 +206,33 @@ public class EligibilityMain extends JFrame {
         }
 
         Student s = tableModel.getStudentAt(row);
-        double cgpa = s.calculateCGPA();
-        int fails = s.countFailedCourses();
-        boolean eligible = eligibilityChecker.isEligible(s);
+        double cgpa = checker.getCGPA(s);
+        int fails = checker.getFailedCourses(s);
 
-        // Block enrolment if the student is not eligible.
-        if (!eligible) {
+        if (!checker.isEligible(s)) {
             JOptionPane.showMessageDialog(this,
-                    "This student is NOT eligible for enrolment.\nCannot proceed.",
+                    "This student is NOT eligible for enrolment.",
                     "Enrolment Blocked",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Create a new enrolment record and append to file.
-        EnrolmentRecord record = new EnrolmentRecord(s, cgpa, fails, true);
+        String fullName = s.getFirstName() + " " + s.getLastName();
+
+        EnrolmentRecord record = new EnrolmentRecord(
+                s.getStudentID(), fullName, cgpa, fails, true
+        );
         EnrolmentFileManager.appendEnrolment(record);
 
         JOptionPane.showMessageDialog(this,
-                "Enrolment successful for " + s.getFullName()
-                        + "\nCGPA: " + String.format("%.2f", cgpa)
-                        + "\nFailed Courses: " + fails,
+                "Enrolment successful for " + fullName +
+                        "\nCGPA: " + String.format("%.2f", cgpa) +
+                        "\nFailed Courses: " + fails,
                 "Enrolment Success",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    // Main entry point to start the GUI application.
-
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new EligibilityMain().setVisible(true);
-        });
+        SwingUtilities.invokeLater(() -> new EligibilityMain().setVisible(true));
     }
 }
