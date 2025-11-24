@@ -37,6 +37,9 @@ public class Course implements CSVParser<Course>{
     public int getAssignmentWeight() {
         return assignmentWeight;
     }
+    public int getCredit() {
+        return credit;
+    }
 
     @Override
     public Course fromCSV(String line) {
