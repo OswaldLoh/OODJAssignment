@@ -3,20 +3,20 @@ import com.mycompany.oodjassignment.functions.CSVParser;
 import java.util.ArrayList;
 
 public class Student implements CSVParser<Student> {
-    private String studentID, firstName, lastName, major, email;
-    private int year;
+    private String studentID, firstName, lastName, major, email, year;
     private static final String filename = "student_information.csv";
     ArrayList<String> enrolledCourses;
 
     // constructors
     public Student() {};
 
-    public Student(String studentID, String firstName, String lastName, String major, String email) {
+    public Student(String studentID, String firstName, String lastName, String major, String year, String email) {
         this.studentID = studentID;
         this.firstName = firstName;         // Parameterized constructor to initialize new objects from CSV file
         this.lastName = lastName;
         this.major = major;
         this.email = email;
+        this.year = year;
     }
     // getters
     public String getStudentID() {
@@ -34,9 +34,7 @@ public class Student implements CSVParser<Student> {
     public String getEmail() {
         return email;
     }
-    public int getYear() {
-        return year;
-    }
+    public String getYear() { return year; }
 
     // setters
     public void setStudentID(String studentID) {
@@ -54,18 +52,15 @@ public class Student implements CSVParser<Student> {
     public void setEmail(String email) {
         this.email = email;
     }
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
     // Methods
-
-
-
     @Override
     public Student fromCSV(String line) {
         String[] details = line.split(",");
-        return new Student(details[0],details[1],details[2],details[3],details[4]);
+        return new Student(details[0],details[1],details[2],details[3],details[4],details[5]);
     }
 
     @Override

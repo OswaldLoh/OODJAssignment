@@ -6,6 +6,7 @@ public class RecoveryTasksDashboard {
     private JPanel RecoveryTasksPanel;
     private JTable table1;
     private JTextField textField1;
-    private JButton button1;
-    private JButton button2;
+    private JButton searchButton;
+    private JButton deleteTaskButton;
+    private JButton backButton;
 }

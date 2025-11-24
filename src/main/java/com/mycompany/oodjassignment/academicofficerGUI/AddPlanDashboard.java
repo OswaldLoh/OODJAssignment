@@ -1,10 +1,11 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 import com.mycompany.oodjassignment.classes.*;
 import com.mycompany.oodjassignment.functions.*;
-
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class AddPlanDashboard {
+    private DefaultTableModel tableModel;
     private Database database;
     private JPanel addPlanDashboardPanel;
     private JTable studentListTable;
@@ -19,6 +20,9 @@ public class AddPlanDashboard {
     public AddPlanDashboard(Database database) {
         this.database = database;
 
+        tableSetup();
+        loadStudents();
+
         backButton.addActionListener(e -> {
             closeCurrentFrame();
             openRecoveryPlanDashboard();
@@ -27,6 +31,31 @@ public class AddPlanDashboard {
     }
 
 
+    private void tableSetup() {
+        String[] columnNames = {"Student ID", "Name", "Major", "Year"};
+        tableModel = new DefaultTableModel(columnNames, 0) {
+            // Make cells un-editable (optional, but recommended)
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+    }
+
+    private void loadStudents() {
+        tableModel.setRowCount(0);
+        for (Student student : database.getStudentDB().values()) {
+            Object[] row = {
+                    student.getStudentID(),
+                    student.getFirstName()+" "+student.getLastName(),
+                    student.getMajor(),
+                    student.getYear()
+            };
+            tableModel.addRow(row);
+        }
+        studentListTable.setModel(tableModel);
+        studentListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
 
     // for back button, go back to main menu
     private void openRecoveryPlanDashboard() {
