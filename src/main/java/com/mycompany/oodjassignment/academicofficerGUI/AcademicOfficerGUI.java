@@ -11,6 +11,7 @@ public class AcademicOfficerGUI {
     private JButton recoveryTasksMenuButton;
     private JButton searchStudentsButton;
     private JButton recoveryPlanMenuButton;
+    private JButton recoveryPlanDashboardButton;
 
     public static void main(String[] args) {
         Database database = new Database();
@@ -33,6 +34,10 @@ public class AcademicOfficerGUI {
             closeCurrentMenu();
             openSearchStudentMenu();
         });
+        recoveryPlanDashboardButton.addActionListener(e -> {
+            closeCurrentMenu();
+            openRecoveryPlanDashboard();
+        });
         recoveryPlanMenuButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryPlanMenu();
@@ -43,7 +48,7 @@ public class AcademicOfficerGUI {
         });
         exitButton.addActionListener(e -> {
             closeCurrentMenu();
-            closeCurrentMenu();
+
         });
     }
     private void openSearchStudentMenu() {
@@ -64,7 +69,6 @@ public class AcademicOfficerGUI {
         recoveryPlanMenuFrame.setLocationRelativeTo(null);
         recoveryPlanMenuFrame.setVisible(true);
     }
-
     private void openRecoveryTaskMenu() {
         JFrame recoveryTaskMenuFrame = new JFrame("Recovery Task Menu");
         RecoveryTasksMenu recoveryTasksMenu = new RecoveryTasksMenu(database);
@@ -73,6 +77,15 @@ public class AcademicOfficerGUI {
         recoveryTaskMenuFrame.setSize(800, 600);
         recoveryTaskMenuFrame.setLocationRelativeTo(null);
         recoveryTaskMenuFrame.setVisible(true);
+    }
+    private void openRecoveryPlanDashboard() {
+        JFrame recoveryPlanDashboardFrame = new JFrame ("Academic Officer System");
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
+        recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
+        recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        recoveryPlanDashboardFrame.setSize(800,600);
+        recoveryPlanDashboardFrame.setLocationRelativeTo(null);
+        recoveryPlanDashboardFrame.setVisible(true);
     }
 
     public JPanel getMainPanel() {

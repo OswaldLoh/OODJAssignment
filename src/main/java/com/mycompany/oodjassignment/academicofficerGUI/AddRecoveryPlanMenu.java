@@ -48,6 +48,7 @@ public class AddRecoveryPlanMenu {
             JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
                     "Student ID " + targetStudentID + " not found in database.",
                     "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         if (targetCourseID.isEmpty()) {
             JOptionPane.showMessageDialog(AddRecoveryPlanPanel,"Please enter a Student ID.");
@@ -58,6 +59,7 @@ public class AddRecoveryPlanMenu {
             JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
                     "Course ID " + targetStudentID + " not found in database.",
                     "Error", JOptionPane.ERROR_MESSAGE);
+            return;
         }
         ArrayList<String> studentCourse = database.getStudentCourse(targetStudentID);
         ArrayList<Grades> studentGrades = database.getStudentAllGrades(targetStudentID);
@@ -67,6 +69,7 @@ public class AddRecoveryPlanMenu {
             JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
                     "Student '" + targetStudentID + "' is not registered to course " + targetCourseID ,
                     "Error",JOptionPane.ERROR_MESSAGE);
+            return;
         }
         if (studentExistingPlans != null) {
             for (RecoveryPlan plan : studentExistingPlans) {
@@ -97,6 +100,7 @@ public class AddRecoveryPlanMenu {
                             "Course: " + targetCourseID + "\n" +
                             "GPA: " + studentGPA,
                     "", JOptionPane.INFORMATION_MESSAGE);
+            return;
         }
 
         IDManager idManager = new IDManager(database.getRecPlanDB());       // Generate new Plan ID
@@ -104,14 +108,14 @@ public class AddRecoveryPlanMenu {
         String nextPlanID = "P" + idManager.generateNewID();
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, targetCourseID, "A01", "0.00");
         database.addRecoveryPlan(newPlan);
-        RecoveryPlan recPlan = new RecoveryPlan();
+        FileHandler.writeCSV(newPlan, database.getRecPlanDB());
 
         JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
                 "Recovery Plan added!",
                 "Success!",JOptionPane.INFORMATION_MESSAGE);
 
         closeCurrentFrame();
-        openAddRecoveryTaskPanel();
+        openAddRecoveryTaskPanel(nextPlanID);
     }
 
     private void closeCurrentFrame() {
@@ -129,9 +133,9 @@ public class AddRecoveryPlanMenu {
         mainMenuFrame.setVisible(true);
     }
 
-    private void openAddRecoveryTaskPanel() {
+    private void openAddRecoveryTaskPanel(String targetPlanID) {
         JFrame addRecoveryTaskFrame= new JFrame("Academic Officer System");
-        AddRecoveryTaskMenu addRecoveryTaskMenu = new AddRecoveryTaskMenu(database);
+        AddRecoveryTaskMenu addRecoveryTaskMenu = new AddRecoveryTaskMenu(database,targetPlanID,true);
         addRecoveryTaskFrame.setContentPane(addRecoveryTaskMenu.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addRecoveryTaskFrame.setSize(800,600);

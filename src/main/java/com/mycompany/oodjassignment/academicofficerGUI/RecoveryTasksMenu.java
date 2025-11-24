@@ -20,6 +20,9 @@ public class RecoveryTasksMenu {
             closeCurrentMenu();
             openMainMenu();
         });
+        AddRecoveryTaskButton.addActionListener(e -> {
+            closeCurrentMenu();
+        });
 
     }
     public JPanel getRecoveryTaskMenuPanel() {
