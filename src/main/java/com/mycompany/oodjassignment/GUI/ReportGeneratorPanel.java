@@ -6,6 +6,7 @@ package com.mycompany.oodjassignment.GUI;
 import java.util.*;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.ReportGenerator;
+import javax.swing.*;
 
 /**
  *
@@ -231,13 +232,13 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
 
         // Validate the input
         if (studentId.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a Student ID", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a Student ID", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         // Check if the student ID exists in the database of student grade
         else if (!database.studentExist(studentId)) {
-            javax.swing.JOptionPane.showMessageDialog(this, "Please enter a valid Student ID.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please enter a valid Student ID.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -257,24 +258,24 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                 String availableYearsStr = "No courses found in the selected year.";
                 availableYearsStr += " Available years: " + availableYears;
                 
-                javax.swing.JOptionPane.showMessageDialog(this, availableYearsStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, availableYearsStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             
             // Generate the yearly report
             try {
-                String filePath = "student_yearly_report_" + studentId + "_year" + year + ".pdf";
+                String filePath = "data/student_report/student_yearly_report_" + studentId + "_year" + year + ".pdf";
                 
                 com.mycompany.oodjassignment.functions.ReportGenerator reportGenerator = 
                     new com.mycompany.oodjassignment.functions.ReportGenerator("REPORT_" + studentId, filePath);
                 
                 reportGenerator.generateYearlyReport(studentId, year);
                 
-                javax.swing.JOptionPane.showMessageDialog(this, "Yearly report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Yearly report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } 
             
             catch (Exception e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         } 
@@ -289,7 +290,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                 String availableSemestersStr = "No courses found in the selected semester.";
                 availableSemestersStr += " Available semesters: " + avaibleSemesters;
                 
-                javax.swing.JOptionPane.showMessageDialog(this, availableSemestersStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, availableSemestersStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             
@@ -297,7 +298,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
             // Generate the report with the selected semester
             try {
                 // Create a report generator instance and generate the report
-                String filePath = "student_report_" + studentId;
+                String filePath = "data/student_report/student_report_" + studentId;
 
                 if (selectedSemester != -1) {
                     filePath += "_sem" + selectedSemester;
@@ -309,11 +310,11 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                 
                 reportGenerator.generateReport(studentId, selectedSemester);
                 
-                javax.swing.JOptionPane.showMessageDialog(this, "Report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             } 
             
             catch (Exception e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Error generating report: " + e.getMessage(), "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 e.printStackTrace();
             }
         }
