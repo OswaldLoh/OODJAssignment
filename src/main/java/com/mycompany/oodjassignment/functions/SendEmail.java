@@ -21,7 +21,7 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendEmail {
 
-    private final String senderEmail = "markyisnice@gmail.coma"; // the app password only can be generated when email is quite old
+    private final String senderEmail = "markyisnice@gmail.com"; // the app password only can be generated when email is quite old
     private final String senderPassword = "dbyv ofcy vzia hngt"; // this is the app password for gmail ( app pass dif with gmail pass )
     private String recipientEmail;
     private String fileLocation;
