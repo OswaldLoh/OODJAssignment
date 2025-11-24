@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.oodjassignment.GUI;
-
+import java.util.*;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.ReportGenerator;
 
@@ -241,38 +241,28 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
             return;
         }
         
-        
+        // Get the selected option from the combo box
         String selectedOption = (String) jComboBox2.getSelectedItem();
         
-        // validating option for yearly report
+        // Clearing the option str only take integer value
         if (selectedOption.toLowerCase().contains("year")) {
-            // Generate yearly report
+
             int year = Integer.parseInt(selectedOption.replaceAll("[^0-9]", ""));
             
-            // Validate if the student has data for the selected year using the database method
+            // Display message if no courses found in the selected year
             if (!database.studentYearExist(studentId, year)) {
                 // Find available years for this student to inform the user
-                java.util.Set<Integer> availableYears = database.getAvailableYears(studentId);
+                Set<Integer> availableYears = database.getAvailableYears(studentId);
                 
                 String availableYearsStr = "No courses found in the selected year.";
-                if (!availableYears.isEmpty()) {
-                    availableYearsStr += " Available years: ";
-                    java.util.List<Integer> sortedYears = new java.util.ArrayList<>(availableYears);
-                    java.util.Collections.sort(sortedYears);
-                    for (int i = 0; i < sortedYears.size(); i++) {
-                        availableYearsStr += sortedYears.get(i);
-                        if (i < sortedYears.size() - 1) {
-                            availableYearsStr += ", ";
-                        }
-                    }
-                }
+                availableYearsStr += " Available years: " + availableYears;
+                
                 javax.swing.JOptionPane.showMessageDialog(this, availableYearsStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
             
             // Generate the yearly report
             try {
-                // Create a report generator instance and generate the report
                 String filePath = "student_yearly_report_" + studentId + "_year" + year + ".pdf";
                 
                 com.mycompany.oodjassignment.functions.ReportGenerator reportGenerator = 
@@ -290,31 +280,15 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
         } 
         
         else {
-            // Generate semester report (existing functionality)            
             int selectedSemester = Integer.parseInt(selectedOption.trim().replaceAll("[^0-9]", ""));
             
             // If a specific semester is selected, check if the student has grades for that semester
             if (!database.studentSemesterExist(studentId, String.valueOf(selectedSemester))) {
-                // Find available semesters for this student to inform the user
-                java.util.Set<String> availableSemesters = new java.util.HashSet<>();
-                for (com.mycompany.oodjassignment.classes.Grades grade : database.getGradeDB().values()) {
-                    if (grade.getStudentID().equals(studentId)) {
-                        availableSemesters.add(String.valueOf(grade.getSemester()));
-                    }
-                }
-                
+                Set<Integer> avaibleSemesters = database.getAvailableSemesters(studentId);
+
                 String availableSemestersStr = "No courses found in the selected semester.";
-                if (!availableSemesters.isEmpty()) {
-                    availableSemestersStr += " Available semesters: ";
-                    java.util.List<String> sortedSemesters = new java.util.ArrayList<>(availableSemesters);
-                    java.util.Collections.sort(sortedSemesters);
-                    for (int i = 0; i < sortedSemesters.size(); i++) {
-                        availableSemestersStr += sortedSemesters.get(i);
-                        if (i < sortedSemesters.size() - 1) {
-                            availableSemestersStr += ", ";
-                        }
-                    }
-                }
+                availableSemestersStr += " Available semesters: " + avaibleSemesters;
+                
                 javax.swing.JOptionPane.showMessageDialog(this, availableSemestersStr, "No Data Found", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 return;
             }

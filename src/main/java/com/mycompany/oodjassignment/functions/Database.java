@@ -1,8 +1,9 @@
 package com.mycompany.oodjassignment.functions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.mycompany.oodjassignment.classes.Course;
 import com.mycompany.oodjassignment.classes.Grades;
@@ -182,8 +183,6 @@ public class Database {
             return false;
         }
 
-        // Check if the student has grades for at least one semester in the target year
-        // Assuming 2 semesters per year (Year 1: Sem 1 & 2, Year 2: Sem 3 & 4, etc.)
         int startSemester = (targetYear - 1) * 2 + 1;  // First semester of the year
         int endSemester = startSemester + 1;           // Last semester of the year
         
@@ -208,8 +207,6 @@ public class Database {
         double totalGPA = 0.0;
         int courseCount = 0;
         
-        // Determine which semesters belong to the target year
-        // Assuming 2 semesters per year (Year 1: Sem 1 & 2, Year 2: Sem 3 & 4, etc.)
         int startSemester = (targetYear - 1) * 2 + 1;  // First semester of the year
         int endSemester = startSemester + 1;           // Last semester of the year
         
@@ -256,8 +253,8 @@ public class Database {
     }
     
     // Get all available years for a student
-    public java.util.Set<Integer> getAvailableYears(String targetStudentID) {
-        java.util.Set<Integer> years = new java.util.HashSet<>();
+    public Set<Integer> getAvailableYears(String targetStudentID) {
+        Set<Integer> years = new HashSet<>();
         
         for (Grades grade : gradesDB.values()) {
             if (grade.getStudentID().equals(targetStudentID)) {
@@ -268,6 +265,19 @@ public class Database {
         }
         
         return years;
+    }
+    
+    // Get all available semesters for a student
+    public Set<Integer> getAvailableSemesters(String targetStudentID) {
+        Set<Integer> semesters = new HashSet<>();
+        
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID)) {
+                semesters.add(grade.getSemester());
+            }
+        }
+        
+        return semesters;
     }
 }
 
