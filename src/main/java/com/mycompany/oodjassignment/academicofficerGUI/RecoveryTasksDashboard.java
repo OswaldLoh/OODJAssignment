@@ -2,6 +2,8 @@ package com.mycompany.oodjassignment.academicofficerGUI;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.File;
+import java.util.*;
 
 import javax.swing.*;
 
@@ -25,6 +27,13 @@ public class RecoveryTasksDashboard {
         tableSetup();
         loadRecoveryPlans();
 
+        modifyButton.addActionListener((e -> {
+            modifyTask();
+        }));
+        deleteTaskButton.addActionListener(e -> {
+            deleteTask();
+        });
+
         backButton.addActionListener(e -> {
             closeCurrentMenu();
             openMainMenu();
@@ -40,6 +49,51 @@ public class RecoveryTasksDashboard {
                 return false;
             }
         };
+    }
+
+    private void modifyTask() {
+        int row = taskTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(RecoveryTasksPanel,
+                    "Please select a recovery task first."  ,
+                    "Error.", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String targetTaskID = (String) tableModel.getValueAt(row,0);
+        String mode = modifySelection();
+        openModifyTaskMenu(targetTaskID,mode);
+        closeCurrentMenu();
+    }
+
+    private void deleteTask() {
+        int row = taskTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(RecoveryTasksPanel,
+                    "Please select a recovery task first."  ,
+                    "Error.", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String targetTaskID = (String) tableModel.getValueAt(row,0);
+        String targetPlanID = (String) tableModel.getValueAt(row,1);
+
+        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID);
+        int taskCount = planTasks.size();
+
+        if (taskCount == 1) {
+            JOptionPane.showMessageDialog(RecoveryTasksPanel,
+                    "Warning! You cannot delete the last recovery task in recovery plan " + targetPlanID + "!",
+                    "Error.", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        database.removeRecoveryTask(targetTaskID);
+        database.updatePlanProgress(targetPlanID);
+        tableModel.removeRow(row);
+        RecoveryTask recTask = new RecoveryTask();
+        RecoveryPlan recPlan = new RecoveryPlan();
+        FileHandler.writeCSV(recPlan,database.getRecPlanDB());
+        FileHandler.writeCSV(recTask,database.getRecTaskDB());
+        JOptionPane.showMessageDialog(RecoveryTasksPanel, "Recovery Task deleted successfully!");
     }
 
     private void loadRecoveryPlans() {
@@ -62,6 +116,33 @@ public class RecoveryTasksDashboard {
         }
         taskTable.setModel(tableModel);
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+    }
+    private String modifySelection() {
+        String[] options = {"Description", "Duration", "Completion Status"};
+        String selectedOption = (String) JOptionPane.showInputDialog(
+                RecoveryTasksPanel,                 // Parent
+                "Choose data to modify.",        // Message
+                "Selection",                  // Title
+                JOptionPane.QUESTION_MESSAGE,    // Icon type
+                null,                            // Custom Icon (none)
+                options,                         // The Array of options
+                options[0]                       // The default selection
+        );
+
+        if (selectedOption != null) {
+            return selectedOption;
+        } else {
+            return null;
+        }
+    }
+    private void openModifyTaskMenu(String targetTaskID, String mode) {
+        JFrame modifyTaskMenuFrame = new JFrame("Academic Officer System");
+        ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode,database);
+        modifyTaskMenuFrame.setContentPane(modifyTaskMenu.getModifyTaskPanel());
+        modifyTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        modifyTaskMenuFrame.setSize(800, 400);
+        modifyTaskMenuFrame.setLocationRelativeTo(null); // Center it
+        modifyTaskMenuFrame.setVisible(true);
     }
 
     private void openMainMenu() {
