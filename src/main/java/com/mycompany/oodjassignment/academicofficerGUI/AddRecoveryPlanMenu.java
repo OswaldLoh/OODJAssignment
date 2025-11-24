@@ -26,6 +26,7 @@ public class AddRecoveryPlanMenu {
 
         addPlanButton.addActionListener(e -> {
             addPlan(userID);
+
         });
         backButton.addActionListener(e -> {
             closeCurrentMenu();
@@ -114,13 +115,8 @@ public class AddRecoveryPlanMenu {
                 "Recovery Plan added!",
                 "Success!",JOptionPane.INFORMATION_MESSAGE);
 
-        closeCurrentFrame();
+        closeCurrentMenu();
         openAddRecoveryTaskPanel(nextPlanID);
-    }
-
-    private void closeCurrentFrame() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(AddRecoveryPlanPanel);
-        currentFrame.dispose();
     }
 
     private void openMainMenu() {
@@ -144,7 +140,7 @@ public class AddRecoveryPlanMenu {
     }
 
     private void closeCurrentMenu() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.AddRecoveryPlanPanel);
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(AddRecoveryPlanPanel);
         currentFrame.dispose();
     }
 
