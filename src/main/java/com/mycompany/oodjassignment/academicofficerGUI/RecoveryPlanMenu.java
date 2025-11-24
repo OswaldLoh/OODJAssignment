@@ -17,8 +17,7 @@ public class RecoveryPlanMenu {
     private JPanel recoveryPlanMenuPanel;
 
     // Constructor
-    public RecoveryPlanMenu(Database database, String userID) {
-        this.userID = userID;
+    public RecoveryPlanMenu(Database database) {
         this.database = database;
         addRecoveryPlanButton.addActionListener(e -> {
             closeCurrentMenu();
@@ -36,7 +35,7 @@ public class RecoveryPlanMenu {
 
     private void openAddRecoveryPlanMenu(String userID) {
         JFrame addRecoveryPlan = new JFrame("Academic Officer System");
-        AddRecoveryPlanMenu addRecoveryPlanMenu = new AddRecoveryPlanMenu(database, userID);
+        AddRecoveryPlanMenu addRecoveryPlanMenu = new AddRecoveryPlanMenu(database);
         addRecoveryPlan.setContentPane(addRecoveryPlanMenu.getAddRecoveryPlanPanel());
         addRecoveryPlan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addRecoveryPlan.setSize(800, 600);
@@ -45,7 +44,7 @@ public class RecoveryPlanMenu {
     }
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(800,600);

@@ -4,7 +4,6 @@ import com.mycompany.oodjassignment.classes.*;
 import javax.swing.*;
 
 public class AcademicOfficerGUI {
-    private String userID;
     private Database database;
     private JPanel mainPanel;
     private JLabel TopTitle;
@@ -18,7 +17,7 @@ public class AcademicOfficerGUI {
         AcademicOfficer testUser = new AcademicOfficer();
         testUser.setUserID("A01");
         String userID = testUser.getUserId();
-        AcademicOfficerGUI mainGUI = new AcademicOfficerGUI(database, userID);
+        AcademicOfficerGUI mainGUI = new AcademicOfficerGUI(database);
         JFrame frame = new JFrame("Academic Officer System");
         frame.setContentPane(mainGUI.getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -27,9 +26,8 @@ public class AcademicOfficerGUI {
         frame.setVisible(true);
     }
 
-    public AcademicOfficerGUI(Database database, String userID) {
+    public AcademicOfficerGUI(Database database) {
         this.database = database;
-        this.userID = userID;
 
         searchStudentsButton.addActionListener(e -> {
             closeCurrentMenu();
@@ -59,7 +57,7 @@ public class AcademicOfficerGUI {
     }
     private void openRecoveryPlanMenu() {
         JFrame recoveryPlanMenuFrame = new JFrame("Recovery Plan Menu");
-        RecoveryPlanMenu recoveryPlanMenu = new RecoveryPlanMenu(database, userID);
+        RecoveryPlanMenu recoveryPlanMenu = new RecoveryPlanMenu(database);
         recoveryPlanMenuFrame.setContentPane(recoveryPlanMenu.getRecoveryPlanMenuPanel());
         recoveryPlanMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanMenuFrame.setSize(800, 600);
@@ -69,7 +67,7 @@ public class AcademicOfficerGUI {
 
     private void openRecoveryTaskMenu() {
         JFrame recoveryTaskMenuFrame = new JFrame("Recovery Task Menu");
-        RecoveryTasksMenu recoveryTasksMenu = new RecoveryTasksMenu(database, userID);
+        RecoveryTasksMenu recoveryTasksMenu = new RecoveryTasksMenu(database);
         recoveryTaskMenuFrame.setContentPane(recoveryTasksMenu.getRecoveryTaskMenuPanel());
         recoveryTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryTaskMenuFrame.setSize(800, 600);

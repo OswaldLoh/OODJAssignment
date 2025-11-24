@@ -105,7 +105,7 @@ public class SearchStudentMenu {
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
         // Create new Main Menu instance
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
 
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

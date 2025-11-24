@@ -20,8 +20,7 @@ public class AddRecoveryPlanMenu {
     private JLabel studentEligibleText;
 
     // constructor
-    public AddRecoveryPlanMenu(Database database, String userID) {
-        this.userID = userID;
+    public AddRecoveryPlanMenu(Database database) {
         this.database  = database;
         textEligibleBox.setEditable(false);
 
@@ -103,23 +102,41 @@ public class AddRecoveryPlanMenu {
         IDManager idManager = new IDManager(database.getRecPlanDB());       // Generate new Plan ID
         idManager.getHighestTaskID();
         String nextPlanID = "P" + idManager.generateNewID();
-        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, targetCourseID, userID, "0.00");
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, targetCourseID, "A01", "0.00");
         database.addRecoveryPlan(newPlan);
         RecoveryPlan recPlan = new RecoveryPlan();
-        FileHandler.writeCSV(recPlan,database.getRecPlanDB());
+
         JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
                 "Recovery Plan added!",
                 "Success!",JOptionPane.INFORMATION_MESSAGE);
+
+        closeCurrentFrame();
+        openAddRecoveryTaskPanel();
+    }
+
+    private void closeCurrentFrame() {
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(AddRecoveryPlanPanel);
+        currentFrame.dispose();
     }
 
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(800, 600);
         mainMenuFrame.setLocationRelativeTo(null); // Center it
         mainMenuFrame.setVisible(true);
+    }
+
+    private void openAddRecoveryTaskPanel() {
+        JFrame addRecoveryTaskFrame= new JFrame("Academic Officer System");
+        AddRecoveryTaskMenu addRecoveryTaskMenu = new AddRecoveryTaskMenu(database);
+        addRecoveryTaskFrame.setContentPane(addRecoveryTaskMenu.getAddRecoveryTaskPanel());
+        addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addRecoveryTaskFrame.setSize(800,600);
+        addRecoveryTaskFrame.setLocationRelativeTo(null);
+        addRecoveryTaskFrame.setVisible(true);
     }
 
     private void closeCurrentMenu() {

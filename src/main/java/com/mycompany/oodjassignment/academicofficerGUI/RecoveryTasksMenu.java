@@ -12,9 +12,8 @@ public class RecoveryTasksMenu {
     private JButton DeleteRecoveryTaskButton;
     private JButton BackButton;
 
-    public RecoveryTasksMenu(Database database, String userID) {
+    public RecoveryTasksMenu(Database database) {
         this.database = database;
-        this.userID = userID;
 
         // back button - back to main menu
         BackButton.addActionListener(e -> {
@@ -29,7 +28,7 @@ public class RecoveryTasksMenu {
 
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(800,600);
