@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RecoveryPlanMenu {
+    private String userID;
     private Database database;
     private JLabel RecoveryPlanMenuTitle;
     private JButton addRecoveryPlanButton;
@@ -15,9 +16,16 @@ public class RecoveryPlanMenu {
     private JButton backButton;
     private JPanel recoveryPlanMenuPanel;
 
-    public RecoveryPlanMenu(Database database) {
+    // Constructor
+    public RecoveryPlanMenu(Database database, String userID) {
+        this.userID = userID;
         this.database = database;
+        addRecoveryPlanButton.addActionListener(e -> {
+            closeCurrentMenu();
+            openAddRecoveryPlanMenu(userID);
+        });
         backButton.addActionListener(e -> {
+            closeCurrentMenu();
             openMainMenu();
         });
     }
@@ -26,14 +34,27 @@ public class RecoveryPlanMenu {
         return recoveryPlanMenuPanel;
     }
 
+    private void openAddRecoveryPlanMenu(String userID) {
+        JFrame addRecoveryPlan = new JFrame("Academic Officer System");
+        AddRecoveryPlanMenu addRecoveryPlanMenu = new AddRecoveryPlanMenu(database, userID);
+        addRecoveryPlan.setContentPane(addRecoveryPlanMenu.getAddRecoveryPlanPanel());
+        addRecoveryPlan.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addRecoveryPlan.setSize(800, 600);
+        addRecoveryPlan.setLocationRelativeTo(null);
+        addRecoveryPlan.setVisible(true);
+    }
     private void openMainMenu() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.recoveryPlanMenuPanel);
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(800,600);
+        mainMenuFrame.setLocationRelativeTo(null);
         mainMenuFrame.setVisible(true);
+    }
+
+    private void closeCurrentMenu() {
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.recoveryPlanMenuPanel);
         currentFrame.dispose();
     }
 }

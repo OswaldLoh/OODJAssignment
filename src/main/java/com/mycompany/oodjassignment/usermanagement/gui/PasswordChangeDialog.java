@@ -204,7 +204,7 @@ public class PasswordChangeDialog extends javax.swing.JDialog {
             return;
         }
         
-        String hashedPassword = PasswordUtil.simpleHash(newPassword);
+        String hashedPassword = PasswordUtil.hashPassword(newPassword);
         targetUser.setPassword(hashedPassword);
         
         if (userManager.updateUser(targetUser)) {

@@ -17,21 +17,11 @@ public class AcademicOfficer extends User {
         this.officeLocation = "";
     }
 
-    public AcademicOfficer(String userID,
-                           String username,
-                           String password,
-                           String fullName,
-                           String email) {
+    public AcademicOfficer(String userID, String username, String password, String fullName, String email) {
         this(userID, username, password, fullName, email, "", "");
     }
 
-    public AcademicOfficer(String userID,
-                           String username,
-                           String password,
-                           String fullName,
-                           String email,
-                           String department,
-                           String officeLocation) {
+    public AcademicOfficer(String userID, String username, String password, String fullName, String email, String department, String officeLocation) {
         super(userID, username, password, fullName, email, UserRole.ACADEMIC_OFFICER);
         this.department = department;
         this.officeLocation = officeLocation;

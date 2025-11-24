@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class PasswordUtil {
     
-    public static String simpleHash(String password) {
+    public static String hashPassword(String password) {
         if (password == null) {
             return "";
         }

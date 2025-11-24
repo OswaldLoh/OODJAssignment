@@ -63,7 +63,7 @@ public class UserManager {
         AcademicOfficer defaultOfficer = new AcademicOfficer(
             "AO001",
             "admin",
-            PasswordUtil.simpleHash("admin123"),
+            PasswordUtil.hashPassword("admin123"),
             "System Administrator",
             "admin@crs.edu",
             "Administration",
@@ -73,7 +73,7 @@ public class UserManager {
         CourseAdministrator defaultAdmin = new CourseAdministrator(
             "CA001",
             "course_admin",
-            PasswordUtil.simpleHash("admin123"),
+            PasswordUtil.hashPassword("admin123"),
             "Course Admin",
             "courseadmin@crs.edu",
             "Computer Science",
