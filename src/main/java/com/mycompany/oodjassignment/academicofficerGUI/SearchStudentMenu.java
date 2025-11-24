@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class SearchStudentMenu {
     // Fields
+    private String userID;
     private Database database;
     private JPanel SearchStudentPanel;
     private JLabel SearchStudentTitle;
@@ -21,22 +22,16 @@ public class SearchStudentMenu {
     public SearchStudentMenu(Database database) {
         this.database = database;
 
-        // 1. Setup Text Area (Make it read-only)
         areaStudentDetails.setEditable(false);
 
-        // 2. Back Button Logic
         backButton.addActionListener(e -> {
-            openMainMenu(); // Logic to open main menu
-            // Note: closeCurrentMenu() is handled inside openMainMenu in your structure,
-            // or you can call it here.
+            openMainMenu();
         });
 
-        // 3. Search Button Logic (The Logic moved here!)
         Search.addActionListener(e -> {
             performSearch();
         });
 
-        // Optional: Allow pressing "Enter" key on the text field
         txtStudentID.addActionListener(e -> performSearch());
     }
 
@@ -110,12 +105,12 @@ public class SearchStudentMenu {
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
         // Create new Main Menu instance
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
 
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(800, 600);
-        mainMenuFrame.setLocationRelativeTo(null); // Center it
+        mainMenuFrame.setLocationRelativeTo(null);
         mainMenuFrame.setVisible(true);
 
         closeCurrentMenu();

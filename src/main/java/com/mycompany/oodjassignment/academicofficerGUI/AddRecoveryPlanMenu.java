@@ -1,8 +1,13 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
+import com.mycompany.oodjassignment.functions.*;
+import com.mycompany.oodjassignment.classes.*;
 
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class AddRecoveryPlanMenu {
+    private String userID;
+    private Database database;
     private JTextField txtStudentID;
     private JButton addPlanButton;
     private JPanel AddRecoveryPlanPanel;
@@ -11,4 +16,120 @@ public class AddRecoveryPlanMenu {
     private JTextField txtCourseID;
     private JLabel courseIDPrompt;
     private JButton backButton;
+    private JTextArea textEligibleBox;
+    private JLabel studentEligibleText;
+
+    // constructor
+    public AddRecoveryPlanMenu(Database database, String userID) {
+        this.userID = userID;
+        this.database  = database;
+        textEligibleBox.setEditable(false);
+
+        addPlanButton.addActionListener(e -> {
+            addPlan(userID);
+        });
+        backButton.addActionListener(e -> {
+            closeCurrentMenu();
+            openMainMenu();
+        });
+
+
+    }
+
+    private void addPlan(String userID) {
+        String targetStudentID = txtStudentID.getText().trim();
+        String targetCourseID = txtCourseID.getText().trim();
+
+        if (targetStudentID.isEmpty()) {
+            JOptionPane.showMessageDialog(AddRecoveryPlanPanel,"Please enter a Student ID.");
+            return;
+        }
+        if (!database.studentExist(targetStudentID)) {
+            txtStudentID.setText("");
+            JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
+                    "Student ID " + targetStudentID + " not found in database.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        if (targetCourseID.isEmpty()) {
+            JOptionPane.showMessageDialog(AddRecoveryPlanPanel,"Please enter a Student ID.");
+            return;
+        }
+        if (!database.courseExist(targetCourseID)) {
+            txtCourseID.setText("");
+            JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
+                    "Course ID " + targetStudentID + " not found in database.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        ArrayList<String> studentCourse = database.getStudentCourse(targetStudentID);
+        ArrayList<Grades> studentGrades = database.getStudentAllGrades(targetStudentID);
+        ArrayList<RecoveryPlan> studentExistingPlans = database.getStudentRecoveryPlan(targetStudentID);
+
+        if (!studentCourse.contains(targetCourseID)) {
+            JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
+                    "Student '" + targetStudentID + "' is not registered to course " + targetCourseID ,
+                    "Error",JOptionPane.ERROR_MESSAGE);
+        }
+        if (studentExistingPlans != null) {
+            for (RecoveryPlan plan : studentExistingPlans) {
+                if (plan.getCourseID().equals(targetCourseID)) {
+                    JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
+                            "Student already has an active Recovery Plan for " + targetCourseID + ".",
+                            "Duplicate Plan", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+            }
+        }
+        boolean eligible = false;
+        double studentGPA = 0;
+        for (Grades grade : studentGrades) {
+            if (grade.getCourseID().equals(targetCourseID)) {
+                grade.setCourseObject(database.getCourse(targetCourseID));
+                studentGPA = grade.calculateGPA();
+                if (studentGPA < 2.0) {
+                    eligible = true;
+                }
+                break;
+            }
+        }
+
+        if (!eligible) {
+            JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
+                    "Student is not eligible for a recovery plan.\n" +
+                            "Course: " + targetCourseID + "\n" +
+                            "GPA: " + studentGPA,
+                    "", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        IDManager idManager = new IDManager(database.getRecPlanDB());       // Generate new Plan ID
+        idManager.getHighestTaskID();
+        String nextPlanID = "P" + idManager.generateNewID();
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, targetCourseID, userID, "0.00");
+        database.addRecoveryPlan(newPlan);
+        RecoveryPlan recPlan = new RecoveryPlan();
+        FileHandler.writeCSV(recPlan,database.getRecPlanDB());
+        JOptionPane.showMessageDialog(AddRecoveryPlanPanel,
+                "Recovery Plan added!",
+                "Success!",JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void openMainMenu() {
+        JFrame mainMenuFrame = new JFrame("Academic Officer System");
+        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database, userID);
+        mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
+        mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainMenuFrame.setSize(800, 600);
+        mainMenuFrame.setLocationRelativeTo(null); // Center it
+        mainMenuFrame.setVisible(true);
+    }
+
+    private void closeCurrentMenu() {
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.AddRecoveryPlanPanel);
+        currentFrame.dispose();
+    }
+
+    public JPanel getAddRecoveryPlanPanel() {
+        return AddRecoveryPlanPanel;
+    }
 }
+
+

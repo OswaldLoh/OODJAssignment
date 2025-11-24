@@ -1,5 +1,6 @@
 package com.mycompany.oodjassignment.functions;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -145,6 +146,15 @@ public class Database {
         }
         newProgress = completeCount/totalTaskCount * 100;
         getRecoveryPlan(planID).setProgress(newProgress);
+    }
+    public ArrayList<String> getStudentCourse(String targetStudentID) {
+        ArrayList<String> studentCourse = new ArrayList<>();
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID)) {
+                studentCourse.add(grade.getCourseID());
+            }
+        }
+        return studentCourse;
     }
 
     public ArrayList<RecoveryTask> getPlanRecoveryTask(String targetRecoveryPlanID) {
