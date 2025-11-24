@@ -4,7 +4,7 @@ import com.mycompany.oodjassignment.functions.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class AddPlanDashboard {
+public class StudentSelectionDashboard {
     private DefaultTableModel tableModel;
     private Database database;
     private JPanel addPlanDashboardPanel;
@@ -17,7 +17,7 @@ public class AddPlanDashboard {
     private JLabel searchStudentIDPrompt;
     private JScrollPane studentListScrollPane;
 
-    public AddPlanDashboard(Database database) {
+    public StudentSelectionDashboard(Database database) {
         this.database = database;
 
         tableSetup();
@@ -80,16 +80,16 @@ public class AddPlanDashboard {
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800,600);
+        recoveryPlanDashboardFrame.setSize(800,400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }
     private void openStudentCourseSelectionMenu(String targetStudentID) {
         JFrame studentCourseSelectionMenuFrame = new JFrame("Academic Officer System");
-        studentCourseSelectionMenu studentCourseSelectionMenu = new studentCourseSelectionMenu(targetStudentID, database);
-        studentCourseSelectionMenuFrame.setContentPane(studentCourseSelectionMenu.getStudentCourseSelectionPanel());
+        CourseSelectionMenu courseSelectionMenu = new CourseSelectionMenu(targetStudentID, database);
+        studentCourseSelectionMenuFrame.setContentPane(courseSelectionMenu.getStudentCourseSelectionPanel());
         studentCourseSelectionMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        studentCourseSelectionMenuFrame.setSize(800,600);
+        studentCourseSelectionMenuFrame.setSize(800,400);
         studentCourseSelectionMenuFrame.setLocationRelativeTo(null);
         studentCourseSelectionMenuFrame.setVisible(true);
     }

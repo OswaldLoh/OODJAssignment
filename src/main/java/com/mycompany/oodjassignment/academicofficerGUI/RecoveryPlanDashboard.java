@@ -14,12 +14,13 @@ public class RecoveryPlanDashboard {
     private JTable planListTable;
     private JButton Search;
     private JTextField txtPlanID;
-    private JButton modifyTasksButton;
+    private JButton addTaskButton;
     private JButton deletePlanButton;
     private JButton addPlanButton;
     private JLabel recoveryPlanDashboardTitle;
     private JScrollPane planListScroll;
     private JButton backButton;
+    private JLabel searchPrompt;
 
     public RecoveryPlanDashboard(Database database) {
         this.database = database;
@@ -36,15 +37,27 @@ public class RecoveryPlanDashboard {
             deletePlan();
         });
 
-        modifyTasksButton.addActionListener(e -> {
-
-
+        addTaskButton.addActionListener(e -> {
+            addTask();
         });
 
         backButton.addActionListener(e -> {
             closeCurrentMenu();
             openMainMenu();
         });
+    }
+
+    private void addTask() {
+        int row = planListTable.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(recoveryPlanDashboardPanel,
+                    "Please select a recovery plan first."  ,
+                    "Error.", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        closeCurrentMenu();
+        String targetPlanID = (String) tableModel.getValueAt(row,0);
+        openAddRecoveryTask(targetPlanID);
     }
 
     private void deletePlan() {
@@ -131,21 +144,30 @@ public class RecoveryPlanDashboard {
         AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
         mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainMenuFrame.setSize(800, 600);
+        mainMenuFrame.setSize(800, 400);
         mainMenuFrame.setLocationRelativeTo(null); // Center it
         mainMenuFrame.setVisible(true);
     }
 
     private void openAddPlanDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        AddPlanDashboard addPlanDashboard = new AddPlanDashboard(database);
-        addPlanDashboardFrame.setContentPane((addPlanDashboard.getAddPlanDashboardPanel()));
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
+        addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addPlanDashboardFrame.setSize(800,600);
+        addPlanDashboardFrame.setSize(800,400);
         addPlanDashboardFrame.setLocationRelativeTo(null);
         addPlanDashboardFrame.setVisible(true);
     }
 
+    private void openAddRecoveryTask(String targetPlanID) {
+        JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, database, false);
+        addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
+        addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addRecoveryTaskFrame.setSize(520,230);
+        addRecoveryTaskFrame.setLocationRelativeTo(null);
+        addRecoveryTaskFrame.setVisible(true);
+    }
 
     private void closeCurrentMenu() {
         JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(recoveryPlanDashboardPanel);

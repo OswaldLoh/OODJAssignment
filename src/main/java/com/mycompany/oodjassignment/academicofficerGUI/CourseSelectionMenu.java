@@ -6,7 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.util.*;
 import javax.swing.*;
 
-public class studentCourseSelectionMenu {
+public class CourseSelectionMenu {
     private DefaultTableModel tableModel;
     private Database database;
     private JPanel studentCourseSelectionPanel;
@@ -16,7 +16,7 @@ public class studentCourseSelectionMenu {
     private JLabel chooseGradePrompt;
     private JScrollPane gradeScroll;
 
-    public studentCourseSelectionMenu(String targetStudentID, Database database) {
+    public CourseSelectionMenu(String targetStudentID, Database database) {
         this.database = database;
 
         tableSetup();
@@ -99,19 +99,19 @@ public class studentCourseSelectionMenu {
 
     private void openAddRecoveryTask(String targetPlanID) {
         JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
-        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, database);
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, database, true);
         addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addRecoveryTaskFrame.setSize(380,230);
+        addRecoveryTaskFrame.setSize(520,230);
         addRecoveryTaskFrame.setLocationRelativeTo(null);
         addRecoveryTaskFrame.setVisible(true);
     }
     private void openAddPlanDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        AddPlanDashboard addPlanDashboard = new AddPlanDashboard(database);
-        addPlanDashboardFrame.setContentPane((addPlanDashboard.getAddPlanDashboardPanel()));
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
+        addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addPlanDashboardFrame.setSize(800,600);
+        addPlanDashboardFrame.setSize(800,400);
         addPlanDashboardFrame.setLocationRelativeTo(null);
         addPlanDashboardFrame.setVisible(true);
     }

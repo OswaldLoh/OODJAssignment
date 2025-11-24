@@ -14,10 +14,17 @@ public class AddRecoveryTask {
     private JLabel promptDescription;
     private JLabel promptDuration;
     private JLabel promptAddRecoveryTask;
+    private JButton backButton;
 
-    public AddRecoveryTask(String targetPlanID, Database database) {
+    public AddRecoveryTask(String targetPlanID, Database database, boolean mustAdd) {
         this.database = database;
         int newDuration = 0;
+
+        if (mustAdd) {
+            backButton.setVisible(false);
+        } else {
+            backButton.setVisible(true);
+        }
 
         RecoveryPlan recPlan = database.getRecoveryPlan(targetPlanID);
         fixedInfoArea.setText("Student ID: " + recPlan.getStudentID() +"\n" +
@@ -26,6 +33,11 @@ public class AddRecoveryTask {
 
         confirmButton.addActionListener(e -> {
             addTask(targetPlanID);
+        });
+
+        backButton.addActionListener(e -> {
+            closeCurrentMenu();
+            openRecoveryPlanDashboard();
         });
     }
 
@@ -83,12 +95,22 @@ public class AddRecoveryTask {
     }
     private void openAddPlanDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        AddPlanDashboard addPlanDashboard = new AddPlanDashboard(database);
-        addPlanDashboardFrame.setContentPane((addPlanDashboard.getAddPlanDashboardPanel()));
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
+        addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addPlanDashboardFrame.setSize(800,600);
+        addPlanDashboardFrame.setSize(800,400);
         addPlanDashboardFrame.setLocationRelativeTo(null);
         addPlanDashboardFrame.setVisible(true);
+    }
+
+    private void openRecoveryPlanDashboard() {
+        JFrame recoveryPlanDashboardFrame = new JFrame ("Academic Officer System");
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
+        recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
+        recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        recoveryPlanDashboardFrame.setSize(800,400);
+        recoveryPlanDashboardFrame.setLocationRelativeTo(null);
+        recoveryPlanDashboardFrame.setVisible(true);
     }
 
     public JPanel getAddRecoveryTaskPanel() {

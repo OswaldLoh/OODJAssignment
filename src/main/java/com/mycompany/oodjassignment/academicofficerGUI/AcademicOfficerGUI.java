@@ -8,10 +8,9 @@ public class AcademicOfficerGUI {
     private JPanel mainPanel;
     private JLabel TopTitle;
     private JButton exitButton;
-    private JButton recoveryTasksMenuButton;
     private JButton searchStudentsButton;
-    private JButton recoveryPlanMenuButton;
     private JButton recoveryPlanDashboardButton;
+    private JButton recoveryTaskDashboardButton;
 
     public static void main(String[] args) {
         Database database = new Database();
@@ -22,7 +21,7 @@ public class AcademicOfficerGUI {
         JFrame frame = new JFrame("Academic Officer System");
         frame.setContentPane(mainGUI.getMainPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
+        frame.setSize(800, 400);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -32,58 +31,38 @@ public class AcademicOfficerGUI {
 
         searchStudentsButton.addActionListener(e -> {
             closeCurrentMenu();
-            openSearchStudentMenu();
         });
         recoveryPlanDashboardButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryPlanDashboard();
         });
-        recoveryPlanMenuButton.addActionListener(e -> {
+        recoveryTaskDashboardButton.addActionListener(e -> {
             closeCurrentMenu();
-            openRecoveryPlanMenu();
+            openRecoveryTaskDashboard();
         });
-        recoveryTasksMenuButton.addActionListener(e -> {
-            closeCurrentMenu();
-            openRecoveryTaskMenu();
-        });
+
         exitButton.addActionListener(e -> {
             closeCurrentMenu();
 
         });
     }
-    private void openSearchStudentMenu() {
-        JFrame searchStudentMenuFrame = new JFrame("Search Students");
-        SearchStudentMenu searchStudentMenu = new SearchStudentMenu(database);
-        searchStudentMenuFrame.setContentPane(searchStudentMenu.getSearchStudentMenuPanel());
-        searchStudentMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        searchStudentMenuFrame.setSize(800,600);
-        searchStudentMenuFrame.setLocationRelativeTo(null);
-        searchStudentMenuFrame.setVisible(true);
+
+    private void openRecoveryTaskDashboard() {
+        JFrame recoveryTaskDashboardFrame = new JFrame ("Academic Officer System");
+        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database);
+        recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
+        recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        recoveryTaskDashboardFrame.setSize(800,400);
+        recoveryTaskDashboardFrame.setLocationRelativeTo(null);
+        recoveryTaskDashboardFrame.setVisible(true);
     }
-    private void openRecoveryPlanMenu() {
-        JFrame recoveryPlanMenuFrame = new JFrame("Recovery Plan Menu");
-        RecoveryPlanMenu recoveryPlanMenu = new RecoveryPlanMenu(database);
-        recoveryPlanMenuFrame.setContentPane(recoveryPlanMenu.getRecoveryPlanMenuPanel());
-        recoveryPlanMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanMenuFrame.setSize(800, 600);
-        recoveryPlanMenuFrame.setLocationRelativeTo(null);
-        recoveryPlanMenuFrame.setVisible(true);
-    }
-    private void openRecoveryTaskMenu() {
-        JFrame recoveryTaskMenuFrame = new JFrame("Recovery Task Menu");
-        RecoveryTasksMenu recoveryTasksMenu = new RecoveryTasksMenu(database);
-        recoveryTaskMenuFrame.setContentPane(recoveryTasksMenu.getRecoveryTaskMenuPanel());
-        recoveryTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryTaskMenuFrame.setSize(800, 600);
-        recoveryTaskMenuFrame.setLocationRelativeTo(null);
-        recoveryTaskMenuFrame.setVisible(true);
-    }
+
     private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame ("Academic Officer System");
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800,600);
+        recoveryPlanDashboardFrame.setSize(800,400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }
