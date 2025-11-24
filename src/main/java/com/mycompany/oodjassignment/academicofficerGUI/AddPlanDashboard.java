@@ -24,7 +24,6 @@ public class AddPlanDashboard {
         loadStudents();
 
         addPlanButton.addActionListener(e -> {
-            closeCurrentMenu();
             addPlan();
 
         });
@@ -43,6 +42,7 @@ public class AddPlanDashboard {
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        closeCurrentMenu();
         String targetStudentID = (String) tableModel.getValueAt(row,0);
         openStudentCourseSelectionMenu(targetStudentID);
     }

@@ -62,6 +62,9 @@ public class studentCourseSelectionMenu {
         JOptionPane.showMessageDialog(studentCourseSelectionPanel,
                 "Recovery Plan added!",
                 "Success!",JOptionPane.INFORMATION_MESSAGE);
+
+        closeCurrentMenu();
+        openAddRecoveryTask(nextPlanID);
     }
 
     private void tableSetup() {
@@ -94,6 +97,15 @@ public class studentCourseSelectionMenu {
         gradeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
+    private void openAddRecoveryTask(String targetPlanID) {
+        JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, database);
+        addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
+        addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addRecoveryTaskFrame.setSize(380,230);
+        addRecoveryTaskFrame.setLocationRelativeTo(null);
+        addRecoveryTaskFrame.setVisible(true);
+    }
     private void openAddPlanDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
         AddPlanDashboard addPlanDashboard = new AddPlanDashboard(database);
