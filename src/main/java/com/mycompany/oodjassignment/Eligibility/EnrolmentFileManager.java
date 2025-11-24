@@ -5,17 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Handles reading and writing enrolment records to a binary file.
- * This encapsulates file handling logic away from the GUI.
+ * Handles binary file storage for enrolment history.
+ * Provides load, save, and append operations.
  */
 public class EnrolmentFileManager {
 
-    // Name of the binary file used to store enrolment records.
     private static final String FILE_NAME = "enrolments.dat";
 
     /**
-     * Loads all enrolment records from the binary file.
-     * If the file does not exist or cannot be read, an empty list is returned.
+     * Loads the entire list of enrolment records.
      */
     @SuppressWarnings("unchecked")
     public static List<EnrolmentRecord> loadEnrolments() {
@@ -33,8 +31,7 @@ public class EnrolmentFileManager {
     }
 
     /**
-     * Writes the entire list of enrolment records to the binary file.
-     * This method overwrites the existing file content.
+     * Saves the full list of enrolment records back to the binary file.
      */
     public static void saveEnrolments(List<EnrolmentRecord> records) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_NAME))) {
@@ -45,13 +42,12 @@ public class EnrolmentFileManager {
     }
 
     /**
-     * Appends a single enrolment record by reading existing data,
-     * adding the new record, and writing all records back to the file.
+     * Adds one new enrolment entry to the file.
+     * Uses load → add → save pattern.
      */
     public static void appendEnrolment(EnrolmentRecord record) {
-        List<EnrolmentRecord> current = loadEnrolments();
-        current.add(record);
-        saveEnrolments(current);
+        List<EnrolmentRecord> records = loadEnrolments();
+        records.add(record);
+        saveEnrolments(records);
     }
 }
-
