@@ -25,7 +25,9 @@
             <preferred-size width="150" height="-1"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value=""/>
+        </properties>
       </component>
       <component id="b3e8e" class="javax.swing.JTextField" binding="textField2" default-binding="true">
         <constraints>
@@ -49,7 +51,9 @@
             <preferred-size width="150" height="50"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <text value=""/>
+        </properties>
       </component>
       <vspacer id="a6bec">
         <constraints>

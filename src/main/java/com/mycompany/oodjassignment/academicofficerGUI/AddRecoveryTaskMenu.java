@@ -17,7 +17,13 @@ public class AddRecoveryTaskMenu {
     public AddRecoveryTaskMenu(Database database) {
         this.database = database;
 
+        addTaskButton.addActionListener(e -> {
 
+        });
+
+    }
+
+    private void addNewTask() {
     }
 
     public JPanel getAddRecoveryTaskPanel() {
