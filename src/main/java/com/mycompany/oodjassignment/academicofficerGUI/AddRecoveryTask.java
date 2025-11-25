@@ -90,17 +90,17 @@ public class AddRecoveryTask {
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");
 
         closeCurrentMenu();
-        openAddPlanDashboard();
+        studentSelectionDashboard();
 
     }
-    private void openAddPlanDashboard() {
-        JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
+    private void studentSelectionDashboard() {
+        JFrame studentSelectionDashboardFrame = new JFrame("Academic Officer System");
         StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
-        addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
-        addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addPlanDashboardFrame.setSize(800,400);
-        addPlanDashboardFrame.setLocationRelativeTo(null);
-        addPlanDashboardFrame.setVisible(true);
+        studentSelectionDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
+        studentSelectionDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        studentSelectionDashboardFrame.setSize(800,400);
+        studentSelectionDashboardFrame.setLocationRelativeTo(null);
+        studentSelectionDashboardFrame.setVisible(true);
     }
 
     private void openRecoveryPlanDashboard() {
