@@ -1,42 +1,45 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
+
+import com.mycompany.oodjassignment.classes.AcademicOfficer;
 import com.mycompany.oodjassignment.functions.*;
-import com.mycompany.oodjassignment.classes.*;
+
 import javax.swing.*;
 
-public class AcademicOfficerGUI {
+public class CourseRecovery {
     private Database database;
-    private JPanel mainPanel;
-    private JLabel TopTitle;
+    private JPanel courseRecoveryPanel;
+    private JButton recoveryPlansButton;
     private JButton exitButton;
-    private JButton searchStudentsButton;
-    private JButton recoveryPlanDashboardButton;
-    private JButton recoveryTaskDashboardButton;
+    private JButton recoveryTasksButton;
+    private JLabel txtArea;
+    private JButton monitorRecoveryPlanButton;
+
 
     public static void main(String[] args) {
         Database database = new Database();
         AcademicOfficer testUser = new AcademicOfficer();
         testUser.setUserID("A01");
         String userID = testUser.getUserId();
-        AcademicOfficerGUI mainGUI = new AcademicOfficerGUI(database);
+        CourseRecovery courseRecovery = new CourseRecovery(database);
         JFrame frame = new JFrame("Academic Officer System");
-        frame.setContentPane(mainGUI.getMainPanel());
+        frame.setContentPane(courseRecovery.getCourseRecoveryPanel());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 400);
+        frame.setSize(550, 400);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
     }
 
-    public AcademicOfficerGUI(Database database) {
+    public CourseRecovery(Database database) {
         this.database = database;
+        txtArea.setText("\n\nWelcome to Course Recovery System! Please choose one of the dashboards below.");
 
-        searchStudentsButton.addActionListener(e -> {
-            closeCurrentMenu();
-        });
-        recoveryPlanDashboardButton.addActionListener(e -> {
+
+        recoveryPlansButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryPlanDashboard();
         });
-        recoveryTaskDashboardButton.addActionListener(e -> {
+        recoveryTasksButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryTaskDashboard();
         });
@@ -67,13 +70,12 @@ public class AcademicOfficerGUI {
         recoveryPlanDashboardFrame.setVisible(true);
     }
 
-    public JPanel getMainPanel() {
-        return mainPanel;
+    public JPanel getCourseRecoveryPanel() {
+        return courseRecoveryPanel;
     }
 
     private void closeCurrentMenu() {
-        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(this.mainPanel);
+        JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(courseRecoveryPanel);
         currentFrame.dispose();
     }
 }
-

@@ -27,6 +27,10 @@ public class RecoveryTasksDashboard {
         tableSetup();
         loadRecoveryPlans();
 
+        searchButton.addActionListener(e -> {
+            search();
+        });
+
         modifyButton.addActionListener((e -> {
             modifyTask();
         }));
@@ -38,6 +42,10 @@ public class RecoveryTasksDashboard {
             closeCurrentMenu();
             openMainMenu();
         });
+    }
+
+    private void search() {
+
     }
 
     private void tableSetup() {
@@ -147,10 +155,10 @@ public class RecoveryTasksDashboard {
 
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        AcademicOfficerGUI academicOfficerMainMenu = new AcademicOfficerGUI(database);
-        mainMenuFrame.setContentPane(academicOfficerMainMenu.getMainPanel());
+        CourseRecovery courseRecovery = new CourseRecovery(database);
+        mainMenuFrame.setContentPane(courseRecovery.getCourseRecoveryPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainMenuFrame.setSize(800, 400);
+        mainMenuFrame.setSize(550, 400);
         mainMenuFrame.setLocationRelativeTo(null); // Center it
         mainMenuFrame.setVisible(true);
     }

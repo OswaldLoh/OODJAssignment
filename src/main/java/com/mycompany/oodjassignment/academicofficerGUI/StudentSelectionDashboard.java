@@ -16,6 +16,7 @@ public class StudentSelectionDashboard {
     private JLabel titleAddPlan;
     private JLabel searchStudentIDPrompt;
     private JScrollPane studentListScrollPane;
+    private JButton viewButton;
 
     public StudentSelectionDashboard(Database database) {
         this.database = database;
@@ -23,6 +24,9 @@ public class StudentSelectionDashboard {
         tableSetup();
         loadStudents();
 
+        viewButton.addActionListener(e -> {
+            viewPlan();
+        });
         addPlanButton.addActionListener(e -> {
             addPlan();
 
@@ -33,7 +37,9 @@ public class StudentSelectionDashboard {
         });
 
     }
+    private void viewPlan() {
 
+    }
     private void addPlan() {
         int row = studentListTable.getSelectedRow();
         if (row == -1) {
