@@ -6,6 +6,8 @@ package com.mycompany.oodjassignment.GUI;
 import java.util.*;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.ReportGenerator;
+import com.mycompany.oodjassignment.functions.SendEmail;
+import com.mycompany.oodjassignment.classes.Student;
 import javax.swing.*;
 
 /**
@@ -271,7 +273,48 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                 
                 reportGenerator.generateYearlyReport(studentId, year);
                 
-                JOptionPane.showMessageDialog(this, "Yearly report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                // Automatically send email to the student with the generated report
+                try {
+                    // Get student information to get the email address
+                    Student student = database.getStudent(studentId);
+                    if (student != null) {
+                        String studentEmail = student.getEmail();
+                        
+                        // Create a SendEmail instance and send the report as attachment
+                        SendEmail emailSender = new SendEmail(studentEmail);
+                        String subject = "Your Academic Report for Year " + year;
+                        String message = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
+                                "Please find attached your academic report for Year " + year + ".\n" +
+                                "This report contains your academic performance across Semesters " + 
+                                ((year - 1) * 2 + 1) + " and " + ((year - 1) * 2 + 2) + ".\n\n" +
+                                "Best regards,\nAcademic Office";
+                        
+                        emailSender.Pdf(subject, message, filePath);
+                        
+                        JOptionPane.showMessageDialog(this, 
+                            "Yearly report generated successfully at: " + filePath + 
+                            "\n\nReport has been automatically sent to the student's email: " + studentEmail, 
+                            "Success", 
+                            javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    } 
+                    
+                    else {
+                        JOptionPane.showMessageDialog(this, 
+                            "Yearly report generated successfully at: " + filePath +
+                            "\n\nNote: Could not retrieve student information to send email automatically.", 
+                            "Success with Warning", 
+                            javax.swing.JOptionPane.WARNING_MESSAGE);
+                    }
+                } 
+                
+                catch (Exception emailException) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Report generated successfully at: " + filePath +
+                        "\n\nError sending email: " + emailException.getMessage(), 
+                        "Report Generated with Email Error", 
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+                    emailException.printStackTrace();
+                }
             } 
             
             catch (Exception e) {
@@ -310,7 +353,47 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                 
                 reportGenerator.generateReport(studentId, selectedSemester);
                 
-                JOptionPane.showMessageDialog(this, "Report generated successfully at: " + filePath, "Success", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                // Automatically send email to the student with the generated report
+                try {
+                    // Get student information to get the email address
+                    Student student = database.getStudent(studentId);
+                    if (student != null) {
+                        String studentEmail = student.getEmail();
+                        
+                        // Create a SendEmail instance and send the report as attachment
+                        SendEmail emailSender = new SendEmail(studentEmail);
+                        String subject = "Your Academic Report for Semester " + selectedSemester;
+                        String message = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
+                                "Please find attached your academic report for Semester " + selectedSemester + ".\n" +
+                                "This report contains your academic performance for this semester.\n\n" +
+                                "Best regards,\nAcademic Office";
+                        
+                        emailSender.Pdf(subject, message, filePath);
+                        
+                        JOptionPane.showMessageDialog(this, 
+                            "Report generated successfully at: " + filePath + 
+                            "\n\nReport has been automatically sent to the student's email: " + studentEmail, 
+                            "Success", 
+                            javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    } 
+                    
+                    else {
+                        JOptionPane.showMessageDialog(this, 
+                            "Report generated successfully at: " + filePath +
+                            "\n\nNote: Could not retrieve student information to send email automatically.", 
+                            "Success with Warning", 
+                            javax.swing.JOptionPane.WARNING_MESSAGE);
+                    }
+                } 
+                
+                catch (Exception emailException) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Report generated successfully at: " + filePath +
+                        "\n\nError sending email: " + emailException.getMessage(), 
+                        "Report Generated with Email Error", 
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+                    emailException.printStackTrace();
+                }
             } 
             
             catch (Exception e) {
