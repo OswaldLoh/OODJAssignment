@@ -8,7 +8,7 @@ import com.mycompany.oodjassignment.classes.User;
 import com.mycompany.oodjassignment.classes.UserRole;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.Eligibility.EligibilityMain;
-import com.mycompany.oodjassignment.academicreport.gui.ReportGeneratorPanel;
+import com.mycompany.oodjassignment.GUI.ReportGeneratorPanel;
 import javax.swing.JOptionPane;
 /**
  *
