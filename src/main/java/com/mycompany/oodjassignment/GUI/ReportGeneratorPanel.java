@@ -25,14 +25,9 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
      * Creates new form ReportGenerator1
      */
     public ReportGeneratorPanel() {
-        this(null);
+        initComponents();
     }
 
-    public ReportGeneratorPanel(AuthenticationService authService) {
-        this.authService = authService;
-        initComponents();
-        setLocationRelativeTo(null);
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -318,14 +313,6 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed\
-        if (authService == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Return Failed, no authentication service",
-                    "Missing Session",
-                    JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
         DashboardFrame dashboardFrame = new DashboardFrame(authService);
         dashboardFrame.setVisible(true);
         dispose();

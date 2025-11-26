@@ -237,9 +237,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     private void academicReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_academicReportButtonActionPerformed
         // TODO add your handling code here:
-        ReportGeneratorPanel generatorPanel = new ReportGeneratorPanel(authService);
-        generatorPanel.setVisible(true);
-        dispose();
+        showComingSoonDialog("Academic Performance Reporting");
     }//GEN-LAST:event_academicReportButtonActionPerformed
 
     private void logoutButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutButtonActionPerformed
