@@ -225,12 +225,7 @@ public class Database {
         }
         
         // Return average GPA for the year, or 0.0 if no courses found
-        if(courseCount > 0){
-            return totalGPA / courseCount;
-        }
-        else{
-            return 0.0;
-        }
+        return courseCount > 0 ? totalGPA / courseCount : 0.0;
     }
     
     // Calculate overall CGPA for all years
