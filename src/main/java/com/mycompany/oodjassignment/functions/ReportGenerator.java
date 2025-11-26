@@ -46,10 +46,7 @@ public class ReportGenerator {
     }
 
     // method
-    public void displayReport(){
-        
-    }
-
+    
     // Semester based report generation    
     public void generateReport(String studentId, int semester){
         Document document = new Document();
