@@ -1,13 +1,27 @@
 package com.mycompany.oodjassignment.Eligibility;
 
+import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+
 import com.mycompany.oodjassignment.classes.Student;
 import com.mycompany.oodjassignment.functions.Database;
-
-import javax.swing.*;
-import java.awt.*;
-import java.util.*;
-import java.util.List;
-import java.util.stream.Collectors;
+import com.mycompany.oodjassignment.functions.SendEmail;
 
 /**
  * Main GUI for the Eligibility Check & Enrolment module.
@@ -208,10 +222,13 @@ public class EligibilityMain extends JFrame {
         Student s = tableModel.getStudentAt(row);
         double cgpa = checker.getCGPA(s);
         int fails = checker.getFailedCourses(s);
-
+        
+        SendEmail sendEmail = new SendEmail(s.getEmail());
+        
         if (!checker.isEligible(s)) {
+            sendEmail.Notification("Eligible Nitification", "You are not eligible for enrolment.");
             JOptionPane.showMessageDialog(this,
-                    "This student is NOT eligible for enrolment.",
+                    "This student is NOT eligible for enrolment.\n Message have been send to the student email.",
                     "Enrolment Blocked",
                     JOptionPane.ERROR_MESSAGE);
             return;
@@ -223,11 +240,12 @@ public class EligibilityMain extends JFrame {
                 s.getStudentID(), fullName, cgpa, fails, true
         );
         EnrolmentFileManager.appendEnrolment(record);
+        sendEmail.Notification("Eligible Nitification", "You have been sucessfully enrolled.");
 
         JOptionPane.showMessageDialog(this,
                 "Enrolment successful for " + fullName +
                         "\nCGPA: " + String.format("%.2f", cgpa) +
-                        "\nFailed Courses: " + fails,
+                        "\nFailed Courses: " + fails + "\nMessage have been send to the student email.",
                 "Enrolment Success",
                 JOptionPane.INFORMATION_MESSAGE);
     }
