@@ -4,8 +4,10 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
+import com.mycompany.oodjassignment.academicofficerGUI.CourseRecovery;
 import com.mycompany.oodjassignment.classes.User;
 import com.mycompany.oodjassignment.classes.UserRole;
+import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.Eligibility.EligibilityMain;
 import com.mycompany.oodjassignment.GUI.ReportGeneratorPanel;
@@ -259,8 +261,21 @@ public class DashboardFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutButtonActionPerformed
 
     private void recoveryPlanButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recoveryPlanButtonActionPerformed
-        // TODO add your handling code here:
-        showComingSoonDialog("Course Recovery Plan");
+        Database database = new Database();
+        CourseRecovery courseRecovery = new CourseRecovery(database, () ->
+            java.awt.EventQueue.invokeLater(() -> {
+                DashboardFrame dashboard = new DashboardFrame(authService);
+                dashboard.setVisible(true);
+            })
+        );
+        
+        javax.swing.JFrame courseRecoveryFrame = new javax.swing.JFrame("Course Recovery System");
+        courseRecoveryFrame.setContentPane(courseRecovery.getCourseRecoveryPanel());
+        courseRecoveryFrame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        courseRecoveryFrame.setSize(550, 400);
+        courseRecoveryFrame.setLocationRelativeTo(this);
+        courseRecoveryFrame.setVisible(true);
+        dispose();
     }//GEN-LAST:event_recoveryPlanButtonActionPerformed
 
     private void userManagementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userManagementButtonActionPerformed

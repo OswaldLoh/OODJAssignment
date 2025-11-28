@@ -13,7 +13,8 @@ import java.util.Locale;
 
 
 public class CourseRecovery {
-    private Database database;
+    private final Database database;
+    private final Runnable onExitCallback;
     private JPanel courseRecoveryPanel;
     private JButton recoveryPlansButton;
     private JButton exitButton;
@@ -36,7 +37,12 @@ public class CourseRecovery {
     }
 
     public CourseRecovery(Database database) {
+        this(database, null);
+    }
+
+    public CourseRecovery(Database database, Runnable onExitCallback) {
         this.database = database;
+        this.onExitCallback = onExitCallback;
         txtArea.setText("\n\nWelcome to Course Recovery System! Please choose one of the dashboards below.");
 
 
@@ -50,7 +56,13 @@ public class CourseRecovery {
         });
 
         exitButton.addActionListener(e -> {
-            closeCurrentMenu();
+            JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(courseRecoveryPanel);
+            if (currentFrame != null) {
+                currentFrame.dispose();
+            }
+            if (onExitCallback != null) {
+                onExitCallback.run();
+            }
         });
     }
 
