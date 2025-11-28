@@ -3,6 +3,7 @@ import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.TableModel;
@@ -100,11 +101,11 @@ public class RecoveryPlanDashboard {
         int row = planListTable.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(recoveryPlanDashboardPanel,
-                    "Please select a recovery plan first."  ,
+                    "Please select a recovery plan first.",
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String targetPlanID = (String) tableModel.getValueAt(row,0);
+        String targetPlanID = (String) tableModel.getValueAt(row, 0);
         RecoveryPlan targetPlan = database.getRecoveryPlan(targetPlanID);
         Student targetStudent = database.getStudent(targetPlan.getStudentID());
         ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID);
@@ -140,19 +141,19 @@ public class RecoveryPlanDashboard {
             progressMonitorMessage.append(line);
             taskCount++;
         }
-        JOptionPane.showMessageDialog(recoveryPlanDashboardPanel,progressMonitorMessage);
+        JOptionPane.showMessageDialog(recoveryPlanDashboardPanel, progressMonitorMessage);
     }
 
     private void addTask() {
         int row = planListTable.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(recoveryPlanDashboardPanel,
-                    "Please select a recovery plan first."  ,
+                    "Please select a recovery plan first.",
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
         closeCurrentMenu();
-        String targetPlanID = (String) tableModel.getValueAt(row,0);
+        String targetPlanID = (String) tableModel.getValueAt(row, 0);
         openAddRecoveryTask(targetPlanID);
     }
 
@@ -161,11 +162,11 @@ public class RecoveryPlanDashboard {
         int row = planListTable.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(recoveryPlanDashboardPanel,
-                    "Please select a plan first."  ,
+                    "Please select a plan first.",
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String planID = (String) tableModel.getValueAt(row,0);
+        String planID = (String) tableModel.getValueAt(row, 0);
         ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);
         StringBuilder taskDeletionMessage = new StringBuilder();
         taskDeletionMessage.append("Doing so will delete the following recovery tasks registered under " + planID + "!\n\n");
@@ -181,10 +182,11 @@ public class RecoveryPlanDashboard {
 
         if (planDeleteConfirmation == JOptionPane.YES_OPTION) {
             taskDeleteConfirmation = JOptionPane.showConfirmDialog(recoveryPlanDashboardPanel,
-                    taskDeletionMessage,"Confirm Delete", JOptionPane.YES_NO_OPTION);
+                    taskDeletionMessage, "Confirm Delete", JOptionPane.YES_NO_OPTION);
         } else {
             return;
-        };
+        }
+        ;
 
         if (taskDeleteConfirmation == JOptionPane.YES_OPTION) {
             database.removeRecoveryPlan(planID);
@@ -198,8 +200,8 @@ public class RecoveryPlanDashboard {
 
         RecoveryPlan recPlan = new RecoveryPlan();
         RecoveryTask recTask = new RecoveryTask();
-        FileHandler.writeCSV(recPlan,database.getRecPlanDB());
-        FileHandler.writeCSV(recTask,database.getRecTaskDB());
+        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+        FileHandler.writeCSV(recTask, database.getRecTaskDB());
     }
 
 
@@ -261,7 +263,7 @@ public class RecoveryPlanDashboard {
         StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
         addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addPlanDashboardFrame.setSize(800,400);
+        addPlanDashboardFrame.setSize(800, 400);
         addPlanDashboardFrame.setLocationRelativeTo(null);
         addPlanDashboardFrame.setVisible(true);
     }
@@ -271,7 +273,7 @@ public class RecoveryPlanDashboard {
         AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, database, false);
         addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addRecoveryTaskFrame.setSize(520,230);
+        addRecoveryTaskFrame.setSize(520, 230);
         addRecoveryTaskFrame.setLocationRelativeTo(null);
         addRecoveryTaskFrame.setVisible(true);
     }
@@ -279,6 +281,66 @@ public class RecoveryPlanDashboard {
     private void closeCurrentMenu() {
         JFrame currentFrame = (JFrame) SwingUtilities.getWindowAncestor(recoveryPlanDashboardPanel);
         currentFrame.dispose();
+    }
+
+    {
+// GUI initializer generated by IntelliJ IDEA GUI Designer
+// >>> IMPORTANT!! <<<
+// DO NOT EDIT OR ADD ANY CODE HERE!
+        $$$setupUI$$$();
+    }
+
+    /**
+     * Method generated by IntelliJ IDEA GUI Designer
+     * >>> IMPORTANT!! <<<
+     * DO NOT edit this method OR call it in your code!
+     *
+     * @noinspection ALL
+     */
+    private void $$$setupUI$$$() {
+        recoveryPlanDashboardPanel = new JPanel();
+        recoveryPlanDashboardPanel.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 22, new Insets(20, 20, 20, 20), -1, -1));
+        recoveryPlanDashboardPanel.setBackground(new Color(-1));
+        recoveryPlanDashboardTitle = new JLabel();
+        recoveryPlanDashboardTitle.setText("Recovery Plan Dashboard");
+        recoveryPlanDashboardPanel.add(recoveryPlanDashboardTitle, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 22, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        planListScroll = new JScrollPane();
+        recoveryPlanDashboardPanel.add(planListScroll, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 22, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        planListTable = new JTable();
+        planListScroll.setViewportView(planListTable);
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        recoveryPlanDashboardPanel.add(panel1, new com.intellij.uiDesigner.core.GridConstraints(1, 11, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        searchPrompt = new JLabel();
+        searchPrompt.setText("Search by PlanID:");
+        recoveryPlanDashboardPanel.add(searchPrompt, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        txtPlanID = new JTextField();
+        recoveryPlanDashboardPanel.add(txtPlanID, new com.intellij.uiDesigner.core.GridConstraints(2, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        addPlanButton = new JButton();
+        addPlanButton.setText("Create New Plan");
+        recoveryPlanDashboardPanel.add(addPlanButton, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 3, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        deletePlanButton = new JButton();
+        deletePlanButton.setText("Delete Recovery Plan");
+        recoveryPlanDashboardPanel.add(deletePlanButton, new com.intellij.uiDesigner.core.GridConstraints(4, 4, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        searchButton = new JButton();
+        searchButton.setText("Search");
+        recoveryPlanDashboardPanel.add(searchButton, new com.intellij.uiDesigner.core.GridConstraints(2, 5, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        addTaskButton = new JButton();
+        addTaskButton.setText("Add Recovery Task");
+        recoveryPlanDashboardPanel.add(addTaskButton, new com.intellij.uiDesigner.core.GridConstraints(4, 21, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        backButton = new JButton();
+        backButton.setText("Back");
+        recoveryPlanDashboardPanel.add(backButton, new com.intellij.uiDesigner.core.GridConstraints(2, 21, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        monitorProgressButton = new JButton();
+        monitorProgressButton.setText("Monitor Progress");
+        recoveryPlanDashboardPanel.add(monitorProgressButton, new com.intellij.uiDesigner.core.GridConstraints(4, 20, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return recoveryPlanDashboardPanel;
     }
 }
 
