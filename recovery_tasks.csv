@@ -1,6 +1,6 @@
 taskID,planID,description,duration,completion
 T5,P5,Exam,30,true
-T6,P5,Testing purposes,30,false
+T6,P5,Testing purposes,30,true
 T10,P7,Task 2,30,false
 T7,P6,Testing 2,600,true
 T8,P7,Duplicate Test,30,true

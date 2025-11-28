@@ -5,6 +5,9 @@ import javax.swing.table.DefaultTableModel;
 
 import java.util.*;
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+import javax.swing.text.TableView;
 
 
 public class RecoveryPlanDashboard {
@@ -44,6 +47,10 @@ public class RecoveryPlanDashboard {
 
         addTaskButton.addActionListener(e -> {
             addTask();
+        });
+
+        txtPlanID.addActionListener(e -> {
+            search();
         });
 
         searchButton.addActionListener(e -> {
@@ -199,12 +206,13 @@ public class RecoveryPlanDashboard {
     private void tableSetup() {
         String[] columnNames = {"Plan ID", "Student ID", "Course ID", "Created By", "Progress"};
         tableModel = new DefaultTableModel(columnNames, 0) {
-            // Make cells un-editable (optional, but recommended)
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
+
+
     }
 
     private void loadRecoveryPlans() {
@@ -215,12 +223,22 @@ public class RecoveryPlanDashboard {
                     plan.getStudentID(),
                     plan.getCourseID(),
                     plan.getCreatedBy(),
-                    plan.getProgress(),
+                    String.format("%.1f", plan.getProgress())
             };
             tableModel.addRow(row);
         }
         planListTable.setModel(tableModel);
+
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
+        planListTable.setRowSorter(sorter);
+        sorter.setComparator(0, (a, b) -> {
+            int n1 = Integer.parseInt(a.toString().substring(1));
+            int n2 = Integer.parseInt(b.toString().substring(1));
+            return Integer.compare(n1, n2);
+        });
         planListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
     }
 
 

@@ -24,9 +24,13 @@ public class StudentSelectionDashboard {
         tableSetup();
         loadStudents();
 
-        viewButton.addActionListener(e -> {
-            viewPlan();
+        txtStudentID.addActionListener(e -> {
+            search();
         });
+        searchButton.addActionListener(e -> {
+            search();
+        });
+
         addPlanButton.addActionListener(e -> {
             addPlan();
 
@@ -35,11 +39,39 @@ public class StudentSelectionDashboard {
             closeCurrentMenu();
             openRecoveryPlanDashboard();
         });
-
     }
-    private void viewPlan() {
+    private void search() {
+        String searchText = txtStudentID.getText().trim();
 
+        if (searchText.isEmpty()) {
+            loadStudents();
+            return;
+        }
+        tableModel.setRowCount(0);
+        boolean found = false;
+
+        for (Student student : database.getStudentDB().values()) {
+            if (student.getStudentID().toLowerCase().contains(searchText.toLowerCase())) {
+                Object[] row = {
+                        student.getStudentID(),
+                        student.getFirstName()+" "+student.getLastName(),
+                        student.getMajor(),
+                        student.getYear()
+                };
+                tableModel.addRow(row);
+                found = true;
+            }
+        }
+        if (!found) {
+            JOptionPane.showMessageDialog(addPlanDashboardPanel,
+                    "No Student found with ID: " + searchText,
+                    "Search Result",
+                    JOptionPane.INFORMATION_MESSAGE);
+            loadStudents();
+            txtStudentID.setText("");
+        }
     }
+
     private void addPlan() {
         int row = studentListTable.getSelectedRow();
         if (row == -1) {
@@ -56,7 +88,6 @@ public class StudentSelectionDashboard {
     private void tableSetup() {
         String[] columnNames = {"Student ID", "Name", "Major", "Year"};
         tableModel = new DefaultTableModel(columnNames, 0) {
-            // Make cells un-editable (optional, but recommended)
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -76,6 +107,7 @@ public class StudentSelectionDashboard {
             tableModel.addRow(row);
         }
         studentListTable.setModel(tableModel);
+        studentListTable.setAutoCreateRowSorter(true);
         studentListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 

@@ -12,8 +12,6 @@ public class CourseRecovery {
     private JButton exitButton;
     private JButton recoveryTasksButton;
     private JLabel txtArea;
-    private JButton monitorRecoveryPlanButton;
-
 
     public static void main(String[] args) {
         Database database = new Database();
@@ -34,7 +32,7 @@ public class CourseRecovery {
         this.database = database;
         txtArea.setText("\n\nWelcome to Course Recovery System! Please choose one of the dashboards below.");
 
-
+        
         recoveryPlansButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryPlanDashboard();
@@ -46,7 +44,6 @@ public class CourseRecovery {
 
         exitButton.addActionListener(e -> {
             closeCurrentMenu();
-
         });
     }
 

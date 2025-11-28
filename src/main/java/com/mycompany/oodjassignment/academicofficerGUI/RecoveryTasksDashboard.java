@@ -2,10 +2,11 @@ package com.mycompany.oodjassignment.academicofficerGUI;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
 import javax.swing.table.DefaultTableModel;
-import java.io.File;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 public class RecoveryTasksDashboard {
     private DefaultTableModel tableModel;
@@ -25,15 +26,17 @@ public class RecoveryTasksDashboard {
         this.database = database;
 
         tableSetup();
-        loadRecoveryPlans();
+        loadRecoveryTasks();
 
+        txtTaskID.addActionListener(e -> {
+            search();
+        });
         searchButton.addActionListener(e -> {
             search();
         });
-
-        modifyButton.addActionListener((e -> {
+        modifyButton.addActionListener(e -> {
             modifyTask();
-        }));
+        });
         deleteTaskButton.addActionListener(e -> {
             deleteTask();
         });
@@ -45,7 +48,42 @@ public class RecoveryTasksDashboard {
     }
 
     private void search() {
+        String searchText = txtTaskID.getText().trim();
 
+        if (searchText.isEmpty()) {
+            loadRecoveryTasks();
+            return;
+        }
+        tableModel.setRowCount(0);
+        boolean found = false;
+
+        for (RecoveryTask task : database.getRecTaskDB().values()) {
+            if (task.getTaskID().toLowerCase().contains(searchText.toLowerCase())) {
+                String completionStatus;
+                if (task.getCompletion()) {
+                    completionStatus = "Completed";
+                } else {
+                    completionStatus = "Incomplete";
+                }
+                Object[] row = {
+                        task.getTaskID(),
+                        task.getPlanID(),
+                        task.getDescription(),
+                        task.getDuration(),
+                        completionStatus
+                };
+                tableModel.addRow(row);
+                found = true;
+            }
+        }
+        if (!found) {
+            JOptionPane.showMessageDialog(RecoveryTasksPanel,
+                    "No recovery task found with ID: " + searchText,
+                    "Search Result",
+                    JOptionPane.INFORMATION_MESSAGE);
+            loadRecoveryTasks();
+            txtTaskID.setText("");
+        }
     }
 
     private void tableSetup() {
@@ -104,7 +142,7 @@ public class RecoveryTasksDashboard {
         JOptionPane.showMessageDialog(RecoveryTasksPanel, "Recovery Task deleted successfully!");
     }
 
-    private void loadRecoveryPlans() {
+    private void loadRecoveryTasks() {
         tableModel.setRowCount(0);
         for (RecoveryTask task : database.getRecTaskDB().values()) {
             String completionStatus;
@@ -123,6 +161,18 @@ public class RecoveryTasksDashboard {
             tableModel.addRow(row);
         }
         taskTable.setModel(tableModel);
+        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
+        taskTable.setRowSorter(sorter);
+        sorter.setComparator(0, (a, b) -> {
+            int n1 = Integer.parseInt(a.toString().substring(1));
+            int n2 = Integer.parseInt(b.toString().substring(1));
+            return Integer.compare(n1, n2);
+        });
+        sorter.setComparator(1, (a, b) -> {
+            int n1 = Integer.parseInt(a.toString().substring(1));
+            int n2 = Integer.parseInt(b.toString().substring(1));
+            return Integer.compare(n1, n2);
+        });
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
     private String modifySelection() {
