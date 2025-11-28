@@ -32,6 +32,7 @@ public class CourseRecovery {
 
     public CourseRecovery(Database database) {
         this.database = database;
+        
         txtArea.setText("\n\nWelcome to Course Recovery System! Please choose one of the dashboards below.");
 
 
