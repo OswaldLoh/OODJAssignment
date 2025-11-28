@@ -1,15 +1,11 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.mycompany.oodjassignment.classes.AcademicOfficer;
 import com.mycompany.oodjassignment.functions.*;
 
 import javax.swing.*;
-import javax.swing.plaf.FontUIResource;
-import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.util.Locale;
+
 
 public class CourseRecovery {
     private Database database;
