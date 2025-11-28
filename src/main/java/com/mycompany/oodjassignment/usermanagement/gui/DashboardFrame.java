@@ -266,7 +266,7 @@ public class DashboardFrame extends javax.swing.JFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 DashboardFrame dashboard = new DashboardFrame(authService);
                 dashboard.setVisible(true);
-            })
+            }), authService
         );
         
         javax.swing.JFrame courseRecoveryFrame = new javax.swing.JFrame("Course Recovery System");

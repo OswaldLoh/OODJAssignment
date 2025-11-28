@@ -110,7 +110,8 @@ public class RecoveryTasksDashboard {
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String targetTaskID = (String) tableModel.getValueAt(row, 0);
+        int modelRow = taskTable.convertRowIndexToModel(row);
+        String targetTaskID = (String) tableModel.getValueAt(modelRow, 0);
         String mode = modifySelection();
         openModifyTaskMenu(targetTaskID, mode);
         closeCurrentMenu();
@@ -124,8 +125,9 @@ public class RecoveryTasksDashboard {
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String targetTaskID = (String) tableModel.getValueAt(row, 0);
-        String targetPlanID = (String) tableModel.getValueAt(row, 1);
+        int modelRow = taskTable.convertRowIndexToModel(row);
+        String targetTaskID = (String) tableModel.getValueAt(modelRow, 0);
+        String targetPlanID = (String) tableModel.getValueAt(modelRow, 1);
 
         ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID);
         int taskCount = planTasks.size();

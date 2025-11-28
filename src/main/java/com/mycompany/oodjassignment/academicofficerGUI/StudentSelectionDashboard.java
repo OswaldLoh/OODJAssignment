@@ -5,11 +5,13 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.mycompany.oodjassignment.classes.*;
 import com.mycompany.oodjassignment.functions.*;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class StudentSelectionDashboard {
+    private String userID;
     private DefaultTableModel tableModel;
     private Database database;
     private JPanel addPlanDashboardPanel;
@@ -23,7 +25,8 @@ public class StudentSelectionDashboard {
     private JScrollPane studentListScrollPane;
     private JButton viewButton;
 
-    public StudentSelectionDashboard(Database database) {
+    public StudentSelectionDashboard(Database database, String userID) {
+        this.userID = userID;
         this.database = database;
 
         tableSetup();
@@ -87,7 +90,8 @@ public class StudentSelectionDashboard {
             return;
         }
         closeCurrentMenu();
-        String targetStudentID = (String) tableModel.getValueAt(row, 0);
+        int modelRow = studentListTable.convertRowIndexToModel(row);
+        String targetStudentID = (String) tableModel.getValueAt(modelRow, 0);
         openStudentCourseSelectionMenu(targetStudentID);
     }
 
@@ -121,7 +125,7 @@ public class StudentSelectionDashboard {
 
     private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, userID);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);
@@ -131,7 +135,7 @@ public class StudentSelectionDashboard {
 
     private void openStudentCourseSelectionMenu(String targetStudentID) {
         JFrame studentCourseSelectionMenuFrame = new JFrame("Academic Officer System");
-        CourseSelectionMenu courseSelectionMenu = new CourseSelectionMenu(targetStudentID, database);
+        CourseSelectionMenu courseSelectionMenu = new CourseSelectionMenu(targetStudentID, database, userID);
         studentCourseSelectionMenuFrame.setContentPane(courseSelectionMenu.getStudentCourseSelectionPanel());
         studentCourseSelectionMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         studentCourseSelectionMenuFrame.setSize(800, 400);
@@ -197,4 +201,5 @@ public class StudentSelectionDashboard {
     public JComponent $$$getRootComponent$$$() {
         return addPlanDashboardPanel;
     }
+
 }

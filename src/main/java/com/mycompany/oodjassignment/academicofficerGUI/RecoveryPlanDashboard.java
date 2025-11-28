@@ -14,6 +14,7 @@ import javax.swing.table.TableRowSorter;
 
 
 public class RecoveryPlanDashboard {
+    private String userID;
     private DefaultTableModel tableModel;
     private Database database;
     private JPanel recoveryPlanDashboardPanel;
@@ -29,8 +30,9 @@ public class RecoveryPlanDashboard {
     private JLabel searchPrompt;
     private JButton monitorProgressButton;
 
-    public RecoveryPlanDashboard(Database database) {
+    public RecoveryPlanDashboard(Database database, String userID) {
         this.database = database;
+        this.userID = userID;
 
         tableSetup();
         loadRecoveryPlans();
@@ -107,7 +109,8 @@ public class RecoveryPlanDashboard {
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String targetPlanID = (String) tableModel.getValueAt(row, 0);
+        int modelRow = planListTable.convertRowIndexToModel(row);
+        String targetPlanID = (String) tableModel.getValueAt(modelRow, 0);
         RecoveryPlan targetPlan = database.getRecoveryPlan(targetPlanID);
         Student targetStudent = database.getStudent(targetPlan.getStudentID());
         ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID);
@@ -155,7 +158,8 @@ public class RecoveryPlanDashboard {
             return;
         }
         closeCurrentMenu();
-        String targetPlanID = (String) tableModel.getValueAt(row, 0);
+        int modelRow = planListTable.convertRowIndexToModel(row);
+        String targetPlanID = (String) tableModel.getValueAt(modelRow, 0);
         openAddRecoveryTask(targetPlanID);
     }
 
@@ -168,7 +172,8 @@ public class RecoveryPlanDashboard {
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        String planID = (String) tableModel.getValueAt(row, 0);
+        int modelRow = planListTable.convertRowIndexToModel(row);
+        String planID = (String) tableModel.getValueAt(modelRow, 0);
         ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);
         StringBuilder taskDeletionMessage = new StringBuilder();
         taskDeletionMessage.append("Doing so will delete the following recovery tasks registered under " + planID + "!\n\n");
@@ -262,7 +267,7 @@ public class RecoveryPlanDashboard {
 
     private void openStudentSelectionDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, userID);
         addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addPlanDashboardFrame.setSize(800, 400);
@@ -272,7 +277,7 @@ public class RecoveryPlanDashboard {
 
     private void openAddRecoveryTask(String targetPlanID) {
         JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
-        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, database, false);
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, userID, database, false);
         addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addRecoveryTaskFrame.setSize(520, 230);

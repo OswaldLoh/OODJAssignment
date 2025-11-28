@@ -4,6 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.mycompany.oodjassignment.classes.AcademicOfficer;
 import com.mycompany.oodjassignment.functions.*;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
@@ -13,6 +14,7 @@ import java.util.Locale;
 
 
 public class CourseRecovery {
+    private final AuthenticationService authService;
     private final Database database;
     private final Runnable onExitCallback;
     private JPanel courseRecoveryPanel;
@@ -21,34 +23,20 @@ public class CourseRecovery {
     private JButton recoveryTasksButton;
     private JLabel txtArea;
 
-    public static void main(String[] args) {
-        Database database = new Database();
-        AcademicOfficer testUser = new AcademicOfficer();
-        testUser.setUserID("A01");
-        String userID = testUser.getUserId();
-        CourseRecovery courseRecovery = new CourseRecovery(database);
-        JFrame frame = new JFrame("Academic Officer System");
-        frame.setContentPane(courseRecovery.getCourseRecoveryPanel());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(550, 400);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-
-    }
-
     public CourseRecovery(Database database) {
-        this(database, null);
+        this(database, null, null);
     }
 
-    public CourseRecovery(Database database, Runnable onExitCallback) {
+    public CourseRecovery(Database database, Runnable onExitCallback, AuthenticationService authService) {
+        this.authService = authService;
         this.database = database;
         this.onExitCallback = onExitCallback;
         txtArea.setText("\n\nWelcome to Course Recovery System! Please choose one of the dashboards below.");
-
+        String userID = authService.getCurrentUser().getUserId();
 
         recoveryPlansButton.addActionListener(e -> {
             closeCurrentMenu();
-            openRecoveryPlanDashboard();
+            openRecoveryPlanDashboard(userID);
         });
         recoveryTasksButton.addActionListener(e -> {
             closeCurrentMenu();
@@ -76,9 +64,9 @@ public class CourseRecovery {
         recoveryTaskDashboardFrame.setVisible(true);
     }
 
-    private void openRecoveryPlanDashboard() {
+    private void openRecoveryPlanDashboard(String userID) {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, userID);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);

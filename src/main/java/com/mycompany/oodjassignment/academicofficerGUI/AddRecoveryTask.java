@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AddRecoveryTask {
+    private String userID;
     private Database database;
     private JPanel addRecoveryTaskPanel;
     private JTextArea fixedInfoArea;
@@ -19,7 +20,8 @@ public class AddRecoveryTask {
     private JLabel promptAddRecoveryTask;
     private JButton backButton;
 
-    public AddRecoveryTask(String targetPlanID, Database database, boolean mustAdd) {
+    public AddRecoveryTask(String targetPlanID, String userID, Database database, boolean mustAdd) {
+        this.userID = userID;
         this.database = database;
         int newDuration = 0;
 
@@ -99,7 +101,7 @@ public class AddRecoveryTask {
 
     private void studentSelectionDashboard() {
         JFrame studentSelectionDashboardFrame = new JFrame("Academic Officer System");
-        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database);
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, userID);
         studentSelectionDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         studentSelectionDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         studentSelectionDashboardFrame.setSize(800, 400);
@@ -109,7 +111,7 @@ public class AddRecoveryTask {
 
     private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, userID);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);
