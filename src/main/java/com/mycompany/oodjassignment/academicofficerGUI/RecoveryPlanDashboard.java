@@ -1,6 +1,5 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
+
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,7 +9,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
-import javax.swing.text.TableView;
+
 
 
 public class RecoveryPlanDashboard {
