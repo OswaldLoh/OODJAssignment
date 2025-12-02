@@ -4,6 +4,8 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
@@ -14,6 +16,7 @@ import javax.swing.table.TableRowSorter;
 
 
 public class RecoveryPlanDashboard {
+    private AuthenticationService authService;
     private String userID;
     private DefaultTableModel tableModel;
     private Database database;
@@ -30,9 +33,9 @@ public class RecoveryPlanDashboard {
     private JLabel searchPrompt;
     private JButton monitorProgressButton;
 
-    public RecoveryPlanDashboard(Database database, String userID) {
+    public RecoveryPlanDashboard(Database database, AuthenticationService authService) {
         this.database = database;
-        this.userID = userID;
+        this.authService = authService;
 
         tableSetup();
         loadRecoveryPlans();
@@ -257,7 +260,7 @@ public class RecoveryPlanDashboard {
 
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        CourseRecovery courseRecovery = new CourseRecovery(database);
+        CourseRecovery courseRecovery = new CourseRecovery(database, authService);
         mainMenuFrame.setContentPane(courseRecovery.getCourseRecoveryPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(550, 400);
@@ -267,7 +270,7 @@ public class RecoveryPlanDashboard {
 
     private void openStudentSelectionDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, userID);
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, authService);
         addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addPlanDashboardFrame.setSize(800, 400);
@@ -277,7 +280,7 @@ public class RecoveryPlanDashboard {
 
     private void openAddRecoveryTask(String targetPlanID) {
         JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
-        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, userID, database, false);
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, authService, database, false);
         addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addRecoveryTaskFrame.setSize(520, 230);
@@ -349,5 +352,6 @@ public class RecoveryPlanDashboard {
     public JComponent $$$getRootComponent$$$() {
         return recoveryPlanDashboardPanel;
     }
+
 }
 

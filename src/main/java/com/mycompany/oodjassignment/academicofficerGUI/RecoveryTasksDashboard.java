@@ -5,6 +5,8 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.*;
@@ -14,6 +16,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class RecoveryTasksDashboard {
+    private AuthenticationService authService;
     private DefaultTableModel tableModel;
     private Database database;
     private JPanel RecoveryTasksPanel;
@@ -27,8 +30,9 @@ public class RecoveryTasksDashboard {
     private JButton modifyButton;
     private JLabel seartchPrompt;
 
-    public RecoveryTasksDashboard(Database database) {
+    public RecoveryTasksDashboard(Database database, AuthenticationService authService) {
         this.database = database;
+        this.authService = authService;
 
         tableSetup();
         loadRecoveryTasks();
@@ -113,6 +117,9 @@ public class RecoveryTasksDashboard {
         int modelRow = taskTable.convertRowIndexToModel(row);
         String targetTaskID = (String) tableModel.getValueAt(modelRow, 0);
         String mode = modifySelection();
+        if (mode == null) {
+            return;
+        }
         openModifyTaskMenu(targetTaskID, mode);
         closeCurrentMenu();
     }
@@ -204,7 +211,7 @@ public class RecoveryTasksDashboard {
 
     private void openModifyTaskMenu(String targetTaskID, String mode) {
         JFrame modifyTaskMenuFrame = new JFrame("Academic Officer System");
-        ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode, database);
+        ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode, database, authService);
         modifyTaskMenuFrame.setContentPane(modifyTaskMenu.getModifyTaskPanel());
         modifyTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         modifyTaskMenuFrame.setSize(800, 400);
@@ -214,7 +221,7 @@ public class RecoveryTasksDashboard {
 
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        CourseRecovery courseRecovery = new CourseRecovery(database);
+        CourseRecovery courseRecovery = new CourseRecovery(database, authService);
         mainMenuFrame.setContentPane(courseRecovery.getCourseRecoveryPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(550, 400);
@@ -283,4 +290,5 @@ public class RecoveryTasksDashboard {
     public JComponent $$$getRootComponent$$$() {
         return RecoveryTasksPanel;
     }
+
 }

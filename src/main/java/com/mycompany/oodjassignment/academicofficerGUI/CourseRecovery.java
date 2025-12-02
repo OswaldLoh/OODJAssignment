@@ -23,8 +23,8 @@ public class CourseRecovery {
     private JButton recoveryTasksButton;
     private JLabel txtArea;
 
-    public CourseRecovery(Database database) {
-        this(database, null, null);
+    public CourseRecovery(Database database, AuthenticationService authService) {
+        this(database, null, authService);
     }
 
     public CourseRecovery(Database database, Runnable onExitCallback, AuthenticationService authService) {
@@ -36,7 +36,7 @@ public class CourseRecovery {
 
         recoveryPlansButton.addActionListener(e -> {
             closeCurrentMenu();
-            openRecoveryPlanDashboard(userID);
+            openRecoveryPlanDashboard();
         });
         recoveryTasksButton.addActionListener(e -> {
             closeCurrentMenu();
@@ -56,7 +56,7 @@ public class CourseRecovery {
 
     private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database);
+        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
         recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryTaskDashboardFrame.setSize(800, 400);
@@ -64,9 +64,9 @@ public class CourseRecovery {
         recoveryTaskDashboardFrame.setVisible(true);
     }
 
-    private void openRecoveryPlanDashboard(String userID) {
+    private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, userID);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);
@@ -161,4 +161,5 @@ public class CourseRecovery {
     public JComponent $$$getRootComponent$$$() {
         return courseRecoveryPanel;
     }
+
 }

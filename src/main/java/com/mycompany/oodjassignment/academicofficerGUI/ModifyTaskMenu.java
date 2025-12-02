@@ -4,10 +4,13 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+
 import java.awt.*;
 import javax.swing.*;
 
 public class ModifyTaskMenu {
+    private AuthenticationService authService;
     private String mode;
     private String targetTaskID;
     private Database database;
@@ -24,18 +27,19 @@ public class ModifyTaskMenu {
     private JButton backButton;
     private JButton confirmButton;
 
-    public ModifyTaskMenu(String targetTaskID, String mode, Database database) {
+    public ModifyTaskMenu(String targetTaskID, String mode, Database database, AuthenticationService authService) {
         this.mode = mode;
         this.database = database;
         this.targetTaskID = targetTaskID;
+        this.authService = authService;
 
         if (mode.equals("Description")) {
-            // SHOW Description fields
+            // show
             promptDescription.setVisible(true);
             txtNewDescription.setVisible(true);
-            txtNewDescription.setText(""); // Ensure it's empty
+            txtNewDescription.setText("");
 
-            // HIDE others
+            // hide
             promptDuration.setVisible(false);
             txtNewDuration.setVisible(false);
             promptCompletion.setVisible(false);
@@ -43,12 +47,12 @@ public class ModifyTaskMenu {
             incompleteRadioButton.setVisible(false);
 
         } else if (mode.equals("Duration")) {
-            // SHOW Duration fields
+            // show
             promptDuration.setVisible(true);
             txtNewDuration.setVisible(true);
-            txtNewDuration.setText(""); // Ensure it's empty
+            txtNewDuration.setText("");
 
-            // HIDE others
+            // hide
             promptDescription.setVisible(false);
             txtNewDescription.setVisible(false);
             promptCompletion.setVisible(false);
@@ -56,25 +60,25 @@ public class ModifyTaskMenu {
             incompleteRadioButton.setVisible(false);
 
         } else if (mode.equals("Completion Status")) {
-            // SHOW Completion fields
+            // show
             promptCompletion.setVisible(true);
             completeRadioButton.setVisible(true);
             incompleteRadioButton.setVisible(true);
 
-            // CRITICAL: You still need to group them so they work as a pair
+            // group radio buttons
             ButtonGroup group = new ButtonGroup();
             group.add(completeRadioButton);
             group.add(incompleteRadioButton);
 
-            // Optional: Default to 'Incomplete' or clear selection
-            // group.clearSelection(); // If you want neither selected
             incompleteRadioButton.setSelected(true); // Default safe option
 
-            // HIDE others
+            // hide
             promptDescription.setVisible(false);
             txtNewDescription.setVisible(false);
             promptDuration.setVisible(false);
             txtNewDuration.setVisible(false);
+        } else if (mode == null) {
+            return;
         }
 
         RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
@@ -167,7 +171,7 @@ public class ModifyTaskMenu {
 
     private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database);
+        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
         recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryTaskDashboardFrame.setSize(800, 400);
@@ -240,4 +244,5 @@ public class ModifyTaskMenu {
     public JComponent $$$getRootComponent$$$() {
         return modifyTaskPanel;
     }
+
 }

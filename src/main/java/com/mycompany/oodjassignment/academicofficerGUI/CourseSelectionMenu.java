@@ -13,7 +13,7 @@ import java.util.*;
 import javax.swing.*;
 
 public class CourseSelectionMenu {
-    private String userID;
+    private AuthenticationService authService;
     private DefaultTableModel tableModel;
     private Database database;
     private JPanel studentCourseSelectionPanel;
@@ -23,8 +23,8 @@ public class CourseSelectionMenu {
     private JLabel chooseGradePrompt;
     private JScrollPane gradeScroll;
 
-    public CourseSelectionMenu(String targetStudentID, Database database, String userID) {
-        this.userID = userID;
+    public CourseSelectionMenu(String targetStudentID, Database database, AuthenticationService authService) {
+        this.authService = authService;
         this.database = database;
 
         tableSetup();
@@ -63,6 +63,7 @@ public class CourseSelectionMenu {
         IDManager idManager = new IDManager(database.getRecPlanDB());       // Generate new Plan ID
         idManager.getHighestTaskID();
         String nextPlanID = "P" + idManager.generateNewID();
+        String userID = authService.getCurrentUser().getUserId();
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, courseID, userID, "0.00");
         database.addRecoveryPlan(newPlan);
         FileHandler.writeCSV(newPlan, database.getRecPlanDB());
@@ -107,7 +108,7 @@ public class CourseSelectionMenu {
 
     private void openAddRecoveryTask(String targetPlanID) {
         JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
-        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, userID, database, true);
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, authService, database, true);
         addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addRecoveryTaskFrame.setSize(520, 230);
@@ -117,7 +118,7 @@ public class CourseSelectionMenu {
 
     private void openAddPlanDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, userID);
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, authService);
         addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addPlanDashboardFrame.setSize(800, 400);
