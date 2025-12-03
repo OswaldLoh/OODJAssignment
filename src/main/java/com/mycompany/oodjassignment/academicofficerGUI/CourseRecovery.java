@@ -23,10 +23,6 @@ public class CourseRecovery {
     private JButton recoveryTasksButton;
     private JLabel txtArea;
 
-    public CourseRecovery(Database database, AuthenticationService authService) {
-        this(database, null, authService);
-    }
-
     public CourseRecovery(Database database, Runnable onExitCallback, AuthenticationService authService) {
         this.authService = authService;
         this.database = database;
@@ -56,7 +52,7 @@ public class CourseRecovery {
 
     private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, authService);
+        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
         recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryTaskDashboardFrame.setSize(800, 400);
@@ -66,7 +62,7 @@ public class CourseRecovery {
 
     private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, authService);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);

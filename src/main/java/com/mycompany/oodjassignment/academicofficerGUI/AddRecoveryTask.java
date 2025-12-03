@@ -9,6 +9,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class AddRecoveryTask {
+    private final Runnable onExitCallback;
     private AuthenticationService authService;
     private String userID;
     private Database database;
@@ -22,7 +23,8 @@ public class AddRecoveryTask {
     private JLabel promptAddRecoveryTask;
     private JButton backButton;
 
-    public AddRecoveryTask(String targetPlanID, AuthenticationService authService, Database database, boolean mustAdd) {
+    public AddRecoveryTask(String targetPlanID, AuthenticationService authService, Runnable onExitCallback, Database database, boolean mustAdd) {
+        this.onExitCallback = onExitCallback;
         this.authService = authService;
         this.database = database;
 
@@ -102,7 +104,7 @@ public class AddRecoveryTask {
 
     private void studentSelectionDashboard() {
         JFrame studentSelectionDashboardFrame = new JFrame("Academic Officer System");
-        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, authService);
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, onExitCallback, authService);
         studentSelectionDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         studentSelectionDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         studentSelectionDashboardFrame.setSize(800, 400);
@@ -112,7 +114,7 @@ public class AddRecoveryTask {
 
     private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, authService);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);

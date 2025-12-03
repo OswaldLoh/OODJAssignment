@@ -226,7 +226,7 @@ public class EligibilityMain extends JFrame {
         SendEmail sendEmail = new SendEmail(s.getEmail());
         
         if (!checker.isEligible(s)) {
-            sendEmail.Notification("Eligible Nitification", "You are not eligible for enrolment.");
+            sendEmail.Notification("Eligible Notification", "You are not eligible for enrolment.");
             JOptionPane.showMessageDialog(this,
                     "This student is NOT eligible for enrolment.\n Message have been send to the student email.",
                     "Enrolment Blocked",
@@ -240,7 +240,7 @@ public class EligibilityMain extends JFrame {
                 s.getStudentID(), fullName, cgpa, fails, true
         );
         EnrolmentFileManager.appendEnrolment(record);
-        sendEmail.Notification("Eligible Nitification", "You have been sucessfully enrolled.");
+        sendEmail.Notification("Eligible Notification", "You have been successfully enrolled.");
 
         JOptionPane.showMessageDialog(this,
                 "Enrolment successful for " + fullName +

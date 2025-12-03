@@ -13,6 +13,7 @@ import java.util.*;
 import javax.swing.*;
 
 public class CourseSelectionMenu {
+    private final Runnable onExitCallback;
     private AuthenticationService authService;
     private DefaultTableModel tableModel;
     private Database database;
@@ -23,7 +24,8 @@ public class CourseSelectionMenu {
     private JLabel chooseGradePrompt;
     private JScrollPane gradeScroll;
 
-    public CourseSelectionMenu(String targetStudentID, Database database, AuthenticationService authService) {
+    public CourseSelectionMenu(String targetStudentID, Database database, Runnable onExitCallback, AuthenticationService authService) {
+        this.onExitCallback = onExitCallback;
         this.authService = authService;
         this.database = database;
 
@@ -108,7 +110,7 @@ public class CourseSelectionMenu {
 
     private void openAddRecoveryTask(String targetPlanID) {
         JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
-        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, authService, database, true);
+        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, authService, onExitCallback, database, true);
         addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
         addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addRecoveryTaskFrame.setSize(520, 230);
@@ -118,7 +120,7 @@ public class CourseSelectionMenu {
 
     private void openAddPlanDashboard() {
         JFrame addPlanDashboardFrame = new JFrame("Academic Officer System");
-        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, authService);
+        StudentSelectionDashboard studentSelectionDashboard = new StudentSelectionDashboard(database, onExitCallback, authService);
         addPlanDashboardFrame.setContentPane((studentSelectionDashboard.getAddPlanDashboardPanel()));
         addPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         addPlanDashboardFrame.setSize(800, 400);

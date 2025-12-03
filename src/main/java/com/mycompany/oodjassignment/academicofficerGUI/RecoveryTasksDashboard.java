@@ -16,6 +16,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 public class RecoveryTasksDashboard {
+    private final Runnable onExitCallback;
     private AuthenticationService authService;
     private DefaultTableModel tableModel;
     private Database database;
@@ -30,7 +31,8 @@ public class RecoveryTasksDashboard {
     private JButton modifyButton;
     private JLabel seartchPrompt;
 
-    public RecoveryTasksDashboard(Database database, AuthenticationService authService) {
+    public RecoveryTasksDashboard(Database database, Runnable onExitCallback, AuthenticationService authService) {
+        this.onExitCallback = onExitCallback;
         this.database = database;
         this.authService = authService;
 
@@ -211,7 +213,7 @@ public class RecoveryTasksDashboard {
 
     private void openModifyTaskMenu(String targetTaskID, String mode) {
         JFrame modifyTaskMenuFrame = new JFrame("Academic Officer System");
-        ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode, database, authService);
+        ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode, database, authService, onExitCallback);
         modifyTaskMenuFrame.setContentPane(modifyTaskMenu.getModifyTaskPanel());
         modifyTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         modifyTaskMenuFrame.setSize(800, 400);
@@ -221,7 +223,7 @@ public class RecoveryTasksDashboard {
 
     private void openMainMenu() {
         JFrame mainMenuFrame = new JFrame("Academic Officer System");
-        CourseRecovery courseRecovery = new CourseRecovery(database, authService);
+        CourseRecovery courseRecovery = new CourseRecovery(database, onExitCallback, authService);
         mainMenuFrame.setContentPane(courseRecovery.getCourseRecoveryPanel());
         mainMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainMenuFrame.setSize(550, 400);

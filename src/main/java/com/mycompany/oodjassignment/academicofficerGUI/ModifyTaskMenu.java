@@ -10,6 +10,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class ModifyTaskMenu {
+    private final Runnable onExitCallback;
     private AuthenticationService authService;
     private String mode;
     private String targetTaskID;
@@ -27,11 +28,12 @@ public class ModifyTaskMenu {
     private JButton backButton;
     private JButton confirmButton;
 
-    public ModifyTaskMenu(String targetTaskID, String mode, Database database, AuthenticationService authService) {
+    public ModifyTaskMenu(String targetTaskID, String mode, Database database, AuthenticationService authService, Runnable onExitCallback) {
         this.mode = mode;
         this.database = database;
         this.targetTaskID = targetTaskID;
         this.authService = authService;
+        this.onExitCallback = onExitCallback;
 
         if (mode.equals("Description")) {
             // show
@@ -171,7 +173,7 @@ public class ModifyTaskMenu {
 
     private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, authService);
+        RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
         recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryTaskDashboardFrame.setSize(800, 400);

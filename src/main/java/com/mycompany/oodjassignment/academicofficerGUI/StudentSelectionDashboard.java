@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class StudentSelectionDashboard {
+    private final Runnable onExitCallback;
     private AuthenticationService authService;
     private String userID;
     private DefaultTableModel tableModel;
@@ -27,7 +28,8 @@ public class StudentSelectionDashboard {
     private JScrollPane studentListScrollPane;
     private JButton viewButton;
 
-    public StudentSelectionDashboard(Database database, AuthenticationService authService) {
+    public StudentSelectionDashboard(Database database, Runnable onExitCallback, AuthenticationService authService) {
+        this.onExitCallback = onExitCallback;
         this.authService = authService;
         this.database = database;
 
@@ -127,7 +129,7 @@ public class StudentSelectionDashboard {
 
     private void openRecoveryPlanDashboard() {
         JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
-        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, authService);
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         recoveryPlanDashboardFrame.setSize(800, 400);
@@ -137,7 +139,7 @@ public class StudentSelectionDashboard {
 
     private void openStudentCourseSelectionMenu(String targetStudentID) {
         JFrame studentCourseSelectionMenuFrame = new JFrame("Academic Officer System");
-        CourseSelectionMenu courseSelectionMenu = new CourseSelectionMenu(targetStudentID, database, authService);
+        CourseSelectionMenu courseSelectionMenu = new CourseSelectionMenu(targetStudentID, database, onExitCallback, authService);
         studentCourseSelectionMenuFrame.setContentPane(courseSelectionMenu.getStudentCourseSelectionPanel());
         studentCourseSelectionMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         studentCourseSelectionMenuFrame.setSize(800, 400);
