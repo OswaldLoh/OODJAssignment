@@ -25,23 +25,32 @@ import com.mycompany.oodjassignment.functions.SendEmail;
 
 /**
  * Main GUI for the Eligibility Check & Enrolment module.
- * Integrates searching, filtering, analytics, highlighting,
- * and saving enrolment decisions.
+ * Key features implemented here:
+ * - Search & filter student eligibility
+ * - Auto-highlighting eligible/ineligible students (via renderer)
+ * - Displaying CGPA, failed courses and eligibility status
+ * - Enrolment with file storage
+ * - Email notification to students
+ * - Analytics for whole student population
+ * - Audit log tracking
  */
 public class EligibilityMain extends JFrame {
 
-    private final Database db;              // shared project database
-    private final EligibilityChecker checker;
+    private final Database db;                // Shared database object for reading student/course/grade data
+    private final EligibilityChecker checker; // Logic class that handles all eligibility calculations
 
-    private Map<String, Student> allStudentsMap;
-    private List<Student> displayedStudents;
+    private Map<String, Student> allStudentsMap;    // Holds ALL students from CSV
+    private List<Student> displayedStudents;        // Only the students currently visible in the table (after filtering)
 
-    private EligibilityTableModel tableModel;
-    private JTable table;
+    private EligibilityTableModel tableModel;       // Custom table model
+    private JTable table;                           // Table GUI component
 
-    private JTextField txtSearch;
-    private JCheckBox chkShowOnlyIneligible;
-    private JLabel lblSelectedInfo;
+    private JTextField txtSearch;                   // Search text field
+    private JCheckBox chkShowOnlyIneligible;        // Checkbox filter
+    private JLabel lblSelectedInfo;                 // Shows info for the selected student
+
+    // Stores enrolled students to avoid duplicate enrolments
+    private final List<String> alreadyEnrolled = new ArrayList<>();
 
     /**
      * Constructor initializes the Database and creates the full GUI.
@@ -49,13 +58,19 @@ public class EligibilityMain extends JFrame {
     public EligibilityMain() {
         super("Eligibility Check & Enrolment");
 
-        db = new Database();                       // loads all CSV data automatically
-        checker = new EligibilityChecker(db);      // performs the eligibility logic
+        db = new Database();
+        checker = new EligibilityChecker(db);
         allStudentsMap = db.getStudentDB();
-        displayedStudents = new ArrayList<>(allStudentsMap.values());
-        // Sort students by StudentID in ascending order
-        displayedStudents.sort(Comparator.comparing(Student::getStudentID));
 
+        displayedStudents = new ArrayList<>(allStudentsMap.values());
+
+        // Load previously enrolled students into memory
+        for (EnrolmentRecord r : EnrolmentFileManager.loadEnrolments()) {
+            alreadyEnrolled.add(r.getStudentID());
+        }
+
+        // Sort initial table display
+        displayedStudents.sort(Comparator.comparing(Student::getStudentID));
 
         initComponents();
 
@@ -65,17 +80,19 @@ public class EligibilityMain extends JFrame {
     }
 
     /**
-     * Builds UI components: search bar, table, buttons, listeners.
+     * Builds UI components and event listeners.
      */
     private void initComponents() {
+
         tableModel = new EligibilityTableModel(displayedStudents, checker);
         table = new JTable(tableModel);
+
         table.setDefaultRenderer(Object.class, new EligibilityCellRenderer());
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JScrollPane scrollPane = new JScrollPane(table);
 
-        // top search panel
+        // Top search & filter panel
         txtSearch = new JTextField(20);
         JButton btnSearch = new JButton("Search");
         chkShowOnlyIneligible = new JCheckBox("Show only NOT eligible");
@@ -88,7 +105,7 @@ public class EligibilityMain extends JFrame {
         topPanel.add(chkShowOnlyIneligible);
         topPanel.add(btnClear);
 
-        // bottom panel: analytics + enrol
+        // Bottom panel
         JButton btnAnalytics = new JButton("Progression Analytics");
         JButton btnEnrol = new JButton("Enrol Selected");
         lblSelectedInfo = new JLabel("Select a student to view details.");
@@ -101,24 +118,22 @@ public class EligibilityMain extends JFrame {
         bottomPanel.add(lblSelectedInfo, BorderLayout.CENTER);
         bottomPanel.add(btnPanel, BorderLayout.EAST);
 
-        // add to frame
+        // Add everything to frame
         add(topPanel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // event handlers
+        // Event handlers
         btnSearch.addActionListener(e -> applyFilter());
         chkShowOnlyIneligible.addActionListener(e -> applyFilter());
         btnClear.addActionListener(e -> resetFilter());
-
         table.getSelectionModel().addListSelectionListener(e -> updateSelectedInfo());
-
         btnAnalytics.addActionListener(e -> showAnalytics());
         btnEnrol.addActionListener(e -> enrolSelectedStudent());
     }
 
     /**
-     * Applies search + ineligible-only filters using student fields.
+     * Applies search and eligibility filters.
      */
     private void applyFilter() {
         String keyword = txtSearch.getText().trim().toLowerCase();
@@ -139,26 +154,25 @@ public class EligibilityMain extends JFrame {
                 .collect(Collectors.toList());
 
         displayedStudents = filtered;
-        // Sort result
         displayedStudents.sort(Comparator.comparing(Student::getStudentID));
         tableModel.setStudents(displayedStudents);
     }
 
     /**
-     * Restores full student list.
+     * Clears all filters and restores full list.
      */
     private void resetFilter() {
         txtSearch.setText("");
         chkShowOnlyIneligible.setSelected(false);
-        // Convert HashMap → List
+
         displayedStudents = new ArrayList<>(allStudentsMap.values());
-        // Sort students by StudentID in ascending order
         displayedStudents.sort(Comparator.comparing(Student::getStudentID));
+
         tableModel.setStudents(displayedStudents);
     }
 
     /**
-     * Updates label showing selected student's academic performance.
+     * Updates academic details of selected student.
      */
     private void updateSelectedInfo() {
         int row = table.getSelectedRow();
@@ -168,6 +182,7 @@ public class EligibilityMain extends JFrame {
         }
 
         Student s = tableModel.getStudentAt(row);
+
         double cgpa = checker.getCGPA(s);
         int fails = checker.getFailedCourses(s);
         boolean eligible = checker.isEligible(s);
@@ -179,7 +194,7 @@ public class EligibilityMain extends JFrame {
     }
 
     /**
-     * Shows general analytics for the entire student population.
+     * Shows performance analytics for all students.
      */
     private void showAnalytics() {
         int total = allStudentsMap.size();
@@ -207,9 +222,10 @@ public class EligibilityMain extends JFrame {
     }
 
     /**
-     * Creates and stores an enrolment record for the selected student.
+     * Handles enrolment, audit logging, and email notification.
      */
     private void enrolSelectedStudent() {
+
         int row = table.getSelectedRow();
         if (row < 0) {
             JOptionPane.showMessageDialog(this,
@@ -220,32 +236,79 @@ public class EligibilityMain extends JFrame {
         }
 
         Student s = tableModel.getStudentAt(row);
+
+        // Prevent double enrolment
+        if (alreadyEnrolled.contains(s.getStudentID())) {
+            JOptionPane.showMessageDialog(this,
+                    "This student has ALREADY been enrolled.\nDuplicate enrolment is not allowed.",
+                    "Already Enrolled",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         double cgpa = checker.getCGPA(s);
         int fails = checker.getFailedCourses(s);
-        
+
+        // Prepare email sender object
         SendEmail sendEmail = new SendEmail(s.getEmail());
-        
+
+        // If student is not eligible → block enrolment
         if (!checker.isEligible(s)) {
-            sendEmail.Notification("Eligible Notification", "You are not eligible for enrolment.");
+
+            // Write audit log for blocked enrolment
+            EnrolmentAudit.log(
+                    s.getStudentID(),
+                    s.getFirstName() + " " + s.getLastName(),
+                    cgpa, fails,
+                    "BLOCKED"
+            );
+
+            // Run email in a separate thread to avoid UI freezing
+            new Thread(() ->
+                    sendEmail.Notification(
+                            "Eligibility Notification",
+                            "You are not eligible for enrolment."
+                    )
+            ).start();
+
             JOptionPane.showMessageDialog(this,
-                    "This student is NOT eligible for enrolment.\n Message have been send to the student email.",
+                    "This student is NOT eligible for enrolment.\nMessage has been sent to the student's email.",
                     "Enrolment Blocked",
                     JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // SUCCESS CASE
         String fullName = s.getFirstName() + " " + s.getLastName();
 
+        // Create enrolment record object
         EnrolmentRecord record = new EnrolmentRecord(
                 s.getStudentID(), fullName, cgpa, fails, true
         );
+
+        // Save to file for future reference
         EnrolmentFileManager.appendEnrolment(record);
-        sendEmail.Notification("Eligible Notification", "You have been successfully enrolled.");
+        // Mark the student as already enrolled to prevent duplicates
+        alreadyEnrolled.add(s.getStudentID());
+
+        // Audit log entry for successful enrolment
+        EnrolmentAudit.log(
+                s.getStudentID(), fullName, cgpa, fails, "ENROLLED"
+        );
+
+        // Email sent asynchronously to keep UI responsive
+        new Thread(() ->
+                sendEmail.Notification(
+                        "Enrolment Successful",
+                        "You have been successfully enrolled."
+                )
+        ).start();
 
         JOptionPane.showMessageDialog(this,
                 "Enrolment successful for " + fullName +
                         "\nCGPA: " + String.format("%.2f", cgpa) +
-                        "\nFailed Courses: " + fails + "\nMessage have been send to the student email.",
+                        "\nFailed Courses: " + fails +
+                        "\nMessage has been sent to the student's email.",
                 "Enrolment Success",
                 JOptionPane.INFORMATION_MESSAGE);
     }
