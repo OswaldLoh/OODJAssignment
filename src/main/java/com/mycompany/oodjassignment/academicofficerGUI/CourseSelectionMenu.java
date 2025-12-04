@@ -64,9 +64,10 @@ public class CourseSelectionMenu {
 
         IDManager idManager = new IDManager(database.getRecPlanDB());       // Generate new Plan ID
         idManager.getHighestTaskID();
+        String component = database.getRecoveryPlanComponent(targetStudentID, courseID);
         String nextPlanID = "P" + idManager.generateNewID();
         String userID = authService.getCurrentUser().getUserId();
-        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, courseID, userID, "0.00");
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, courseID, component, userID, "0.00");
         database.addRecoveryPlan(newPlan);
         FileHandler.writeCSV(newPlan, database.getRecPlanDB());
 

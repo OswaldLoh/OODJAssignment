@@ -52,7 +52,8 @@ public class RecoveryPlanManager {
         idManager.getHighestTaskID();
         String nextPlanID = "P" + idManager.generateNewID();
 
-        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, selectedCourse.getCourseID(), userID, "0.00");
+        String component = "hi";
+        RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, component, selectedCourse.getCourseID(), userID, "0.00");
         database.addRecoveryPlan(newPlan);
         addTask(nextPlanID);
         System.out.println();

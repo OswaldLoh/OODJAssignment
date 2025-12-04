@@ -12,8 +12,6 @@ import com.mycompany.oodjassignment.classes.RecoveryTask;
 import com.mycompany.oodjassignment.classes.Student;
 
 public class Database {
-    private RecoveryPlan recPlanInterface;
-    private RecoveryTask recTaskInterface;
     private HashMap<String, Course> courseDB;
     private HashMap<String, RecoveryPlan> recPlanDB;
     private HashMap<String, RecoveryTask> recTaskDB;
@@ -147,6 +145,34 @@ public class Database {
         }
         newProgress = completeCount/totalTaskCount * 100;
         getRecoveryPlan(planID).setProgress(newProgress);
+    }
+
+    public String getRecoveryPlanComponent(String targetStudentID, String targetCourseID) {
+        String retakenComponent = "hi";
+        int attemptCount = 0;
+        ArrayList<Grades> courseAttempts = new ArrayList<>();
+        for (Grades grade : gradesDB.values()) {
+            if (grade.getStudentID().equals(targetStudentID) && grade.getCourseID().equals(targetCourseID)) {
+                courseAttempts.add(grade);
+                attemptCount ++;
+            }
+        }
+        if (attemptCount == 3) {
+            retakenComponent = "Module Retake";
+        } else {
+            for (Grades grade : courseAttempts) {
+                if (grade.getAttempt() == attemptCount) {
+                    if (grade.getWeightedAssignmentMark() < 40 && grade.getWeightedExamMark() < 40) {
+                        retakenComponent = "Examination and Assignment";
+                    } else if (grade.getWeightedExamMark() < 40) {
+                        retakenComponent = "Examination";
+                    } else if (grade.getWeightedAssignmentMark() < 40) {
+                        retakenComponent = "Assignment";
+                    }
+                }
+            }
+        }
+        return retakenComponent;
     }
     public ArrayList<String> getStudentCourse(String targetStudentID) {
         ArrayList<String> studentCourse = new ArrayList<>();
