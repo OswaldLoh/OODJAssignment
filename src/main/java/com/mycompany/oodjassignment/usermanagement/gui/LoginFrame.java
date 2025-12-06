@@ -6,6 +6,7 @@ package com.mycompany.oodjassignment.usermanagement.gui;
 
 import com.mycompany.oodjassignment.classes.User;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+import com.mycompany.oodjassignment.functions.*;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
@@ -228,6 +229,7 @@ private void showPasswordReset() {
                 "Password Reset Successful",
                 JOptionPane.INFORMATION_MESSAGE
             );
+            sendEmail.Notification("Temporary Pass", ("New Temporary Password: " + tempPassword ));
         } else {
             JOptionPane.showMessageDialog(
                 this,
