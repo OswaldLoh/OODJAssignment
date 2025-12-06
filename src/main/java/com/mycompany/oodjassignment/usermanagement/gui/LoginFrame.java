@@ -221,6 +221,7 @@ private void showPasswordReset() {
     if (email != null && !email.trim().isEmpty()) {
         String tempPassword = authService.recoverPassword(email.trim());
         if (tempPassword != null) {
+            SendEmail sendEmail = new SendEmail(email);
             JOptionPane.showMessageDialog(
                 this,
                 "Temporary password: " + tempPassword + "\n" +
