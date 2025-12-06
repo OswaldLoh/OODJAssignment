@@ -21,17 +21,35 @@ import javax.mail.internet.MimeMultipart;
 
 public class SendEmail {
 
-    private final String senderEmail = "markyisnice@gmail.com"; // the app password only can be generated when email is quite old
-    private final String senderPassword = "dbyv ofcy vzia hngt"; // this is the app password for gmail ( app pass dif with gmail pass )
+    private String senderEmail ; // the app password only can be generated when email is quite old
+    private String senderPassword; // this is the app password for gmail ( app pass dif with gmail pass )
     private String recipientEmail;
     private String fileLocation;
 
     // constructor
     public SendEmail(String recipientEmail) {
         this.recipientEmail = recipientEmail;
+        this.senderEmail = "markysinice@gmail.com";
+        this.senderPassword = "dbyv ofcy vzia hngt";
     }
 
     // getter and setter
+        public String getSenderEmail() {
+        return senderEmail;
+    }
+
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
+    }
+
+    public String getSenderPassword() {
+        return senderPassword;
+    }
+
+    public void setSenderPassword(String senderPassword) {
+        this.senderPassword = senderPassword;
+    }
+
     public String getRecipientEmail() {
         return recipientEmail;
     }
@@ -165,6 +183,11 @@ public class SendEmail {
             System.out.println("Error: \n" + e.getMessage());
         }
 
+    }
+
+    @Override
+    public String toString() {
+        return "SendEmail{" + "senderEmail=" + senderEmail + ", senderPassword=" + senderPassword + ", recipientEmail=" + recipientEmail + ", fileLocation=" + fileLocation + '}';
     }
 
 }

@@ -18,25 +18,15 @@ import com.mycompany.oodjassignment.classes.Student;
 
 public class ReportGenerator {
     
-    private String reportID;
     private String filePath;
     private final Database database = new Database();
 
     // constructor
-    public ReportGenerator(String reportID, String filePath) {
-        this.reportID = reportID;
+    public ReportGenerator(String filePath) {
         this.filePath = filePath;
     }
 
     // getter and setter
-    public String getReportID() {
-        return reportID;
-    }
-
-    public void setReportID(String reportID) {
-        this.reportID = reportID;
-    }
-
     public String getFilePath() {
         return filePath;
     }
@@ -365,6 +355,11 @@ public class ReportGenerator {
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ReportGenerator{" + "filePath=" + filePath + '}';
     }
 
 }
