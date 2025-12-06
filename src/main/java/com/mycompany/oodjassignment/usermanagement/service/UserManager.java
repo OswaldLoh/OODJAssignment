@@ -11,8 +11,8 @@ import java.util.List;
 
 public class UserManager {
     
-    private static final String USER_FILE = "data/users.csv";
-    private static final String DEFAULT_USER_RESOURCE = "/users.csv";
+    private static final String USER_FILE = "data/users.txt";
+    private static final String DEFAULT_USER_RESOURCE = "/users.txt";
     private List<User> users;
     
     public UserManager() {
