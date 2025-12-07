@@ -17,9 +17,11 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.mycompany.oodjassignment.classes.RecoveryPlan;
 import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.classes.Student;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.FileHandler;
 import com.mycompany.oodjassignment.functions.IDManager;
+import com.mycompany.oodjassignment.functions.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 public class AddRecoveryTask {
@@ -56,7 +58,7 @@ public class AddRecoveryTask {
         confirmButton.addActionListener(e -> {
             addTask(targetPlanID);
         });
-
+        
         backButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryPlanDashboard();
@@ -109,8 +111,25 @@ public class AddRecoveryTask {
         database.addRecoveryTask(newTask);
         database.updatePlanProgress(targetPlanID);
         FileHandler.writeCSV(newTask, database.getRecTaskDB());
+        
+        RecoveryPlan recPlan = database.getRecoveryPlan(targetPlanID);
+        Student student = database.getStudent(recPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
 
-
+        String emailSubject = "New Recovery Task Assigned";
+        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+                "A new recovery task has been assigned to you for your course recovery plan (Plan ID: " + targetPlanID + ").\n\n" +
+                "Task Description: " + newDescription + "\n" +
+                "Duration (days): " + newDuration + "\n\n" +
+                "Please make sure to complete the task within the specified duration.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+        
+        new Thread(() ->
+        sendEmail.Notification(
+                emailSubject,
+                emailContent
+        )).start();
 
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");
 
