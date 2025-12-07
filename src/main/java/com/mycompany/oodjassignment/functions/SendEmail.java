@@ -29,8 +29,8 @@ public class SendEmail {
     // constructor
     public SendEmail(String recipientEmail) {
         this.recipientEmail = recipientEmail;
-        this.senderEmail = "markysinice@gmail.com";
-        this.senderPassword = "dbyv ofcy vzia hngt";
+        this.senderEmail = "markyisnice@gmail.com";
+        this.senderPassword = "aysj ecmc qivs rkwz";
     }
 
     // getter and setter
