@@ -258,7 +258,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                 String filePath = "data/student_report/student_yearly_report_" + studentId + "_year" + year + ".pdf";
                 
                 com.mycompany.oodjassignment.functions.ReportGenerator reportGenerator = 
-                    new com.mycompany.oodjassignment.functions.ReportGenerator("REPORT_" + studentId, filePath);
+                    new com.mycompany.oodjassignment.functions.ReportGenerator(filePath);
                 
                 reportGenerator.generateYearlyReport(studentId, year);
                 
@@ -338,7 +338,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
 
                 filePath += ".pdf";
                 
-                ReportGenerator reportGenerator = new ReportGenerator("REPORT_" + studentId, filePath);
+                ReportGenerator reportGenerator = new ReportGenerator(filePath);
                 
                 reportGenerator.generateReport(studentId, selectedSemester);
                 

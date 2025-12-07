@@ -1,12 +1,26 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Insets;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.mycompany.oodjassignment.functions.*;
-import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.classes.RecoveryPlan;
+import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.FileHandler;
+import com.mycompany.oodjassignment.functions.IDManager;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class AddRecoveryTask {
     private final Runnable onExitCallback;
@@ -95,6 +109,9 @@ public class AddRecoveryTask {
         database.addRecoveryTask(newTask);
         database.updatePlanProgress(targetPlanID);
         FileHandler.writeCSV(newTask, database.getRecTaskDB());
+
+
+
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");
 
         closeCurrentMenu();
