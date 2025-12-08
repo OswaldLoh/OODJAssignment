@@ -42,9 +42,6 @@ public class AcademicOfficer extends User {
     }
 
 
-
-
-
     @Override
     public String getPermissions() {
         return "Full access to student records, course recovery plans, "
