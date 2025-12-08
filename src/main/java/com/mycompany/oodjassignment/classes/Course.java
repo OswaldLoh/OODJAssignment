@@ -4,7 +4,7 @@ import com.mycompany.oodjassignment.functions.*;
 public class Course implements CSVParser<Course>{
     private String courseID, courseName, semester, instructor;
     private int examWeight, assignmentWeight, credit;
-    private static final String filename = "course_assessment_information.csv";
+    private static final String filename = "course_assessment_information.txt";
 
     // constructors
     public Course() {};
