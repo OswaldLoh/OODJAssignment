@@ -20,11 +20,11 @@ public class ModifyTaskMenu {
     private JTextField txtNewDescription;
     private JRadioButton completeRadioButton;
     private JRadioButton incompleteRadioButton;
-    private JTextField txtNewDuration;
+    private JTextField txtNewWeek;
     private JLabel modifyTitle;
     private JLabel promptDescription;
     private JLabel promptCompletion;
-    private JLabel promptDuration;
+    private JLabel promptWeek;
     private JButton backButton;
     private JButton confirmButton;
 
@@ -42,17 +42,17 @@ public class ModifyTaskMenu {
             txtNewDescription.setText("");
 
             // hide
-            promptDuration.setVisible(false);
-            txtNewDuration.setVisible(false);
+            promptWeek.setVisible(false);
+            txtNewWeek.setVisible(false);
             promptCompletion.setVisible(false);
             completeRadioButton.setVisible(false);
             incompleteRadioButton.setVisible(false);
 
-        } else if (mode.equals("Duration")) {
+        } else if (mode.equals("Week")) {
             // show
-            promptDuration.setVisible(true);
-            txtNewDuration.setVisible(true);
-            txtNewDuration.setText("");
+            promptWeek.setVisible(true);
+            txtNewWeek.setVisible(true);
+            txtNewWeek.setText("");
 
             // hide
             promptDescription.setVisible(false);
@@ -77,8 +77,8 @@ public class ModifyTaskMenu {
             // hide
             promptDescription.setVisible(false);
             txtNewDescription.setVisible(false);
-            promptDuration.setVisible(false);
-            txtNewDuration.setVisible(false);
+            promptWeek.setVisible(false);
+            txtNewWeek.setVisible(false);
         } else if (mode == null) {
             return;
         }
@@ -98,8 +98,8 @@ public class ModifyTaskMenu {
                 case "Description":
                     modifyDescription();
                     break;
-                case "Duration":
-                    modifyDuration();
+                case "Week":
+                    modifyWeek();
                     break;
                 case "Completion Status":
                     modifyCompletion();
@@ -111,6 +111,7 @@ public class ModifyTaskMenu {
         });
 
         backButton.addActionListener(e -> {
+            openRecoveryTaskDashboard();
             closeCurrentMenu();
         });
     }
@@ -130,32 +131,32 @@ public class ModifyTaskMenu {
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
     }
 
-    private void modifyDuration() {
+    private void modifyWeek() {
         RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
-        String newDurationString = txtNewDuration.getText().trim();
-        int newDuration = 0;
+        String newWeekString = txtNewWeek.getText().trim();
+        int newWeek = 0;
         try {
-            if (newDurationString.isEmpty()) {
+            if (newWeekString.isEmpty()) {
                 JOptionPane.showMessageDialog(modifyTaskPanel,
-                        "Please enter a duration.",
+                        "Please enter a week.",
                         "Missing Input", JOptionPane.WARNING_MESSAGE);
                 return;
             }
-            newDuration = Integer.parseInt(newDurationString);
+            newWeek = Integer.parseInt(newWeekString);
 
-            if (newDuration <= 0) {
+            if (newWeek <= 0) {
                 JOptionPane.showMessageDialog(modifyTaskPanel,
-                        "Duration must be greater than 0.",
+                        "Week must be greater than 0.",
                         "Invalid Input", JOptionPane.WARNING_MESSAGE);
                 return;
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(modifyTaskPanel,
-                    "Duration must be a valid whole number.",
+                    "Week must be a valid whole number.",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        targetTask.setDuration(newDuration);
+        targetTask.setWeek(newWeek);
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
@@ -176,7 +177,7 @@ public class ModifyTaskMenu {
         RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
         recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryTaskDashboardFrame.setSize(800, 400);
+        recoveryTaskDashboardFrame.setSize(900, 400);
         recoveryTaskDashboardFrame.setLocationRelativeTo(null);
         recoveryTaskDashboardFrame.setVisible(true);
     }
@@ -227,11 +228,11 @@ public class ModifyTaskMenu {
         promptCompletion = new JLabel();
         promptCompletion.setText("Completion Status:");
         modifyTaskPanel.add(promptCompletion, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        txtNewDuration = new JTextField();
-        modifyTaskPanel.add(txtNewDuration, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        promptDuration = new JLabel();
-        promptDuration.setText("Enter new Duration (days):");
-        modifyTaskPanel.add(promptDuration, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        txtNewWeek = new JTextField();
+        modifyTaskPanel.add(txtNewWeek, new GridConstraints(3, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        promptWeek = new JLabel();
+        promptWeek.setText("Enter new Week:");
+        modifyTaskPanel.add(promptWeek, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         backButton = new JButton();
         backButton.setText("Back");
         modifyTaskPanel.add(backButton, new GridConstraints(6, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

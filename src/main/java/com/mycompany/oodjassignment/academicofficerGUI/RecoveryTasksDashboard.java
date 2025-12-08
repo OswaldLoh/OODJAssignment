@@ -80,7 +80,7 @@ public class RecoveryTasksDashboard {
                         task.getTaskID(),
                         task.getPlanID(),
                         task.getDescription(),
-                        task.getDuration(),
+                        task.getWeek(),
                         completionStatus
                 };
                 tableModel.addRow(row);
@@ -98,7 +98,7 @@ public class RecoveryTasksDashboard {
     }
 
     private void tableSetup() {
-        String[] columnNames = {"Task ID", "Plan ID", "Description", "Duration (days)", "Progress"};
+        String[] columnNames = {"Task ID", "Plan ID", "Description", "Week", "Progress"};
         tableModel = new DefaultTableModel(columnNames, 0) {
 
             @Override
@@ -160,6 +160,7 @@ public class RecoveryTasksDashboard {
 
     private void loadRecoveryTasks() {
         tableModel.setRowCount(0);
+
         for (RecoveryTask task : database.getRecTaskDB().values()) {
             String completionStatus;
             if (task.getCompletion()) {
@@ -171,12 +172,17 @@ public class RecoveryTasksDashboard {
                     task.getTaskID(),
                     task.getPlanID(),
                     task.getDescription(),
-                    task.getDuration(),
+                    task.getWeek(),
                     completionStatus
             };
             tableModel.addRow(row);
         }
         taskTable.setModel(tableModel);
+        taskTable.getColumnModel().getColumn(0).setPreferredWidth(70);
+        taskTable.getColumnModel().getColumn(1).setPreferredWidth(70);
+        taskTable.getColumnModel().getColumn(2).setPreferredWidth(400);
+        taskTable.getColumnModel().getColumn(3).setPreferredWidth(50);
+        taskTable.getColumnModel().getColumn(4).setPreferredWidth(100);
         TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
         taskTable.setRowSorter(sorter);
         sorter.setComparator(0, (a, b) -> {
@@ -189,11 +195,16 @@ public class RecoveryTasksDashboard {
             int n2 = Integer.parseInt(b.toString().substring(1));
             return Integer.compare(n1, n2);
         });
+        sorter.setComparator(3, (a, b) -> {
+            int n1 = Integer.parseInt(a.toString());
+            int n2 = Integer.parseInt(b.toString());
+            return Integer.compare(n1, n2);
+        });
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
     private String modifySelection() {
-        String[] options = {"Description", "Duration", "Completion Status"};
+        String[] options = {"Description", "Week", "Completion Status"};
         String selectedOption = (String) JOptionPane.showInputDialog(
                 RecoveryTasksPanel,                 // Parent
                 "Choose data to modify.",        // Message

@@ -13,9 +13,12 @@ public class IDManager {
 
     // generate ID mechanism
     public int generateNewID() {
-        return highestInt+1;
+        highestInt++;
+        return highestInt;
     }
+
     public int getHighestTaskID() {
+
         for (String key : sourceHashMap.keySet()) {
             int num = Integer.parseInt(key.substring(1));
             if (num > highestInt) {

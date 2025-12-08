@@ -32,10 +32,10 @@ public class AddRecoveryTask {
     private JPanel addRecoveryTaskPanel;
     private JTextArea fixedInfoArea;
     private JTextField txtDescription;
-    private JTextField txtDuration;
+    private JTextField txtWeek;
     private JButton confirmButton;
     private JLabel promptDescription;
-    private JLabel promptDuration;
+    private JLabel promptWeek;
     private JLabel promptAddRecoveryTask;
     private JButton backButton;
 
@@ -58,7 +58,7 @@ public class AddRecoveryTask {
         confirmButton.addActionListener(e -> {
             addTask(targetPlanID);
         });
-        
+
         backButton.addActionListener(e -> {
             closeCurrentMenu();
             openRecoveryPlanDashboard();
@@ -67,10 +67,10 @@ public class AddRecoveryTask {
 
 
     public void addTask(String targetPlanID) {
-        int newDuration = 0;
+        int newWeek = 0;
 
         String newDescription = txtDescription.getText().trim();
-        String newDurationString = txtDuration.getText().trim();
+        String newWeekString = txtWeek.getText().trim();
 
         if (newDescription.isEmpty()) {
             JOptionPane.showMessageDialog(addRecoveryTaskPanel,
@@ -80,25 +80,25 @@ public class AddRecoveryTask {
         }
 
         try {
-            if (newDurationString.isEmpty()) {
+            if (newWeekString.isEmpty()) {
                 JOptionPane.showMessageDialog(addRecoveryTaskPanel,
-                        "Please enter a duration (days).",
+                        "Please enter week: ",
                         "Error.", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
-            newDuration = Integer.parseInt(newDurationString);
+            newWeek = Integer.parseInt(newWeekString);
 
-            if (newDuration <= 0) {
+            if (newWeek <= 0) {
                 JOptionPane.showMessageDialog(addRecoveryTaskPanel,
-                        "Duration must be greater than 0.",
+                        "Week must be greater than 0.",
                         "Error.", JOptionPane.WARNING_MESSAGE);
                 return;
             }
 
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(addRecoveryTaskPanel,
-                    "Please enter a valid whole number for duration.",
+                    "Please enter a valid whole number for week.",
                     "Error.", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -107,11 +107,11 @@ public class AddRecoveryTask {
         recTasKIDManager.getHighestTaskID();
         String nextTaskID = "T" + recTasKIDManager.generateNewID();
 
-        RecoveryTask newTask = new RecoveryTask(nextTaskID, targetPlanID, newDescription, newDuration, false);
+        RecoveryTask newTask = new RecoveryTask(nextTaskID, targetPlanID, newDescription, newWeek, false);
         database.addRecoveryTask(newTask);
         database.updatePlanProgress(targetPlanID);
         FileHandler.writeCSV(newTask, database.getRecTaskDB());
-        
+
         RecoveryPlan recPlan = database.getRecoveryPlan(targetPlanID);
         Student student = database.getStudent(recPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
@@ -120,16 +120,16 @@ public class AddRecoveryTask {
         String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
                 "A new recovery task has been assigned to you for your course recovery plan (Plan ID: " + targetPlanID + ").\n\n" +
                 "Task Description: " + newDescription + "\n" +
-                "Duration (days): " + newDuration + "\n\n" +
+                "Week: " + newWeek + "\n\n" +
                 "Please make sure to complete the task within the specified duration.\n\n" +
                 "Best regards,\n" +
                 "Academic Officer Team";
-        
+
         new Thread(() ->
-        sendEmail.Notification(
-                emailSubject,
-                emailContent
-        )).start();
+                sendEmail.Notification(
+                        emailSubject,
+                        emailContent
+                )).start();
 
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");
 
@@ -190,11 +190,11 @@ public class AddRecoveryTask {
         addRecoveryTaskPanel.add(promptDescription, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtDescription = new JTextField();
         addRecoveryTaskPanel.add(txtDescription, new GridConstraints(2, 1, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        txtDuration = new JTextField();
-        addRecoveryTaskPanel.add(txtDuration, new GridConstraints(3, 1, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        promptDuration = new JLabel();
-        promptDuration.setText("Enter Duration (days):");
-        addRecoveryTaskPanel.add(promptDuration, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        txtWeek = new JTextField();
+        addRecoveryTaskPanel.add(txtWeek, new GridConstraints(3, 1, 1, 4, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        promptWeek = new JLabel();
+        promptWeek.setText("Enter week:");
+        addRecoveryTaskPanel.add(promptWeek, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         fixedInfoArea = new JTextArea();
         addRecoveryTaskPanel.add(fixedInfoArea, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         promptAddRecoveryTask = new JLabel();
@@ -214,4 +214,5 @@ public class AddRecoveryTask {
     public JComponent $$$getRootComponent$$$() {
         return addRecoveryTaskPanel;
     }
+
 }

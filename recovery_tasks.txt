@@ -1,13 +1,13 @@
-taskID,planID,description,duration,completion
-T5,P5,Exam,30,true
-T6,P5,Testing purposes,30,true
-T10,P7,Task 2,30,false
-T7,P6,Testing 2,600,true
-T8,P7,Duplicate Test,30,true
-T12,P10,hello,30,false
-T11,P8,Hello,142,false
-T9,P7,Test 1,30,false
-T14,P2,Hi,40,false
-T13,P1,Hi,30,false
-T15,P3,hi nigga,223,false
-T3,P3,Module,50,false
+taskID,planID,description,week,completion
+T4,P1,Complete the assignment and take the recovery examination.,13,false
+T5,P2,Create a balanced weekly schedule for revision and assignment progress.,1,false
+T6,P2,Strengthen weak areas and refine assignment sections based on feedback.,5,false
+T10,P3,Strengthen weak areas and refine assignment sections based on feedback.,5,false
+T7,P2,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false
+T8,P2,Complete the assignment and take the recovery examination.,13,false
+T12,P3,Complete the assignment and take the recovery examination.,13,false
+T9,P3,Create a balanced weekly schedule for revision and assignment progress.,1,false
+T11,P3,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false
+T1,P1,Create a balanced weekly schedule for revision and assignment progress.,1,false
+T2,P1,Strengthen weak areas and refine assignment sections based on feedback.,5,false
+T3,P1,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false

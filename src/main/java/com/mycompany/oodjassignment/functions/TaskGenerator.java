@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskGenerator {
-
     public static List<String> getTaskDescriptions(String planType) {
         List<String> descriptions = new ArrayList<>();
 
-        switch (planType) { // Step 2: Check which type
+        switch (planType) {
             case "Examination":
                 descriptions.add("Review all core and weak topics through notes, slides, and tutorials.");
                 descriptions.add("Practice past-year papers and timed mock questions.");

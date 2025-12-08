@@ -9,7 +9,9 @@ import javax.swing.table.DefaultTableModel;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 
 public class CourseSelectionMenu {
@@ -75,8 +77,24 @@ public class CourseSelectionMenu {
                 "Recovery Plan added!",
                 "Success!", JOptionPane.INFORMATION_MESSAGE);
 
+        initializeTasks(component, nextPlanID);
+        openRecoveryPlanDashboard();
         closeCurrentMenu();
-        openAddRecoveryTask(nextPlanID);
+    }
+
+    private void initializeTasks(String component, String targetPlanID) {
+        List<String> taskDescriptions = TaskGenerator.getTaskDescriptions(component);
+        IDManager idManager = new IDManager(database.getRecTaskDB());
+        int newWeek = 1;
+        idManager.getHighestTaskID();
+        for (String description : taskDescriptions) {
+            String newTaskID = "T" + idManager.generateNewID();
+            RecoveryTask newTask = new RecoveryTask(newTaskID, targetPlanID, description, newWeek, false);
+            newWeek = newWeek + 4;
+            database.addRecoveryTask(newTask);
+            FileHandler.writeCSV(newTask, database.getRecTaskDB());
+        }
+
     }
 
     private void tableSetup() {
@@ -109,14 +127,14 @@ public class CourseSelectionMenu {
         gradeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
-    private void openAddRecoveryTask(String targetPlanID) {
-        JFrame addRecoveryTaskFrame = new JFrame("Academic Officer System");
-        AddRecoveryTask addRecoveryTask = new AddRecoveryTask(targetPlanID, authService, onExitCallback, database, true);
-        addRecoveryTaskFrame.setContentPane(addRecoveryTask.getAddRecoveryTaskPanel());
-        addRecoveryTaskFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addRecoveryTaskFrame.setSize(520, 230);
-        addRecoveryTaskFrame.setLocationRelativeTo(null);
-        addRecoveryTaskFrame.setVisible(true);
+    private void openRecoveryPlanDashboard() {
+        JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
+        recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
+        recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        recoveryPlanDashboardFrame.setSize(800, 400);
+        recoveryPlanDashboardFrame.setLocationRelativeTo(null);
+        recoveryPlanDashboardFrame.setVisible(true);
     }
 
     private void openAddPlanDashboard() {

@@ -3,18 +3,18 @@ import com.mycompany.oodjassignment.functions.CSVParser;
 
 public class RecoveryTask implements CSVParser<RecoveryTask> {
     private String taskID, description, planID;
-    private int duration;
+    private int week;
     private boolean completion;
     private static final String filename = "recovery_tasks.txt";
 
     public RecoveryTask() {
     }; // No arg constructor used to retrieve fromCSV method for object parsing
 
-    public RecoveryTask(String taskID, String planID, String description, int duration, boolean completion) { // used for parsing possibly
+    public RecoveryTask(String taskID, String planID, String description, int week, boolean completion) { // used for parsing possibly
         this.taskID = taskID;
         this.planID = planID;
         this.description = description;
-        this.duration = duration;
+        this.week = week;
         this.completion = completion;
     }; // Parameterized constructor used to construct objects from the contents of CSV file
 
@@ -24,7 +24,7 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     }
     public String getPlanID() { return planID; }
     public String getDescription() { return description; }
-    public int getDuration() { return duration; }
+    public int getWeek() { return week; }
     public boolean getCompletion() {
         return completion;
     }
@@ -35,8 +35,8 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     public void setCompletion(boolean completion) {
         this.completion = completion;
     }
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setWeek(int week) {
+        this.week = week;
     }
     public void setDescription(String description) {
         this.description = description;
@@ -51,11 +51,11 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     }
     @Override
     public String toCSV() {
-        return (taskID+","+planID+","+description+","+duration+","+completion);
+        return (taskID+","+planID+","+description+","+week+","+completion);
     }
     @Override
     public String getFileHeader() {
-        return "taskID,planID,description,duration,completion";
+        return "taskID,planID,description,week,completion";
     }
     @Override
     public String getFilename() {

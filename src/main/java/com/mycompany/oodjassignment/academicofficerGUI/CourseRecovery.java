@@ -2,7 +2,6 @@ package com.mycompany.oodjassignment.academicofficerGUI;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.mycompany.oodjassignment.classes.AcademicOfficer;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
@@ -55,7 +54,7 @@ public class CourseRecovery {
         RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
         recoveryTaskDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryTaskDashboardFrame.setSize(800, 400);
+        recoveryTaskDashboardFrame.setSize(900, 400);
         recoveryTaskDashboardFrame.setLocationRelativeTo(null);
         recoveryTaskDashboardFrame.setVisible(true);
     }

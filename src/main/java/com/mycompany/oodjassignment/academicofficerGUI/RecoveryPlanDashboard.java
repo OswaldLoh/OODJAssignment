@@ -116,42 +116,8 @@ public class RecoveryPlanDashboard {
         }
         int modelRow = planListTable.convertRowIndexToModel(row);
         String targetPlanID = (String) tableModel.getValueAt(modelRow, 0);
-        RecoveryPlan targetPlan = database.getRecoveryPlan(targetPlanID);
-        Student targetStudent = database.getStudent(targetPlan.getStudentID());
-        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID);
-
-        StringBuilder progressMonitorMessage = new StringBuilder();
-        progressMonitorMessage.append("                   Recovery Plan Progress\n");
-        progressMonitorMessage.append("========================================\n");
-
-        progressMonitorMessage.append(String.format("Student ID  :    %s\n", targetStudent.getStudentID()));
-        progressMonitorMessage.append(String.format("Name          :    %s %s\n", targetStudent.getFirstName(), targetStudent.getLastName()));
-        progressMonitorMessage.append(String.format("Plan ID        :    %s\n", targetPlanID));
-        progressMonitorMessage.append(String.format("Progress    :    %.1f%%\n", targetPlan.getProgress()));
-        progressMonitorMessage.append("\n"); // Empty line for separation
-
-        progressMonitorMessage.append(String.format("%-5s %-15s %s\n", "No.", "Task ID", "Status"));
-        progressMonitorMessage.append("----------------------------------------\n");
-
-        int taskCount = 1;
-        String completionStatus;
-
-        for (RecoveryTask task : planTasks) {
-            if (task.getCompletion()) {
-                completionStatus = "Completed";
-            } else {
-                completionStatus = "Incomplete";
-            }
-
-            String line = String.format("%-10s %-15s %s\n",
-                    taskCount + ".",
-                    task.getTaskID(),
-                    completionStatus);
-
-            progressMonitorMessage.append(line);
-            taskCount++;
-        }
-        JOptionPane.showMessageDialog(recoveryPlanDashboardPanel, progressMonitorMessage);
+        openMonitorProgress(targetPlanID);
+        closeCurrentMenu();
     }
 
     private void addTask() {
@@ -268,6 +234,16 @@ public class RecoveryPlanDashboard {
         mainMenuFrame.setSize(550, 400);
         mainMenuFrame.setLocationRelativeTo(null); // Center it
         mainMenuFrame.setVisible(true);
+    }
+
+    private void openMonitorProgress(String targetPlanID) {
+        JFrame monitorProgressFrame = new JFrame("Academic Officer System");
+        MonitorProgress monitorProgress = new MonitorProgress(authService, onExitCallback, database, targetPlanID);
+        monitorProgressFrame.setContentPane((monitorProgress.getMonitorProgressPanel()));
+        monitorProgressFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        monitorProgressFrame.setSize(900, 400);
+        monitorProgressFrame.setLocationRelativeTo(null);
+        monitorProgressFrame.setVisible(true);
     }
 
     private void openStudentSelectionDashboard() {
