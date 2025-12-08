@@ -12,7 +12,7 @@ public class Test {
     }
     
     public static void testReportGenerator(){
-        ReportGenerator reportGen = new ReportGenerator("R001", "academic_report.pdf");
+        ReportGenerator reportGen = new ReportGenerator("academic_report.pdf");
         reportGen.generateReport("S001", 1);
     }
 

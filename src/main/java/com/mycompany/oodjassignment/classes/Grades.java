@@ -4,7 +4,7 @@ import com.mycompany.oodjassignment.functions.CSVParser;
 public class Grades implements CSVParser<Grades> {
     private String gradeID, studentID, courseID, component;
     private double examMark, assignmentMark;
-    private static final String filename = "student_grades.csv";
+    private static final String filename = "student_grades.txt";
     private int semester, attempt;
     private Course course;
 

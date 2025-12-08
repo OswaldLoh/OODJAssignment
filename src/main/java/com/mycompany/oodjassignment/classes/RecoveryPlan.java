@@ -6,7 +6,7 @@ import java.util.*;
 public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     private String planID, studentID, courseID, createdBy, component;
     private double progress;
-    private static final String filename = "recovery_plans.csv";
+    private static final String filename = "recovery_plans.txt";
 
     // constructors
     public RecoveryPlan() {}

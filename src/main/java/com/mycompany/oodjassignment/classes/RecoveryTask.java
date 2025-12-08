@@ -5,7 +5,7 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     private String taskID, description, planID;
     private int duration;
     private boolean completion;
-    private static final String filename = "recovery_tasks.csv";
+    private static final String filename = "recovery_tasks.txt";
 
     public RecoveryTask() {
     }; // No arg constructor used to retrieve fromCSV method for object parsing
