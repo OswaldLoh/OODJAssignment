@@ -64,19 +64,66 @@ public class Main {
         System.out.println("Choose what to do:");
         System.out.println("1. Eligibility Check");
         System.out.println("2. Course Recovery Plan");
-        System.out.println("3. Back");
+        System.out.println("3. Student Analytics Dashboard");
+        System.out.println("4. University Management Dashboard");
+        System.out.println("5. Back");
         do {
-            System.out.println(">>>   ");
+            System.out.print(">>>   ");
             selection = input.nextInt();
             switch(selection) {
                 case 1:
                     System.out.println("Entered Eligibility Check.");
                     break;
                 case 2:
+                    System.out.println("Entered Course Recovery Plan.");
                     break;
                 case 3:
+                    System.out.println("Launching Student Analytics Dashboard...");
+                    launchAnalyticsDashboard();
                     break;
+                case 4:
+                    System.out.println("Launching University Management Dashboard...");
+                    launchDashboard();
+                    break;
+                case 5:
+                    System.out.println("Returning to previous menu.");
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+                    System.out.println();
             }
-        } while (selection != 3);
+        } while (selection != 5);
+    }
+    
+    private static void launchAnalyticsDashboard() {
+        // Run the Swing application in a separate thread
+        new Thread(() -> {
+            try {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    com.mycompany.oodjassignment.reportgeneratorGUI.StudentPerformancePanel dashboard = 
+                        new com.mycompany.oodjassignment.reportgeneratorGUI.StudentPerformancePanel();
+                    dashboard.setVisible(true);
+                });
+            } catch (Exception e) {
+                System.out.println("Error launching analytics dashboard: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }).start();
+    }
+    
+    private static void launchDashboard() {
+        // Run the Swing application in a separate thread
+        new Thread(() -> {
+            try {
+                javax.swing.SwingUtilities.invokeLater(() -> {
+                    com.mycompany.oodjassignment.reportgeneratorGUI.DashboardPanel dashboard = 
+                        new com.mycompany.oodjassignment.reportgeneratorGUI.DashboardPanel();
+                    dashboard.setVisible(true);
+                });
+            } catch (Exception e) {
+                System.out.println("Error launching dashboard: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }).start();
     }
 }

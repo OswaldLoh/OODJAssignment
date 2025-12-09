@@ -50,7 +50,6 @@ public class Grades implements CSVParser<Grades> {
     public double calculateGPA() {
         double totalMark, GPA;
         totalMark = getWeightedExamMark() + (getWeightedAssignmentMark());
-        System.out.println("Total mark: " + totalMark);
 
         if (totalMark >= 80) {
             return 4.00;
@@ -102,12 +101,10 @@ public class Grades implements CSVParser<Grades> {
 
     }
     public double getWeightedExamMark() {
-        System.out.println(studentID + " " + courseID + " Exam Mark: " + examMark * course.getExamWeight() / 100);
         return (examMark * course.getExamWeight() / 100);
     }
 
     public double getWeightedAssignmentMark() {
-        System.out.println(studentID + " " + courseID + " Assignment Mark: " + assignmentMark* course.getAssignmentWeight() / 100);
         return (assignmentMark* course.getAssignmentWeight() / 100);
     }
 

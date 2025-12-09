@@ -164,7 +164,7 @@ public abstract class User implements Serializable {
     }
 
     public void showMenu() {
-        System.out.println("General Menu");
+        
     }
 
     public String toFileString() {
