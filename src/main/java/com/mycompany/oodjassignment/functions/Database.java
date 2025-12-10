@@ -383,12 +383,17 @@ public class Database {
             }
             
             // Calculate the true department CGPA
-            double deptCGPA = (totalCreditHours > 0) ? totalQualityPoints / totalCreditHours : 0.0;
-            
-            if (totalCreditHours > 0) { 
-                // Only add departments with valid data
+            double deptCGPA;
+            if(totalCreditHours > 0){
+                deptCGPA = totalQualityPoints / totalCreditHours;
                 departmentData.put(major, deptCGPA);
+
             }
+
+            else{
+                deptCGPA = 0.0;
+            }
+
         }
         
         return departmentData;
@@ -424,7 +429,9 @@ public class Database {
             double avgGPA;
             if (grades.size() > 0) {
                 avgGPA = totalGPA / grades.size();
-            } else {
+            } 
+            
+            else {
                 avgGPA = 0.0;
             }
             

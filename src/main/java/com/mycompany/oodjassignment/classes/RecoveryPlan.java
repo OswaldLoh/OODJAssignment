@@ -55,6 +55,11 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
         return filename;
     }
 
+    @Override
+    public String toString() {
+        return String.format("RecoveryPlan[ID=%s, StudentID=%s, CourseID=%s, Component=%s, CreatedBy=%s, Progress=%.2f%%]", 
+                planID, studentID, courseID, component, createdBy, progress);
+    }
 }
 
 

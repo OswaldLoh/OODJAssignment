@@ -58,4 +58,10 @@ public class Course implements CSVParser<Course>{
     public String getFilename() {
         return filename;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("Course[ID=%s, Name=%s, Credit=%d, Semester=%s, Instructor=%s, ExamWeight=%d, AssignmentWeight=%d]", 
+                courseID, courseName, credit, semester, instructor, examWeight, assignmentWeight);
+    }
 }

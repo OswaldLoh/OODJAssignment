@@ -71,4 +71,10 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     public String getFilename() {
         return filename;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("RecoveryTask[ID=%s, PlanID=%s, Description=%s, Week=%d, Completed=%s]", 
+                taskID, planID, description, week, completion ? "Yes" : "No");
+    }
 }
