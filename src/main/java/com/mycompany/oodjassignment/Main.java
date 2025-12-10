@@ -1,8 +1,7 @@
 package com.mycompany.oodjassignment;
-import com.mycompany.oodjassignment.classes.*;
-import com.mycompany.oodjassignment.functions.*;
-
 import java.util.Scanner;
+
+import com.mycompany.oodjassignment.functions.FileHandler;
 
 public class Main {
     public static void main(String[] args) {
@@ -78,14 +77,6 @@ public class Main {
                     System.out.println("Entered Course Recovery Plan.");
                     break;
                 case 3:
-                    System.out.println("Launching Student Analytics Dashboard...");
-                    launchAnalyticsDashboard();
-                    break;
-                case 4:
-                    System.out.println("Launching University Management Dashboard...");
-                    launchDashboard();
-                    break;
-                case 5:
                     System.out.println("Returning to previous menu.");
                     break;
                 default:
@@ -95,35 +86,4 @@ public class Main {
         } while (selection != 5);
     }
     
-    private static void launchAnalyticsDashboard() {
-        // Run the Swing application in a separate thread
-        new Thread(() -> {
-            try {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    com.mycompany.oodjassignment.reportgeneratorGUI.StudentPerformancePanel dashboard = 
-                        new com.mycompany.oodjassignment.reportgeneratorGUI.StudentPerformancePanel();
-                    dashboard.setVisible(true);
-                });
-            } catch (Exception e) {
-                System.out.println("Error launching analytics dashboard: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }).start();
-    }
-    
-    private static void launchDashboard() {
-        // Run the Swing application in a separate thread
-        new Thread(() -> {
-            try {
-                javax.swing.SwingUtilities.invokeLater(() -> {
-                    com.mycompany.oodjassignment.reportgeneratorGUI.DashboardPanel dashboard = 
-                        new com.mycompany.oodjassignment.reportgeneratorGUI.DashboardPanel();
-                    dashboard.setVisible(true);
-                });
-            } catch (Exception e) {
-                System.out.println("Error launching dashboard: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }).start();
-    }
 }
