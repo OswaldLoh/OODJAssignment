@@ -5,6 +5,7 @@
 package com.mycompany.oodjassignment.reportgeneratorGUI;
 
 import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.reportgeneratorGUI.ReportGeneratorPanel;
 
 /**
  *
@@ -16,6 +17,7 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
     private final Database database = new Database();
     private String currentChartType = "GPA Distribution";
     private ChartPanel chartPanel;
+    private ReportGeneratorPanel reportGeneratorPanel; // Reference to the calling panel
 
     /**
      * Creates new form StudentPerformancePanel
@@ -25,6 +27,10 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
         initializeCustomComponents(); // Add custom components programmatically
         setLocationRelativeTo(null);
         loadChart(); // Load initial chart
+    }
+    
+    public void setReportGeneratorPanel(ReportGeneratorPanel panel) {
+        this.reportGeneratorPanel = panel;
     }
 
     /**
@@ -247,6 +253,11 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // Return to the Report Generator panel if available, otherwise just dispose
+        if (reportGeneratorPanel != null) {
+            reportGeneratorPanel.setVisible(true);
+            reportGeneratorPanel.toFront(); // Bring to front to ensure it's visible
+        }
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
