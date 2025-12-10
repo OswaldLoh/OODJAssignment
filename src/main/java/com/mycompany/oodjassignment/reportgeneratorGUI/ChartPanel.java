@@ -90,7 +90,7 @@ public class ChartPanel extends JPanel {
         }
         
         int[] values = {gradeA, gradeB, gradeC, gradeD, gradeF};
-        String[] labels = {"A & A-", "B+, B, B-", "C+, C", "D", "F"};
+        String[] labels = {"A", "B+, B", "C+, C", "D", "F"};
         String title = "Grade Distribution";
         
         drawBarChart(g2d, values, labels, title);
@@ -430,7 +430,7 @@ public class ChartPanel extends JPanel {
             
             // Special handling for semester performance chart to keep labels horizontal
             if (chartType.equals("Semester Performance") || chartType.equals("GPA Distribution") ||
-                (labels.length == 5 && labels[0].equals("A & A-") && labels[1].equals("B+, B, B-"))) {
+                (labels.length == 5 && labels[0].equals("A") && labels[1].equals("B+, B"))) {
                 // For Semester Performance and GPA Distribution, always display labels horizontally
                 g2d.drawString(label, labelX, labelY);
             } 
@@ -500,7 +500,7 @@ public class ChartPanel extends JPanel {
     private void drawGPADistributionLegend(Graphics2D g2d, int x, int y) {
         g2d.setFont(new Font("Arial", Font.PLAIN, 12));
         
-        String[] grades = {"A & A-", "B+, B, B-", "C+, C", "D", "F"};
+        String[] grades = {"A", "B+, B", "C+, C", "D", "F"};
         Color[] colors = {
             new Color(77, 175, 74),   // Green
             new Color(152, 78, 163),  // Purple

@@ -3,14 +3,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.oodjassignment.reportgeneratorGUI;
-import java.util.*;
+import java.awt.Desktop;
+import java.io.FileReader;
+import java.util.Set;
+
+import javax.swing.JOptionPane;
+
+import com.mycompany.oodjassignment.classes.Student;
 import com.mycompany.oodjassignment.functions.Database;
 import com.mycompany.oodjassignment.functions.ReportGenerator;
 import com.mycompany.oodjassignment.functions.SendEmail;
-import com.mycompany.oodjassignment.classes.Student;
-import javax.swing.*;
-import com.mycompany.oodjassignment.usermanagement.gui.*;
-import com.mycompany.oodjassignment.usermanagement.service.*;
+import com.mycompany.oodjassignment.usermanagement.gui.DashboardFrame;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 /**
  *
@@ -118,7 +122,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
 
         jComboBox2.setBackground(new java.awt.Color(255, 255, 255));
         jComboBox2.setForeground(new java.awt.Color(0, 0, 0));
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semester 1", "Semester 2", "Semester 3", "Semester 4 ", "Semester 5", "Semester 6", " " }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Semester 1", "Semester 2", "Semester 3", "Semester 4 ", "Semester 5", "Semester 6", "Year 1", "Year 2", "Year 3" }));
         jComboBox2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jComboBox2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -281,12 +285,18 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                         String subject = "Your Academic Report for Year " + year;
                         String message = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
                                 "Please find attached your academic report for Year " + year + ".\n" +
-                                "This report contains your academic performance across Semesters " + 
-                                ((year - 1) * 2 + 1) + " and " + ((year - 1) * 2 + 2) + ".\n\n" +
                                 "Best regards,\nAcademic Office";
+
+                        // this is required because the thread will show error is not final or not local
+                        new Thread() {
+                            public void run() {
+                                emailSender.Pdf(subject, message, filePath);
+                            }
+                        }.start();
                         
-                        emailSender.Pdf(subject, message, filePath);
                         
+                        Desktop.getDesktop().open(new java.io.File(filePath));
+
                         JOptionPane.showMessageDialog(this, 
                             "Yearly report generated successfully at: " + filePath + 
                             "\n\nReport has been automatically sent to the student's email: " + studentEmail, 
@@ -337,14 +347,8 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
             // Generate the report with the selected semester
             try {
                 // Create a report generator instance and generate the report
-                String filePath = "data/student_report/student_report_" + studentId;
+                String filePath = "data/student_report/student_report_" + studentId + "_sem" + selectedSemester + ".pdf";
 
-                if (selectedSemester != -1) {
-                    filePath += "_sem" + selectedSemester;
-                }
-
-                filePath += ".pdf";
-                
                 ReportGenerator reportGenerator = new ReportGenerator(filePath);
                 
                 reportGenerator.generateReport(studentId, selectedSemester);
@@ -354,21 +358,25 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
                     // Get student information to get the email address
                     Student student = database.getStudent(studentId);
                     if (student != null) {
-                        String studentEmail = student.getEmail();
                         
                         // Create a SendEmail instance and send the report as attachment
-                        SendEmail emailSender = new SendEmail(studentEmail);
+                        SendEmail sendEmail = new SendEmail(student.getEmail());
                         String subject = "Your Academic Report for Semester " + selectedSemester;
                         String message = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
                                 "Please find attached your academic report for Semester " + selectedSemester + ".\n" +
                                 "This report contains your academic performance for this semester.\n\n" +
                                 "Best regards,\nAcademic Office";
                         
-                        emailSender.Pdf(subject, message, filePath);
+                        // creating a new thread to send email so that the UI will not freeze
+                        new Thread(() -> 
+                                sendEmail.Pdf(subject, message, filePath)
+                        ).start();                      
+
+                        Desktop.getDesktop().open(new java.io.File(filePath));
                         
                         JOptionPane.showMessageDialog(this, 
                             "Report generated successfully at: " + filePath + 
-                            "\n\nReport has been automatically sent to the student's email: " + studentEmail, 
+                            "\n\nReport has been automatically sent to the student's email: " + student.getEmail(), 
                             "Success", 
                             javax.swing.JOptionPane.INFORMATION_MESSAGE);
                     } 

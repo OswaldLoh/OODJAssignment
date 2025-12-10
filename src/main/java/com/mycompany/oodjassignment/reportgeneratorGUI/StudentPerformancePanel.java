@@ -5,7 +5,6 @@
 package com.mycompany.oodjassignment.reportgeneratorGUI;
 
 import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.reportgeneratorGUI.ReportGeneratorPanel;
 
 /**
  *
@@ -38,7 +37,7 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
      */
     private void initializeCustomComponents() {
         // Create and add the SwingChartPanel programmatically
-        chartPanel = new com.mycompany.oodjassignment.reportgeneratorGUI.ChartPanel(currentChartType);
+        chartPanel = new ChartPanel(currentChartType);
         chartPanel.setBackground(new java.awt.Color(255, 255, 255));
         chartPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         
