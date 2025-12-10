@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Student implements CSVParser<Student> {
     private String studentID, firstName, lastName, major, email, year;
-    private static final String filename = "student_information.txt";
+    private static final String filename = "data/student_information.txt";
     ArrayList<String> enrolledCourses;
 
     // constructors

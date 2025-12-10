@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class EnrolmentAudit {
 
-    private static final String LOG_FILE = "enrolment_log.txt";
+    private static final String LOG_FILE = "data/enrolment_log.txt";
     private static final DateTimeFormatter FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
