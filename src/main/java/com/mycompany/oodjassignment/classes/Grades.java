@@ -126,4 +126,10 @@ public class Grades implements CSVParser<Grades> {
     public String getFilename() {
         return filename;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("Grades[ID=%s, StudentID=%s, CourseID=%s, Component=%s, ExamMark=%.2f, AssignmentMark=%.2f, Semester=%d, Attempt=%d]", 
+                gradeID, studentID, courseID, component, examMark, assignmentMark, semester, attempt);
+    }
 }

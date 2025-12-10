@@ -77,4 +77,10 @@ public class Student implements CSVParser<Student> {
     public String getFilename() {
         return filename;
     }
+    
+    @Override
+    public String toString() {
+        return String.format("Student[ID=%s, FirstName=%s, LastName=%s, Major=%s, Year=%s, Email=%s]", 
+                studentID, firstName, lastName, major, year, email);
+    }
 }
