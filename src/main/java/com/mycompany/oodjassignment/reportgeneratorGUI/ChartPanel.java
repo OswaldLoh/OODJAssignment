@@ -1,21 +1,29 @@
 package com.mycompany.oodjassignment.reportgeneratorGUI;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
 import com.mycompany.oodjassignment.classes.Course;
 import com.mycompany.oodjassignment.classes.Grades;
 import com.mycompany.oodjassignment.classes.Student;
 import com.mycompany.oodjassignment.functions.Database;
 
-public class SwingChartPanel extends JPanel {
+public class ChartPanel extends JPanel {
     private String chartType;
     private Database database = new Database();
     
-    public SwingChartPanel(String chartType) {
+    public ChartPanel(String chartType) {
         this.chartType = chartType;
         this.setPreferredSize(new Dimension(1000, 600)); // Even larger size for better display
     }
@@ -134,7 +142,8 @@ public class SwingChartPanel extends JPanel {
             // Calculate the true department CGPA
             double deptCGPA = (totalCreditHours > 0) ? totalQualityPoints / totalCreditHours : 0.0;
             
-            if (totalCreditHours > 0) { // Only add departments with valid data
+            if (totalCreditHours > 0) { 
+                // Only add departments with valid data
                 gpaValues.add(deptCGPA);
                 deptLabels.add(major);
             }
@@ -275,10 +284,14 @@ public class SwingChartPanel extends JPanel {
         // Find max value for scaling
         int maxValue = 0;
         for (int value : values) {
-            if (value > maxValue) maxValue = value;
+            if (value > maxValue){
+                maxValue = value;
+            }
         }
-        if (maxValue == 0) maxValue = 1; // Avoid division by zero
-        
+
+        if (maxValue == 0) {
+            maxValue = 1; // Avoid division by zero
+        }
         // Set up chart dimensions
         int width = getWidth();
         int height = getHeight();
@@ -291,11 +304,17 @@ public class SwingChartPanel extends JPanel {
         int bottomMargin;
         if (labels.length <= 8) {
             bottomMargin = 120;
-        } else if (labels.length <= 15) {
+        } 
+
+        else if (labels.length <= 15) {
             bottomMargin = 150;
-        } else if (labels.length <= 25) {
+        } 
+
+        else if (labels.length <= 25) {
             bottomMargin = 180;
-        } else {
+        } 
+
+        else {
             bottomMargin = Math.min(250, 100 + labels.length * 8); // Cap at reasonable height
         }
         
@@ -303,8 +322,12 @@ public class SwingChartPanel extends JPanel {
         FontMetrics fm = g2d.getFontMetrics();
         int maxLabelWidth = 0;
         for (String label : labels) {
+
             int labelWidth = fm.stringWidth(label);
-            if (labelWidth > maxLabelWidth) maxLabelWidth = labelWidth;
+            
+            if (labelWidth > maxLabelWidth) {
+                maxLabelWidth = labelWidth;
+            }
         }
         int leftMargin = Math.max(100, 50 + maxLabelWidth); // Make left margin accommodate long labels
         
@@ -353,15 +376,18 @@ public class SwingChartPanel extends JPanel {
             // For small datasets, use standard dimensions
             barWidth = 40;
             spacing = Math.max(5, (availableWidth - (barWidth * values.length)) / Math.max(values.length, 1));
-        } else if (values.length <= 15) {
+        } 
+        else if (values.length <= 15) {
             // Medium datasets
             barWidth = 25;
             spacing = 10;
-        } else if (values.length <= 30) {
+        } 
+        else if (values.length <= 30) {
             // Larger datasets
             barWidth = 15;
             spacing = 6;
-        } else {
+        } 
+        else {
             // For very large datasets, use minimal dimensions
             barWidth = Math.max(5, availableWidth / Math.max(values.length, 1));
             spacing = Math.max(1, (availableWidth - (barWidth * values.length)) / Math.max(values.length, 1) / 2);
@@ -385,7 +411,9 @@ public class SwingChartPanel extends JPanel {
             g2d.setColor(Color.BLACK);
             if (barWidth > 3) {
                 g2d.drawRect(x, y, barWidth, barHeight);
-            } else {
+            } 
+
+            else {
                 // For very thin bars, just draw the outline
                 g2d.drawLine(x, y, x + barWidth - 1, y);
                 g2d.drawLine(x, y, x, y + barHeight);
@@ -400,24 +428,30 @@ public class SwingChartPanel extends JPanel {
             int labelX = x + (barWidth - labelWidth) / 2;
             int labelY = topMargin + chartHeight + 40; // Increase the space between chart and labels
             
-            // Special handling for GPA Distribution chart to keep labels horizontal
-            if (chartType.equals("GPA Distribution") || 
+            // Special handling for semester performance chart to keep labels horizontal
+            if (chartType.equals("Semester Performance") || chartType.equals("GPA Distribution") ||
                 (labels.length == 5 && labels[0].equals("A & A-") && labels[1].equals("B+, B, B-"))) {
-                // For GPA Distribution, always display labels horizontally
+                // For Semester Performance and GPA Distribution, always display labels horizontally
                 g2d.drawString(label, labelX, labelY);
-            } else {
+            } 
+            
+            else {
                 // Rotate labels for large datasets or long labels to save space and avoid graph overlap
                 if (labels.length > 6 || labelWidth > 30) { // Also consider label length for rotation
                     // Use a steeper angle and position the label to avoid graph area
                     g2d.rotate(-Math.PI/2.2, x + barWidth/2, labelY); // Steeper rotation (about 81 degrees) - almost vertical
                     g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 15); // Move down more to avoid overlap
                     g2d.rotate(Math.PI/2.2, x + barWidth/2, labelY); // Rotate back
-                } else if (labelWidth > barWidth) {
+                } 
+                
+                else if (labelWidth > barWidth) {
                     // For medium-sized datasets with wide labels, use 60-degree rotation
                     g2d.rotate(-Math.PI/3, x + barWidth/2, labelY);
                     g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 12); // Move down more to avoid overlap
                     g2d.rotate(Math.PI/3, x + barWidth/2, labelY);
-                } else {
+                } 
+                
+                else {
                     // For shorter labels, draw horizontally
                     g2d.drawString(label, labelX, labelY);
                 }
@@ -428,8 +462,25 @@ public class SwingChartPanel extends JPanel {
                 String valueStr = String.valueOf(values[i] / 100.0);
                 FontMetrics valueFm = g2d.getFontMetrics();
                 int valueWidth = valueFm.stringWidth(valueStr);
+                
                 if (valueWidth <= barWidth) {
-                    g2d.drawString(valueStr, x + (barWidth - valueWidth) / 2, Math.max(y - 2, topMargin + 5));
+                    // Check if there's enough space to draw the value on top of the bar
+                    if (barHeight > 20) { // If bar is tall enough, put value inside the bar near the bottom
+                        int valueLabelY = y + barHeight - 5; // Position near the bottom of the bar
+                        g2d.setColor(Color.BLACK); // Use black text for visibility inside bar
+                        g2d.drawString(valueStr, x + (barWidth - valueWidth) / 2, valueLabelY);
+                        // Restore the original color after drawing the value
+                        g2d.setColor(barColor);
+                    } 
+                    
+                    else {
+                        // If bar is not tall enough to put the value inside, put it on top
+                        int valueLabelY = y - 5;
+                        g2d.setColor(Color.BLACK); // Use black text for contrast
+                        g2d.drawString(valueStr, x + (barWidth - valueWidth) / 2, valueLabelY);
+                        // Restore the original color
+                        g2d.setColor(barColor);
+                    }
                 }
             }
         }
