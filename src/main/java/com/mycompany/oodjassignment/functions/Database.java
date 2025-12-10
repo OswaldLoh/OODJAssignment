@@ -3,6 +3,8 @@ package com.mycompany.oodjassignment.functions;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.mycompany.oodjassignment.classes.Course;
@@ -309,6 +311,182 @@ public class Database {
         }
         
         return semesters;
+    }
+    
+    // Data processing methods for charts
+    
+    // Get GPA distribution data
+    public int[] getGPADistributionData() {
+        HashMap<String, Grades> gradeDB = getGradeDB();
+        
+        // Count grades in different GPA ranges
+        int gradeA = 0, gradeB = 0, gradeC = 0, gradeD = 0, gradeF = 0;
+        
+        for (Grades grade : gradeDB.values()) {
+            grade.setCourseObject(getCourse(grade.getCourseID()));
+            String letterGrade = grade.getLetterGrade();
+            
+            switch (letterGrade) {
+                case "A":
+                case "A-":
+                    gradeA++;
+                    break;
+                case "B+":
+                case "B":
+                case "B-":
+                    gradeB++;
+                    break;
+                case "C+":
+                case "C":
+                    gradeC++;
+                    break;
+                case "D":
+                    gradeD++;
+                    break;
+                case "F":
+                    gradeF++;
+                    break;
+            }
+        }
+        
+        return new int[] {gradeA, gradeB, gradeC, gradeD, gradeF};
+    }
+    
+    // Get department performance data
+    public Map<String, Double> getDepartmentPerformanceData() {
+        Map<String, Double> departmentData = new HashMap<>();
+        
+        // Group students by department/major and calculate statistics
+        HashMap<String, List<Student>> studentsByMajor = new HashMap<>();
+        HashMap<String, Student> studentDB = getStudentDB();
+        
+        for (Student student : studentDB.values()) {
+            String major = student.getMajor();
+            studentsByMajor.computeIfAbsent(major, k -> new ArrayList<>()).add(student);
+        }
+        
+        for (Map.Entry<String, List<Student>> entry : studentsByMajor.entrySet()) {
+            String major = entry.getKey();
+            List<Student> students = entry.getValue();
+            
+            // Calculate true department CGPA by considering all grades from all students in the department
+            double totalQualityPoints = 0.0;
+            int totalCreditHours = 0;
+            
+            for (Student student : students) {
+                List<Grades> studentGrades = getStudentAllGrades(student.getStudentID());
+                
+                for (Grades grade : studentGrades) {
+                    Course course = getCourse(grade.getCourseID());
+                    if (course != null) {
+                        grade.setCourseObject(course);
+                        
+                        // Get the GPA for this specific grade/course
+                        double courseGPA = grade.calculateGPA();
+                        
+                        // Get the credit hours for the course
+                        int creditHours = course.getCredit();
+                        
+                        // Add to total quality points (GPA * credit hours)
+                        totalQualityPoints += courseGPA * creditHours;
+                        totalCreditHours += creditHours;
+                    }
+                }
+            }
+            
+            // Calculate the true department CGPA
+            double deptCGPA = (totalCreditHours > 0) ? totalQualityPoints / totalCreditHours : 0.0;
+            
+            if (totalCreditHours > 0) { 
+                // Only add departments with valid data
+                departmentData.put(major, deptCGPA);
+            }
+        }
+        
+        return departmentData;
+    }
+    
+    // Get course performance data
+    public Map<String, Double> getCoursePerformanceData() {
+        Map<String, Double> courseData = new HashMap<>();
+        
+        // Get grades by course
+        HashMap<String, List<Grades>> gradesByCourse = new HashMap<>();
+        HashMap<String, Grades> gradeDB = getGradeDB();
+        
+        for (Grades grade : gradeDB.values()) {
+            String courseId = grade.getCourseID();
+            gradesByCourse.computeIfAbsent(courseId, k -> new ArrayList<>()).add(grade);
+        }
+        
+        for (Map.Entry<String, List<Grades>> entry : gradesByCourse.entrySet()) {
+            String courseId = entry.getKey();
+            List<Grades> grades = entry.getValue();
+            
+            Course course = getCourse(courseId);
+            if (course == null) continue; // Skip if course not found
+            
+            // Calculate average GPA for this course
+            double totalGPA = 0.0;
+            for (Grades grade : grades) {
+                grade.setCourseObject(course);
+                totalGPA += grade.calculateGPA();
+            }
+            
+            double avgGPA;
+            if (grades.size() > 0) {
+                avgGPA = totalGPA / grades.size();
+            } else {
+                avgGPA = 0.0;
+            }
+            
+            courseData.put(courseId, avgGPA);
+        }
+        
+        return courseData;
+    }
+    
+    // Get semester performance data
+    public Map<Integer, Double> getSemesterPerformanceData() {
+        Map<Integer, Double> semesterData = new HashMap<>();
+        
+        // Group grades by semester and calculate statistics
+        Map<Integer, List<Grades>> gradesBySemester = new HashMap<>();
+        HashMap<String, Grades> gradeDB = getGradeDB();
+        
+        for (Grades grade : gradeDB.values()) {
+            int semester = grade.getSemester();
+            gradesBySemester.computeIfAbsent(semester, k -> new ArrayList<>()).add(grade);
+        }
+        
+        // Process each semester
+        for (Map.Entry<Integer, List<Grades>> entry : gradesBySemester.entrySet()) {
+            Integer semester = entry.getKey();
+            List<Grades> grades = entry.getValue();
+            
+            // Calculate average GPA for this semester
+            double totalGPA = 0.0;
+            for (Grades grade : grades) {
+                Course course = getCourse(grade.getCourseID());
+                if (course != null) {
+                    grade.setCourseObject(course);
+                    totalGPA += grade.calculateGPA();
+                }
+            }
+            
+            double avgGPA;
+            if (grades.size() > 0) {
+                avgGPA = totalGPA / grades.size();
+            } 
+            
+            else {
+                avgGPA = 0.0;
+            }
+            
+            semesterData.put(semester, avgGPA);
+        }
+        
+        return semesterData;
     }
 }
 

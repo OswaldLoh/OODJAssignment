@@ -8,15 +8,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JPanel;
 
-import com.mycompany.oodjassignment.classes.Course;
-import com.mycompany.oodjassignment.classes.Grades;
-import com.mycompany.oodjassignment.classes.Student;
 import com.mycompany.oodjassignment.functions.Database;
 
 public class ChartPanel extends JPanel {
@@ -56,40 +52,7 @@ public class ChartPanel extends JPanel {
     }
     
     private void drawGPADistributionChart(Graphics2D g2d) {
-        // Get all grades
-        HashMap<String, Grades> gradeDB = database.getGradeDB();
-        
-        // Count grades in different GPA ranges
-        int gradeA = 0, gradeB = 0, gradeC = 0, gradeD = 0, gradeF = 0;
-        
-        for (Grades grade : gradeDB.values()) {
-            grade.setCourseObject(database.getCourse(grade.getCourseID()));
-            String letterGrade = grade.getLetterGrade();
-            
-            switch (letterGrade) {
-                case "A":
-                case "A-":
-                    gradeA++;
-                    break;
-                case "B+":
-                case "B":
-                case "B-":
-                    gradeB++;
-                    break;
-                case "C+":
-                case "C":
-                    gradeC++;
-                    break;
-                case "D":
-                    gradeD++;
-                    break;
-                case "F":
-                    gradeF++;
-                    break;
-            }
-        }
-        
-        int[] values = {gradeA, gradeB, gradeC, gradeD, gradeF};
+        int[] values = database.getGPADistributionData();
         String[] labels = {"A", "B+, B", "C+, C", "D", "F"};
         String title = "Grade Distribution";
         
@@ -97,60 +60,19 @@ public class ChartPanel extends JPanel {
     }
     
     private void drawDepartmentPerformanceChart(Graphics2D g2d) {
-        // Group students by department/major and calculate statistics
-        HashMap<String, List<Student>> studentsByMajor = new HashMap<>();
-        HashMap<String, Student> studentDB = database.getStudentDB();
-        
-        for (Student student : studentDB.values()) {
-            String major = student.getMajor();
-            studentsByMajor.computeIfAbsent(major, k -> new ArrayList<>()).add(student);
-        }
+        Map<String, Double> deptData = database.getDepartmentPerformanceData();
         
         // Prepare data
-        java.util.List<Double> gpaValues = new ArrayList<>();
-        java.util.List<String> deptLabels = new ArrayList<>();
+        List<Double> gpaValues = new ArrayList<>();
+        List<String> deptLabels = new ArrayList<>();
         
-        for (Map.Entry<String, List<Student>> entry : studentsByMajor.entrySet()) {
-            String major = entry.getKey();
-            List<Student> students = entry.getValue();
-            
-            // Calculate true department CGPA by considering all grades from all students in the department
-            double totalQualityPoints = 0.0;
-            int totalCreditHours = 0;
-            
-            for (Student student : students) {
-                List<Grades> studentGrades = database.getStudentAllGrades(student.getStudentID());
-                
-                for (Grades grade : studentGrades) {
-                    Course course = database.getCourse(grade.getCourseID());
-                    if (course != null) {
-                        grade.setCourseObject(course);
-                        
-                        // Get the GPA for this specific grade/course
-                        double courseGPA = grade.calculateGPA();
-                        
-                        // Get the credit hours for the course
-                        int creditHours = course.getCredit();
-                        
-                        // Add to total quality points (GPA * credit hours)
-                        totalQualityPoints += courseGPA * creditHours;
-                        totalCreditHours += creditHours;
-                    }
-                }
-            }
-            
-            // Calculate the true department CGPA
-            double deptCGPA = (totalCreditHours > 0) ? totalQualityPoints / totalCreditHours : 0.0;
-            
-            if (totalCreditHours > 0) { 
-                // Only add departments with valid data
-                gpaValues.add(deptCGPA);
-                deptLabels.add(major);
-            }
+        for (Map.Entry<String, Double> entry : deptData.entrySet()) {
+            deptLabels.add(entry.getKey());  // department name
+            gpaValues.add(entry.getValue()); // average GPA
         }
         
         // Sort the data by CGPA descending for better visualization
-        java.util.List<int[]> sortedData = new java.util.ArrayList<>();
+        List<int[]> sortedData = new ArrayList<>();
         for (int i = 0; i < gpaValues.size(); i++) {
             sortedData.add(new int[]{i, (int) Math.round(gpaValues.get(i) * 100)});
         }
@@ -171,41 +93,19 @@ public class ChartPanel extends JPanel {
     }
     
     private void drawCoursePerformanceChart(Graphics2D g2d) {
-        // Get grades by course
-        HashMap<String, List<Grades>> gradesByCourse = new HashMap<>();
-        HashMap<String, Grades> gradeDB = database.getGradeDB();
-        
-        for (Grades grade : gradeDB.values()) {
-            String courseId = grade.getCourseID();
-            gradesByCourse.computeIfAbsent(courseId, k -> new ArrayList<>()).add(grade);
-        }
+        Map<String, Double> courseData = database.getCoursePerformanceData();
         
         // Prepare data for ALL courses
-        java.util.List<Double> gpaValues = new ArrayList<>();
-        java.util.List<String> courseLabels = new ArrayList<>();
+        List<Double> gpaValues = new ArrayList<>();
+        List<String> courseLabels = new ArrayList<>();
         
-        for (Map.Entry<String, List<Grades>> entry : gradesByCourse.entrySet()) {
-            String courseId = entry.getKey();
-            List<Grades> grades = entry.getValue();
-            
-            Course course = database.getCourse(courseId);
-            if (course == null) continue; // Skip if course not found
-            
-            // Calculate average GPA for this course
-            double totalGPA = 0.0;
-            for (Grades grade : grades) {
-                grade.setCourseObject(course);
-                totalGPA += grade.calculateGPA();
-            }
-            
-            double avgGPA = grades.size() > 0 ? totalGPA / grades.size() : 0.0;
-            
-            gpaValues.add(avgGPA);
-            courseLabels.add(courseId);
+        for (Map.Entry<String, Double> entry : courseData.entrySet()) {
+            courseLabels.add(entry.getKey());  // course ID
+            gpaValues.add(entry.getValue());   // average GPA
         }
         
         // Sort the data by GPA descending for better visualization
-        java.util.List<int[]> sortedData = new java.util.ArrayList<>();
+        List<int[]> sortedData = new ArrayList<>();
         for (int i = 0; i < gpaValues.size(); i++) {
             sortedData.add(new int[]{i, (int) Math.round(gpaValues.get(i) * 100)});
         }
@@ -226,39 +126,18 @@ public class ChartPanel extends JPanel {
     }
     
     private void drawSemesterPerformanceChart(Graphics2D g2d) {
-        // Group grades by semester and calculate statistics
-        Map<Integer, List<Grades>> gradesBySemester = new HashMap<>();
-        HashMap<String, Grades> gradeDB = database.getGradeDB();
-        
-        for (Grades grade : gradeDB.values()) {
-            int semester = grade.getSemester();
-            gradesBySemester.computeIfAbsent(semester, k -> new ArrayList<>()).add(grade);
-        }
+        Map<Integer, Double> semesterData = database.getSemesterPerformanceData();
         
         // Prepare data maintaining chronological order
-        java.util.List<Double> gpaValues = new ArrayList<>();
-        java.util.List<String> semesterLabels = new ArrayList<>();
+        List<Double> gpaValues = new ArrayList<>();
+        List<String> semesterLabels = new ArrayList<>();
         
         // Sort semesters in ascending order (chronological)
-        List<Integer> sortedSemesters = new ArrayList<>(gradesBySemester.keySet());
+        List<Integer> sortedSemesters = new ArrayList<>(semesterData.keySet());
         java.util.Collections.sort(sortedSemesters);
         
         for (Integer semester : sortedSemesters) {
-            List<Grades> grades = gradesBySemester.get(semester);
-            
-            // Calculate average GPA for this semester
-            double totalGPA = 0.0;
-            for (Grades grade : grades) {
-                Course course = database.getCourse(grade.getCourseID());
-                if (course != null) {
-                    grade.setCourseObject(course);
-                    totalGPA += grade.calculateGPA();
-                }
-            }
-            
-            double avgGPA = grades.size() > 0 ? totalGPA / grades.size() : 0.0;
-            
-            gpaValues.add(avgGPA);
+            gpaValues.add(semesterData.get(semester));
             semesterLabels.add("Sem " + semester);
         }
         
@@ -377,16 +256,19 @@ public class ChartPanel extends JPanel {
             barWidth = 40;
             spacing = Math.max(5, (availableWidth - (barWidth * values.length)) / Math.max(values.length, 1));
         } 
+
         else if (values.length <= 15) {
             // Medium datasets
             barWidth = 25;
             spacing = 10;
         } 
+
         else if (values.length <= 30) {
             // Larger datasets
             barWidth = 15;
             spacing = 6;
         } 
+        
         else {
             // For very large datasets, use minimal dimensions
             barWidth = Math.max(5, availableWidth / Math.max(values.length, 1));
