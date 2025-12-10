@@ -184,7 +184,7 @@ public class RecoveryPlanDashboard {
 
 
     private void tableSetup() {
-        String[] columnNames = {"Plan ID", "Student ID", "Course ID", "Created By", "Progress"};
+        String[] columnNames = {"Plan ID", "Component", "Student ID", "Course ID", "Created By", "Progress"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -200,6 +200,7 @@ public class RecoveryPlanDashboard {
         for (RecoveryPlan plan : database.getRecPlanDB().values()) {
             Object[] row = {
                     plan.getPlanID(),
+                    plan.getComponent(),
                     plan.getStudentID(),
                     plan.getCourseID(),
                     plan.getCreatedBy(),

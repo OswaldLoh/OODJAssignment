@@ -1,4 +1,4 @@
 planID,studentID,courseID,component,createdBy,progress
-P1,S015,C217,Examination and Assignment,AO001,0.0
-P2,S099,C215,Examination and Assignment,AO001,0.0
-P3,S092,C204,Examination and Assignment,AO001,0.0
+P1,S015,C217,Assignment,AO001,0.0
+P2,S016,C217,Assignment,AO001,0.0
+P3,S004,C236,Examination,AO001,0.0

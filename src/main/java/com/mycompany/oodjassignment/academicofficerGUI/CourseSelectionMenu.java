@@ -5,14 +5,16 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.classes.*;
+
+import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.text.StyleContext;
 
 public class CourseSelectionMenu {
     private final Runnable onExitCallback;
@@ -23,14 +25,16 @@ public class CourseSelectionMenu {
     private JTable gradeList;
     private JButton confirmButton;
     private JButton backButton;
-    private JLabel chooseGradePrompt;
     private JScrollPane gradeScroll;
+    public JTextArea showStudentTxtArea;
 
     public CourseSelectionMenu(String targetStudentID, Database database, Runnable onExitCallback, AuthenticationService authService) {
         this.onExitCallback = onExitCallback;
         this.authService = authService;
         this.database = database;
 
+        showStudentTxtArea.setText("Showing grades for Student \"" + targetStudentID + "\" - Please choose grade to add Recovery Plan:");
+        showStudentTxtArea.setEditable(false);
         tableSetup();
         loadStudentGrades(targetStudentID);
 
@@ -61,6 +65,14 @@ public class CourseSelectionMenu {
                     "Student is not eligible for recovery plan for course " + courseID + ".\n" +
                             "Student GPA is higher than 2.0." + " (" + GPA + ")",
                     "Ineligible", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        boolean duplicatePlan = database.checkExistingRecoveryPLan(targetStudentID, courseID);
+        if (duplicatePlan) {
+            JOptionPane.showMessageDialog(studentCourseSelectionPanel,
+                    "Student already has recovery plan for course " + courseID + ".\n",
+                    "Error", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
@@ -174,9 +186,6 @@ public class CourseSelectionMenu {
         studentCourseSelectionPanel = new JPanel();
         studentCourseSelectionPanel.setLayout(new GridLayoutManager(3, 3, new Insets(20, 20, 20, 20), -1, -1));
         studentCourseSelectionPanel.setBackground(new Color(-1));
-        chooseGradePrompt = new JLabel();
-        chooseGradePrompt.setText("Please choose student grades to add Recovery Plan:");
-        studentCourseSelectionPanel.add(chooseGradePrompt, new GridConstraints(0, 0, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         gradeScroll = new JScrollPane();
         studentCourseSelectionPanel.add(gradeScroll, new GridConstraints(1, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         gradeList = new JTable();
@@ -189,6 +198,32 @@ public class CourseSelectionMenu {
         backButton = new JButton();
         backButton.setText("Back");
         studentCourseSelectionPanel.add(backButton, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        showStudentTxtArea = new JTextArea();
+        Font showStudentTxtAreaFont = this.$$$getFont$$$("Dialog", -1, -1, showStudentTxtArea.getFont());
+        if (showStudentTxtAreaFont != null) showStudentTxtArea.setFont(showStudentTxtAreaFont);
+        studentCourseSelectionPanel.add(showStudentTxtArea, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**

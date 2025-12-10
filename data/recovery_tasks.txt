@@ -1,13 +1,13 @@
 taskID,planID,description,week,completion
-T4,P1,Complete the assignment and take the recovery examination.,13,false
-T5,P2,Create a balanced weekly schedule for revision and assignment progress.,1,false
-T6,P2,Strengthen weak areas and refine assignment sections based on feedback.,5,false
-T10,P3,Strengthen weak areas and refine assignment sections based on feedback.,5,false
-T7,P2,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false
-T8,P2,Complete the assignment and take the recovery examination.,13,false
-T12,P3,Complete the assignment and take the recovery examination.,13,false
-T9,P3,Create a balanced weekly schedule for revision and assignment progress.,1,false
-T11,P3,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false
-T1,P1,Create a balanced weekly schedule for revision and assignment progress.,1,false
-T2,P1,Strengthen weak areas and refine assignment sections based on feedback.,5,false
-T3,P1,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false
+T4,P1,Submit the recovery assignment.,13,false
+T5,P2,Break the assignment into manageable subtasks with checkpoints.,1,false
+T6,P2,Revisit feedback and identify components requiring improvement.,5,false
+T10,P3,Practice past-year papers and timed mock questions.,5,false
+T7,P2,Consult the lecturer or tutor to confirm expectations and requirements.,9,false
+T8,P2,Submit the recovery assignment.,13,false
+T12,P3,Sit for the recovery examination.,13,false
+T9,P3,"Review all core and weak topics through notes, slides, and tutorials.",1,false
+T11,P3,Attend consultation sessions to clarify unclear concepts.,9,false
+T1,P1,Break the assignment into manageable subtasks with checkpoints.,1,false
+T2,P1,Revisit feedback and identify components requiring improvement.,5,false
+T3,P1,Consult the lecturer or tutor to confirm expectations and requirements.,9,false

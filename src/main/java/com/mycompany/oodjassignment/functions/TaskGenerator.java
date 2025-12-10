@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskGenerator {
+
     public static List<String> getTaskDescriptions(String planType) {
         List<String> descriptions = new ArrayList<>();
 
