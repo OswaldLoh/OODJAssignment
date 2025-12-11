@@ -127,7 +127,7 @@ public class AddRecoveryTask {
 
         // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
+                sendEmail.Notification(emailSubject, emailContent)
         ).start();
 
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");

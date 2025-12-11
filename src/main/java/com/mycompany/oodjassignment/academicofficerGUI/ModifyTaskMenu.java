@@ -142,15 +142,15 @@ public class ModifyTaskMenu {
                     "Missing Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         // Store old description for email
         String oldDescription = targetTask.getDescription();
-        
+
         targetTask.setDescription(newDescription);
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        
+
         // Send email notification about description change
         RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
         Student student = database.getStudent(associatedPlan.getStudentID());
@@ -168,9 +168,9 @@ public class ModifyTaskMenu {
 
         // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
+                sendEmail.Notification(emailSubject, emailContent)
         ).start();
-        
+
     }
 
     private void modifyWeek() {
@@ -198,21 +198,21 @@ public class ModifyTaskMenu {
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // Store old week for email
         int oldWeek = targetTask.getWeek();
-        
+
         targetTask.setWeek(newWeek);
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        
+
         // Send email notification about week change
         RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
         Student student = database.getStudent(associatedPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
         String emailSubject = "Recovery Task Week Updated";
-        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName()+",\n\n" +
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
                 "The week deadline of a recovery task in your course recovery plan has been updated.\n\n" +
                 "Plan ID: " + targetTask.getPlanID() + "\n" +
                 "Task ID: " + targetTask.getTaskID() + "\n" +
@@ -224,7 +224,7 @@ public class ModifyTaskMenu {
 
         // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
+                sendEmail.Notification(emailSubject, emailContent)
         ).start();
     }
 
@@ -237,29 +237,29 @@ public class ModifyTaskMenu {
         database.updatePlanProgress(targetTask.getPlanID());
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        
+
         // Send email notification about completion status change
         RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
         Student student = database.getStudent(associatedPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
         String emailSubject = "Recovery Task Completion Status Updated";
-        String emailContent = "Dear " + student.getFirstName() + " " +  student.getLastName() + ",\n\n" +
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
                 "The completion status of a recovery task in your course recovery plan has been updated.\n\n" +
                 "Plan ID: " + targetTask.getPlanID() + "\n" +
                 "Task ID: " + targetTask.getTaskID() + "\n" +
                 "Previous Status: " + oldCompletionStatus + "\n" +
-                "Current Status: " + newCompletionStatus+ "\n\n" +
+                "Current Status: " + newCompletionStatus + "\n\n" +
                 "Please check your recovery plan for the updated status.\n\n" +
                 "Best regards,\n" +
                 "Academic Officer Team";
 
         // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
+                sendEmail.Notification(emailSubject, emailContent)
         ).start();
     }
 
-        private void openRecoveryTaskDashboard() {
+    private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
         RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());

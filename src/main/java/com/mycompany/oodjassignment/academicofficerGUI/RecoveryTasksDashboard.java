@@ -17,8 +17,6 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -45,7 +43,7 @@ public class RecoveryTasksDashboard {
     private JLabel promptRecoveryTask;
     private JScrollPane taskScroll;
     private JButton modifyButton;
-    private JLabel seartchPrompt;
+    private JLabel searchPrompt;
 
     public RecoveryTasksDashboard(Database database, Runnable onExitCallback, AuthenticationService authService) {
         this.onExitCallback = onExitCallback;
@@ -178,7 +176,7 @@ public class RecoveryTasksDashboard {
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
         FileHandler.writeCSV(recTask, database.getRecTaskDB());
-        
+
         // Send email notification about task deletion
         SendEmail sendEmail = new SendEmail(student.getEmail());
         String emailSubject = "Recovery Task Deleted";
@@ -190,10 +188,10 @@ public class RecoveryTasksDashboard {
                 "Please note that this task is no longer required as part of your recovery plan.\n\n" +
                 "Best regards,\n" +
                 "Academic Officer Team";
-                
+
         // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
+                sendEmail.Notification(emailSubject, emailContent)
         ).start();
 
         JOptionPane.showMessageDialog(RecoveryTasksPanel, "Recovery Task deleted successfully!");
@@ -318,9 +316,9 @@ public class RecoveryTasksDashboard {
         RecoveryTasksPanel.add(searchButton, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtTaskID = new JTextField();
         RecoveryTasksPanel.add(txtTaskID, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
-        seartchPrompt = new JLabel();
-        seartchPrompt.setText("Search by TaskID or PlanID:");
-        RecoveryTasksPanel.add(seartchPrompt, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        searchPrompt = new JLabel();
+        searchPrompt.setText("Search by TaskID or PlanID:");
+        RecoveryTasksPanel.add(searchPrompt, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         RecoveryTasksPanel.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
     }
