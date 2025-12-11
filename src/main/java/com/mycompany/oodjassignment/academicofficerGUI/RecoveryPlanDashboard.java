@@ -172,7 +172,7 @@ public class RecoveryPlanDashboard {
             for (RecoveryTask task : planTasks) {
                 database.removeRecoveryTask(task.getTaskID());
             }
-            tableModel.removeRow(row);
+            tableModel.removeRow(modelRow);
         } else {
             return;
         }

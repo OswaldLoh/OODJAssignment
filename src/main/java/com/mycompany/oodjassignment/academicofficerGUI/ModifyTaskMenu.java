@@ -1,8 +1,7 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Insets;
+import java.awt.*;
+import java.util.Locale;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,6 +14,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -29,7 +30,6 @@ import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService
 public class ModifyTaskMenu {
     private final Runnable onExitCallback;
     private AuthenticationService authService;
-    private String mode;
     private String targetTaskID;
     private Database database;
     private JPanel modifyTaskPanel;
@@ -46,80 +46,33 @@ public class ModifyTaskMenu {
     private JButton confirmButton;
 
     public ModifyTaskMenu(String targetTaskID, String mode, Database database, AuthenticationService authService, Runnable onExitCallback) {
-        this.mode = mode;
         this.database = database;
         this.targetTaskID = targetTaskID;
         this.authService = authService;
         this.onExitCallback = onExitCallback;
 
-        if (mode.equals("Description")) {
-            // show
-            promptDescription.setVisible(true);
-            txtNewDescription.setVisible(true);
-            txtNewDescription.setText("");
+        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);       // getting object of selected recovery task
 
-            // hide
-            promptWeek.setVisible(false);
-            txtNewWeek.setVisible(false);
-            promptCompletion.setVisible(false);
-            completeRadioButton.setVisible(false);
-            incompleteRadioButton.setVisible(false);
+        showSelectedModifyTarget(mode);            // only show specific search box or radio button based on which data to be modified
 
-        } else if (mode.equals("Week")) {
-            // show
-            promptWeek.setVisible(true);
-            txtNewWeek.setVisible(true);
-            txtNewWeek.setText("");
+        initializeTextArea(targetTask);            // show the current details of the selected task
 
-            // hide
-            promptDescription.setVisible(false);
-            txtNewDescription.setVisible(false);
-            promptCompletion.setVisible(false);
-            completeRadioButton.setVisible(false);
-            incompleteRadioButton.setVisible(false);
-
-        } else if (mode.equals("Completion Status")) {
-            // show
-            promptCompletion.setVisible(true);
-            completeRadioButton.setVisible(true);
-            incompleteRadioButton.setVisible(true);
-
-            // group radio buttons
-            ButtonGroup group = new ButtonGroup();
-            group.add(completeRadioButton);
-            group.add(incompleteRadioButton);
-
-            incompleteRadioButton.setSelected(true); // Default safe option
-
-            // hide
-            promptDescription.setVisible(false);
-            txtNewDescription.setVisible(false);
-            promptWeek.setVisible(false);
-            txtNewWeek.setVisible(false);
-        } else if (mode == null) {
-            return;
-        }
-
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
-        detailsTextArea.setText("Plan ID: " + targetTask.getPlanID() +
-                "\nTask ID: " + targetTask.getTaskID());
-
-        if (targetTask.getCompletion()) {
+        if (targetTask.getCompletion()) {               // initialize selection of the completion radio button
             completeRadioButton.setSelected(true);
         } else {
             incompleteRadioButton.setSelected(true);
         }
 
-        confirmButton.addActionListener(e -> {
+        confirmButton.addActionListener(e -> {      // receive
             switch (mode) {
                 case "Description":
-                    modifyDescription();
+                    modifyDescription(targetTask);
                     break;
                 case "Week":
-                    modifyWeek();
+                    modifyWeek(targetTask);
                     break;
                 case "Completion Status":
-                    modifyCompletion();
+                    modifyCompletion(targetTask);
                     break;
             }
             JOptionPane.showMessageDialog(modifyTaskPanel, "Task modified successfully!");
@@ -133,8 +86,7 @@ public class ModifyTaskMenu {
         });
     }
 
-    private void modifyDescription() {
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
+    private void modifyDescription(RecoveryTask targetTask) {
         String newDescription = txtNewDescription.getText().trim();
         if (newDescription.isEmpty()) {
             JOptionPane.showMessageDialog(modifyTaskPanel,
@@ -173,8 +125,7 @@ public class ModifyTaskMenu {
 
     }
 
-    private void modifyWeek() {
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
+    private void modifyWeek(RecoveryTask targetTask) {
         String newWeekString = txtNewWeek.getText().trim();
         int newWeek = 0;
         try {
@@ -228,10 +179,9 @@ public class ModifyTaskMenu {
         ).start();
     }
 
-    private void modifyCompletion() {
+    private void modifyCompletion(RecoveryTask targetTask) {
         boolean newCompletionStatus = completeRadioButton.isSelected();
         RecoveryPlan recPlan = new RecoveryPlan();
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
         boolean oldCompletionStatus = targetTask.getCompletion(); // Store old status for email
         targetTask.setCompletion(newCompletionStatus);
         database.updatePlanProgress(targetTask.getPlanID());
@@ -257,6 +207,69 @@ public class ModifyTaskMenu {
         new Thread(() ->
                 sendEmail.Notification(emailSubject, emailContent)
         ).start();
+    }
+    private void showSelectedModifyTarget(String mode) {
+        if (mode.equals("Description")) {
+            // show
+            promptDescription.setVisible(true);
+            txtNewDescription.setVisible(true);
+            txtNewDescription.setText("");
+
+            // hide
+            promptWeek.setVisible(false);
+            txtNewWeek.setVisible(false);
+            promptCompletion.setVisible(false);
+            completeRadioButton.setVisible(false);
+            incompleteRadioButton.setVisible(false);
+
+        } else if (mode.equals("Week")) {
+            // show
+            promptWeek.setVisible(true);
+            txtNewWeek.setVisible(true);
+            txtNewWeek.setText("");
+
+            // hide
+            promptDescription.setVisible(false);
+            txtNewDescription.setVisible(false);
+            promptCompletion.setVisible(false);
+            completeRadioButton.setVisible(false);
+            incompleteRadioButton.setVisible(false);
+
+        } else if (mode.equals("Completion Status")) {
+            // show
+            promptCompletion.setVisible(true);
+            completeRadioButton.setVisible(true);
+            incompleteRadioButton.setVisible(true);
+
+            // group radio buttons
+            ButtonGroup group = new ButtonGroup();
+            group.add(completeRadioButton);
+            group.add(incompleteRadioButton);
+
+            incompleteRadioButton.setSelected(true); // Default safe option
+
+            // hide
+            promptDescription.setVisible(false);
+            txtNewDescription.setVisible(false);
+            promptWeek.setVisible(false);
+            txtNewWeek.setVisible(false);
+        }
+    }
+
+    private void initializeTextArea(RecoveryTask targetTask) {
+        String completionStatus;
+        if (targetTask.getCompletion()) {               // parsing the completion status from boolean to completion
+            completionStatus = "Complete";
+        } else {
+            completionStatus = "Incomplete";
+        }
+
+        detailsTextArea.setEditable(false);                             // disallow editing the text area
+        detailsTextArea.setText("Plan ID: " + targetTask.getPlanID() +  // display the current details of the selected task
+                "\nTask ID: " + targetTask.getTaskID() +
+                "\nDescription: " + targetTask.getDescription() +
+                "\nWeek: " + targetTask.getWeek() +
+                "\nCompletion Status: " + completionStatus);
     }
 
     private void openRecoveryTaskDashboard() {
@@ -300,6 +313,8 @@ public class ModifyTaskMenu {
         modifyTitle.setText("Modifying Recovery Task Details");
         modifyTaskPanel.add(modifyTitle, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         detailsTextArea = new JTextArea();
+        Font detailsTextAreaFont = this.$$$getFont$$$("Dialog", -1, -1, detailsTextArea.getFont());
+        if (detailsTextAreaFont != null) detailsTextArea.setFont(detailsTextAreaFont);
         modifyTaskPanel.add(detailsTextArea, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         txtNewDescription = new JTextField();
         modifyTaskPanel.add(txtNewDescription, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -307,9 +322,11 @@ public class ModifyTaskMenu {
         promptDescription.setText("Enter new Description:");
         modifyTaskPanel.add(promptDescription, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         completeRadioButton = new JRadioButton();
+        completeRadioButton.setBackground(new Color(-1));
         completeRadioButton.setText("Complete");
         modifyTaskPanel.add(completeRadioButton, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         incompleteRadioButton = new JRadioButton();
+        incompleteRadioButton.setBackground(new Color(-1));
         incompleteRadioButton.setText("Incomplete");
         modifyTaskPanel.add(incompleteRadioButton, new GridConstraints(5, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         promptCompletion = new JLabel();
@@ -326,6 +343,28 @@ public class ModifyTaskMenu {
         confirmButton = new JButton();
         confirmButton.setText("Confirm");
         modifyTaskPanel.add(confirmButton, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**

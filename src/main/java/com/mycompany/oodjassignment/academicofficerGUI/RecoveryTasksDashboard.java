@@ -151,12 +151,16 @@ public class RecoveryTasksDashboard {
             return;
         }
         int modelRow = taskTable.convertRowIndexToModel(row);
-        String targetTaskID = (String) tableModel.getValueAt(modelRow, 0);
+        String targetTaskID = (String) tableModel.getValueAt(modelRow, 0);  // getting details from user selection
         String targetPlanID = (String) tableModel.getValueAt(modelRow, 1);
 
-        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID);
-        int taskCount = planTasks.size();
 
+        RecoveryTask taskToDelete = database.getRecoveryTask(targetTaskID);         // getting objects associated with details
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetPlanID);
+        Student student = database.getStudent(associatedPlan.getStudentID());
+
+        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID); // check if last recovery task in plan?
+        int taskCount = planTasks.size();
         if (taskCount == 1) {
             JOptionPane.showMessageDialog(RecoveryTasksPanel,
                     "Warning! You cannot delete the last recovery task in recovery plan " + targetPlanID + "!",
@@ -164,18 +168,21 @@ public class RecoveryTasksDashboard {
             return;
         }
 
-        // Get the task before removing it to access its details
-        RecoveryTask taskToDelete = database.getRecoveryTask(targetTaskID);
-        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetPlanID);
-        Student student = database.getStudent(associatedPlan.getStudentID());
+        int taskDeleteConfirmation = JOptionPane.showConfirmDialog(RecoveryTasksPanel,  // confirmation prompt
+                "Are you sure you want to delete Task " + targetTaskID + "?",
+                "Confirm Delete", JOptionPane.YES_NO_OPTION);
 
-        database.removeRecoveryTask(targetTaskID);
+        if (taskDeleteConfirmation == JOptionPane.YES_OPTION) {                         // deletion confirmed
+            tableModel.removeRow(modelRow);         // remove row from table
+        } else {
+            return;
+        }
+
+        database.removeRecoveryTask(targetTaskID);      // updating the database and plan overall progress
         database.updatePlanProgress(targetPlanID);
-        tableModel.removeRow(row);
-        RecoveryTask recTask = new RecoveryTask();
-        RecoveryPlan recPlan = new RecoveryPlan();
-        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        FileHandler.writeCSV(recTask, database.getRecTaskDB());
+
+        FileHandler.writeCSV(associatedPlan, database.getRecPlanDB());      // write the updated database into text file
+        FileHandler.writeCSV(taskToDelete, database.getRecTaskDB());
 
         // Send email notification about task deletion
         SendEmail sendEmail = new SendEmail(student.getEmail());
@@ -253,7 +260,7 @@ public class RecoveryTasksDashboard {
         ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode, database, authService, onExitCallback);
         modifyTaskMenuFrame.setContentPane(modifyTaskMenu.getModifyTaskPanel());
         modifyTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        modifyTaskMenuFrame.setSize(400, 200);
+        modifyTaskMenuFrame.setSize(1100, 290);
         modifyTaskMenuFrame.setLocationRelativeTo(null); // Center it
         modifyTaskMenuFrame.setVisible(true);
     }

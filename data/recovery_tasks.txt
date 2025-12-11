@@ -2,8 +2,7 @@ taskID,planID,description,week,completion
 T4,P1,Submit the recovery assignment.,13,false
 T9,P3,"Review all core and weak topics through notes, slides, and tutorials.",1,false
 T10,P3,Practice past-year papers and timed mock questions.,5,false
-T21,P5,Sit for the final examination for the retaken module.,17,false
-T20,P5,Attend final consultation to confirm assignment requirements and progress,13,false
+T20,P5,Direct submission of assignment,13,false
 T12,P3,Sit for the recovery examination.,13,false
 T11,P3,Attend consultation sessions to clarify unclear concepts.,9,false
 T14,P4,Strengthen weak areas and refine assignment sections based on feedback.,5,false
