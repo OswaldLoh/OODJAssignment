@@ -105,9 +105,7 @@ public class Database {
     }
 
     // Check existence in database
-    public boolean courseExist(String targetCourseID) {
-        return courseDB.containsKey(targetCourseID);
-    }
+
 
     public boolean studentExist(String targetStudentID) {
         return studentDB.containsKey(targetStudentID);
@@ -128,11 +126,17 @@ public class Database {
         return false;
     }
 
-    public boolean planExist(String targetPlanID) {
-        return recPlanDB.containsKey(targetPlanID);
+    // RecoveryPlan helper methods
+    public boolean checkExistingRecoveryPLan(String targetStudentID, String targetCourseID) {
+        for (RecoveryPlan plan : recPlanDB.values()) {
+            if (plan.getStudentID().equals(targetStudentID) && plan.getCourseID().equals(targetCourseID)) {
+                System.out.println("Duplicate recovery plan found");
+                return true;
+            }
+        }
+        return false;
     }
 
-    // RecoveryPlan helper methods
     public void updatePlanProgress(String planID) {
         double totalTaskCount = 0;
         double completeCount = 0;
@@ -162,28 +166,21 @@ public class Database {
         if (attemptCount == 3) {
             retakenComponent = "Module Retake";
         } else {
+            Course course = courseDB.get(targetCourseID);
             for (Grades grade : courseAttempts) {
                 if (grade.getAttempt() == attemptCount) {
-                    if (grade.getWeightedAssignmentMark() < 40 && grade.getWeightedExamMark() < 40) {
+                    grade.setCourseObject(course);
+                    if (grade.getWeightedAssignmentMark() < (course.getAssignmentWeight() * 0.4) && grade.getWeightedExamMark() < (course.getExamWeight() * 0.4)) {
                         retakenComponent = "Examination and Assignment";
-                    } else if (grade.getWeightedExamMark() < 40) {
+                    } else if (grade.getWeightedExamMark() < (course.getExamWeight() * 0.4)) {
                         retakenComponent = "Examination";
-                    } else if (grade.getWeightedAssignmentMark() < 40) {
+                    } else if (grade.getWeightedAssignmentMark() < (course.getAssignmentWeight() * 0.4)) {
                         retakenComponent = "Assignment";
                     }
                 }
             }
         }
         return retakenComponent;
-    }
-    public ArrayList<String> getStudentCourse(String targetStudentID) {
-        ArrayList<String> studentCourse = new ArrayList<>();
-        for (Grades grade : gradesDB.values()) {
-            if (grade.getStudentID().equals(targetStudentID)) {
-                studentCourse.add(grade.getCourseID());
-            }
-        }
-        return studentCourse;
     }
 
     public ArrayList<RecoveryTask> getPlanRecoveryTask(String targetRecoveryPlanID) {
@@ -194,15 +191,6 @@ public class Database {
             }
         }
         return taskInPlan;
-    }
-    public ArrayList<RecoveryPlan> getStudentRecoveryPlan(String targetStudentID) {
-        ArrayList<RecoveryPlan> studentPlans = new ArrayList<>();
-        for (RecoveryPlan plan : recPlanDB.values()) {        // Finding if student has recovery plans and add them into a list if yes
-            if ((targetStudentID).equals(plan.getStudentID())) {
-                studentPlans.add(plan);
-            }
-        }
-        return studentPlans;
     }
     
     // Check if a student has grades for a specific year (at least one semester)

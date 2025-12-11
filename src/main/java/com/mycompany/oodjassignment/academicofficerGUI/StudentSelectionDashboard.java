@@ -184,7 +184,7 @@ public class StudentSelectionDashboard {
         searchStudentIDPrompt.setText("Search by StudentID");
         addPlanDashboardPanel.add(searchStudentIDPrompt, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         titleAddPlan = new JLabel();
-        titleAddPlan.setText("Student Grades Dashboard");
+        titleAddPlan.setText("Choose student to add recovery plan:");
         addPlanDashboardPanel.add(titleAddPlan, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         addPlanDashboardPanel.add(spacer1, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
@@ -192,7 +192,7 @@ public class StudentSelectionDashboard {
         searchButton.setText("Search");
         addPlanDashboardPanel.add(searchButton, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         addPlanButton = new JButton();
-        addPlanButton.setText("Add Plan");
+        addPlanButton.setText("Next");
         addPlanDashboardPanel.add(addPlanButton, new GridConstraints(3, 9, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         backButton = new JButton();
         backButton.setText("Back");

@@ -251,7 +251,7 @@ public class RecoveryTasksDashboard {
         ModifyTaskMenu modifyTaskMenu = new ModifyTaskMenu(targetTaskID, mode, database, authService, onExitCallback);
         modifyTaskMenuFrame.setContentPane(modifyTaskMenu.getModifyTaskPanel());
         modifyTaskMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        modifyTaskMenuFrame.setSize(800, 400);
+        modifyTaskMenuFrame.setSize(400, 200);
         modifyTaskMenuFrame.setLocationRelativeTo(null); // Center it
         modifyTaskMenuFrame.setVisible(true);
     }

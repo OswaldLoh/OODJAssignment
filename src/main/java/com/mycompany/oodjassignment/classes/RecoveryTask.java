@@ -45,18 +45,28 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     //methods
     @Override
     public RecoveryTask fromCSV(String line) {
-        String[] details = line.split(",");
-
-        return new RecoveryTask(details[0],details[1],details[2],Integer.parseInt(details[3]),Boolean.parseBoolean(details[4]));
+        String[] details = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)", -1);
+        String rawDesc = details[2];
+        if (rawDesc.startsWith("\"") && rawDesc.endsWith("\"")) {
+            rawDesc = rawDesc.substring(1, rawDesc.length() - 1);
+            rawDesc = rawDesc.replace("\"\"", "\"");
+        }
+        return new RecoveryTask(details[0],details[1],rawDesc,Integer.parseInt(details[3]),Boolean.parseBoolean(details[4]));
     }
     @Override
     public String toCSV() {
-        return (taskID+","+planID+","+description+","+week+","+completion);
+        String cleanedDescription = description.replace("\"", "\"\"");
+        if (cleanedDescription.contains(",")) {
+            cleanedDescription = "\"" + cleanedDescription + "\"";
+        }
+        return (taskID+","+planID+","+ cleanedDescription+","+week+","+completion);
     }
+
     @Override
     public String getFileHeader() {
         return "taskID,planID,description,week,completion";
     }
+
     @Override
     public String getFilename() {
         return filename;
