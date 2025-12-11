@@ -58,7 +58,7 @@ public class CourseSelectionMenu {
         }
 
         String courseID = (String) tableModel.getValueAt(row, 0);
-        double GPA = (double) tableModel.getValueAt(row, 2);
+        double GPA = (double) tableModel.getValueAt(row, 3);
 
         if (GPA >= 2.0) {
             JOptionPane.showMessageDialog(studentCourseSelectionPanel,
@@ -110,9 +110,8 @@ public class CourseSelectionMenu {
     }
 
     private void tableSetup() {
-        String[] columnNames = {"Course ID", "Course Name", "GPA", "Grade"};
+        String[] columnNames = {"Course ID", "Course Name", "Attempt", "GPA", "Grade"};
         tableModel = new DefaultTableModel(columnNames, 0) {
-            // Make cells un-editable (optional, but recommended)
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -126,9 +125,11 @@ public class CourseSelectionMenu {
         for (Grades grade : studentGrades) {
             Course course = database.getCourse(grade.getCourseID());
             grade.setCourseObject(course);
+
             Object[] row = {
                     grade.getCourseID(),
                     course.getCourseName(),
+                    grade.getAttempt(),
                     grade.calculateGPA(),
                     grade.getLetterGrade()
             };
@@ -136,6 +137,7 @@ public class CourseSelectionMenu {
         }
 
         gradeList.setModel(tableModel);
+        TableSorter sorter = new TableSorter(tableModel, gradeList);
         gradeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -144,7 +146,7 @@ public class CourseSelectionMenu {
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800, 400);
+        recoveryPlanDashboardFrame.setSize(1100, 400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }

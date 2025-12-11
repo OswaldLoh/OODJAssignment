@@ -1,5 +1,8 @@
 package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.CSVParser;
+import com.mycompany.oodjassignment.functions.Database;
+
+import java.util.ArrayList;
 
 public class Grades implements CSVParser<Grades> {
     private String gradeID, studentID, courseID, component;
@@ -97,9 +100,11 @@ public class Grades implements CSVParser<Grades> {
             return "D";
         } else {
             return "F";
+        }
     }
 
-    }
+
+
     public double getWeightedExamMark() {
         return (examMark * course.getExamWeight() / 100);
     }

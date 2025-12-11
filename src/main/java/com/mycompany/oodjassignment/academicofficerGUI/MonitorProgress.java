@@ -63,6 +63,7 @@ public class MonitorProgress {
         analyticsTextArea.setText(analyticsText);
         analyticsTextArea.setEditable(false);
     }
+
     private void loadRecoveryTasks(String targetPlanID) {
         tableModel.setRowCount(0);
 
@@ -90,23 +91,10 @@ public class MonitorProgress {
         milestoneTable.getColumnModel().getColumn(2).setPreferredWidth(400);
         milestoneTable.getColumnModel().getColumn(3).setPreferredWidth(50);
         milestoneTable.getColumnModel().getColumn(4).setPreferredWidth(100);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
-        milestoneTable.setRowSorter(sorter);
-        sorter.setComparator(0, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString().substring(1));
-            int n2 = Integer.parseInt(b.toString().substring(1));
-            return Integer.compare(n1, n2);
-        });
-        sorter.setComparator(1, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString().substring(1));
-            int n2 = Integer.parseInt(b.toString().substring(1));
-            return Integer.compare(n1, n2);
-        });
-        sorter.setComparator(3, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString());
-            int n2 = Integer.parseInt(b.toString());
-            return Integer.compare(n1, n2);
-        });
+
+        TableSorter sorter = new TableSorter(tableModel, milestoneTable);
+
+
         milestoneTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -127,7 +115,7 @@ public class MonitorProgress {
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800, 400);
+        recoveryPlanDashboardFrame.setSize(1100, 400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }
@@ -197,4 +185,5 @@ public class MonitorProgress {
     public JComponent $$$getRootComponent$$$() {
         return monitorProgressPanel;
     }
+
 }

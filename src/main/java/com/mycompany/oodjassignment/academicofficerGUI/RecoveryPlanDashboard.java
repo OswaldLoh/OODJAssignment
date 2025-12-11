@@ -89,8 +89,9 @@ public class RecoveryPlanDashboard {
                         plan.getPlanID(),
                         plan.getStudentID(),
                         plan.getCourseID(),
-                        plan.getCreatedBy(),
-                        plan.getProgress(),
+                        plan.getComponent(),
+                        String.format("%.1f", plan.getProgress()),
+                        plan.getCreatedBy()
                 };
                 tableModel.addRow(row);
                 found = true;
@@ -184,7 +185,7 @@ public class RecoveryPlanDashboard {
 
 
     private void tableSetup() {
-        String[] columnNames = {"Plan ID", "Component", "Student ID", "Course ID", "Created By", "Progress"};
+        String[] columnNames = {"Plan ID", "Student ID", "Course ID", "Component", "Progress", "Created By"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -200,23 +201,19 @@ public class RecoveryPlanDashboard {
         for (RecoveryPlan plan : database.getRecPlanDB().values()) {
             Object[] row = {
                     plan.getPlanID(),
-                    plan.getComponent(),
                     plan.getStudentID(),
                     plan.getCourseID(),
-                    plan.getCreatedBy(),
-                    String.format("%.1f", plan.getProgress())
+                    plan.getComponent(),
+                    String.format("%.1f", plan.getProgress()),
+                    plan.getCreatedBy()
             };
             tableModel.addRow(row);
         }
         planListTable.setModel(tableModel);
 
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
-        planListTable.setRowSorter(sorter);
-        sorter.setComparator(0, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString().substring(1));
-            int n2 = Integer.parseInt(b.toString().substring(1));
-            return Integer.compare(n1, n2);
-        });
+        TableSorter sorter = new TableSorter(tableModel, planListTable);
+        sorter.sortTable(0, "ID");
+
         planListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 

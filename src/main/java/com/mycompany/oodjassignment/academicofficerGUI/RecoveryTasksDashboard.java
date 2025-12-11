@@ -69,7 +69,8 @@ public class RecoveryTasksDashboard {
         boolean found = false;
 
         for (RecoveryTask task : database.getRecTaskDB().values()) {
-            if (task.getTaskID().toLowerCase().contains(searchText.toLowerCase())) {
+            if (task.getTaskID().toLowerCase().contains(searchText.toLowerCase()) ||
+                    task.getPlanID().toLowerCase().contains(searchText.toLowerCase())) {
                 String completionStatus;
                 if (task.getCompletion()) {
                     completionStatus = "Completed";
@@ -87,6 +88,7 @@ public class RecoveryTasksDashboard {
                 found = true;
             }
         }
+
         if (!found) {
             JOptionPane.showMessageDialog(RecoveryTasksPanel,
                     "No recovery task found with ID: " + searchText,
@@ -183,23 +185,10 @@ public class RecoveryTasksDashboard {
         taskTable.getColumnModel().getColumn(2).setPreferredWidth(400);
         taskTable.getColumnModel().getColumn(3).setPreferredWidth(50);
         taskTable.getColumnModel().getColumn(4).setPreferredWidth(100);
-        TableRowSorter<TableModel> sorter = new TableRowSorter<>(tableModel);
-        taskTable.setRowSorter(sorter);
-        sorter.setComparator(0, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString().substring(1));
-            int n2 = Integer.parseInt(b.toString().substring(1));
-            return Integer.compare(n1, n2);
-        });
-        sorter.setComparator(1, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString().substring(1));
-            int n2 = Integer.parseInt(b.toString().substring(1));
-            return Integer.compare(n1, n2);
-        });
-        sorter.setComparator(3, (a, b) -> {
-            int n1 = Integer.parseInt(a.toString());
-            int n2 = Integer.parseInt(b.toString());
-            return Integer.compare(n1, n2);
-        });
+
+        TableSorter sorter = new TableSorter(tableModel, taskTable);
+        sorter.sortTable(0, "ID");
+
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -291,7 +280,7 @@ public class RecoveryTasksDashboard {
         txtTaskID = new JTextField();
         RecoveryTasksPanel.add(txtTaskID, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         seartchPrompt = new JLabel();
-        seartchPrompt.setText("Search by TaskID:");
+        seartchPrompt.setText("Search by TaskID or PlanID:");
         RecoveryTasksPanel.add(seartchPrompt, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         RecoveryTasksPanel.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
