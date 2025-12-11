@@ -125,10 +125,35 @@ public class ModifyTaskMenu {
                     "Missing Input", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
+        // Store old description for email
+        String oldDescription = targetTask.getDescription();
+        
         targetTask.setDescription(newDescription);
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+        
+        // Send email notification about description change
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
+        Student student = database.getStudent(associatedPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Description Updated";
+        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+                "The description of a recovery task in your course recovery plan has been updated.\n\n" +
+                "Plan ID: " + targetTask.getPlanID() + "\n" +
+                "Task ID: " + targetTask.getTaskID() + "\n" +
+                "Old Description: " + oldDescription + "\n" +
+                "New Description: " + newDescription + "\n\n" +
+                "Please take note of the updated task requirements.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        new Thread(() ->
+                sendEmail.Notification(
+                        emailSubject,
+                        emailContent
+                )).start();
     }
 
     private void modifyWeek() {
@@ -156,23 +181,70 @@ public class ModifyTaskMenu {
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
             return;
         }
+        
+        // Store old week for email
+        int oldWeek = targetTask.getWeek();
+        
         targetTask.setWeek(newWeek);
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+        
+        // Send email notification about week change
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
+        Student student = database.getStudent(associatedPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Week Updated";
+        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+                "The week deadline of a recovery task in your course recovery plan has been updated.\n\n" +
+                "Plan ID: " + targetTask.getPlanID() + "\n" +
+                "Task ID: " + targetTask.getTaskID() + "\n" +
+                "Old Week: " + oldWeek + "\n" +
+                "New Week: " + newWeek + "\n\n" +
+                "Please adjust your schedule to meet the new deadline.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        new Thread(() ->
+                sendEmail.Notification(
+                        emailSubject,
+                        emailContent
+                )).start();
     }
 
     private void modifyCompletion() {
         boolean newCompletionStatus = completeRadioButton.isSelected();
         RecoveryPlan recPlan = new RecoveryPlan();
         RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
+        boolean oldCompletionStatus = targetTask.getCompletion(); // Store old status for email
         targetTask.setCompletion(newCompletionStatus);
         database.updatePlanProgress(targetTask.getPlanID());
         FileHandler.writeCSV(targetTask, database.getRecTaskDB());
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+        
+        // Send email notification about completion status change
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
+        Student student = database.getStudent(associatedPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Completion Status Updated";
+        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+                "The completion status of a recovery task in your course recovery plan has been updated.\n\n" +
+                "Plan ID: " + targetTask.getPlanID() + "\n" +
+                "Task ID: " + targetTask.getTaskID() + "\n" +
+                "Previous Status: " + (oldCompletionStatus ? "Completed" : "Incomplete") + "\n" +
+                "Current Status: " + (newCompletionStatus ? "Completed" : "Incomplete") + "\n\n" +
+                "Please check your recovery plan for the updated status.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        new Thread(() ->
+                sendEmail.Notification(
+                        emailSubject,
+                        emailContent
+                )).start();
     }
 
-    private void openRecoveryTaskDashboard() {
+        private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
         RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());

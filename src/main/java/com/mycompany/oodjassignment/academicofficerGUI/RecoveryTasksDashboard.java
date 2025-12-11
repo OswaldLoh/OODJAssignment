@@ -148,6 +148,11 @@ public class RecoveryTasksDashboard {
             return;
         }
 
+        // Get the task before removing it to access its details
+        RecoveryTask taskToDelete = database.getRecoveryTask(targetTaskID);
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetPlanID);
+        Student student = database.getStudent(associatedPlan.getStudentID());
+
         database.removeRecoveryTask(targetTaskID);
         database.updatePlanProgress(targetPlanID);
         tableModel.removeRow(row);
@@ -155,6 +160,25 @@ public class RecoveryTasksDashboard {
         RecoveryPlan recPlan = new RecoveryPlan();
         FileHandler.writeCSV(recPlan, database.getRecPlanDB());
         FileHandler.writeCSV(recTask, database.getRecTaskDB());
+        
+        // Send email notification about task deletion
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Deleted";
+        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+                "A recovery task has been removed from your course recovery plan (Plan ID: " + targetPlanID + ").\n\n" +
+                "Task ID: " + taskToDelete.getTaskID() + "\n" +
+                "Task Description: " + taskToDelete.getDescription() + "\n" +
+                "Week: " + taskToDelete.getWeek() + "\n\n" +
+                "Please note that this task is no longer required as part of your recovery plan.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        new Thread(() ->
+                sendEmail.Notification(
+                        emailSubject,
+                        emailContent
+                )).start();
+
         JOptionPane.showMessageDialog(RecoveryTasksPanel, "Recovery Task deleted successfully!");
     }
 
