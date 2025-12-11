@@ -125,11 +125,10 @@ public class AddRecoveryTask {
                 "Best regards,\n" +
                 "Academic Officer Team";
 
+        // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(
-                        emailSubject,
-                        emailContent
-                )).start();
+                sendEmail.Notification(emailSubject,emailContent)
+        ).start();
 
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");
 

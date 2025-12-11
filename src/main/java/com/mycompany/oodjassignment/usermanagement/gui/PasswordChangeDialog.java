@@ -5,6 +5,7 @@
 package com.mycompany.oodjassignment.usermanagement.gui;
 
 import com.mycompany.oodjassignment.classes.User;
+import com.mycompany.oodjassignment.functions.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import com.mycompany.oodjassignment.usermanagement.util.PasswordUtil;
 import javax.swing.JOptionPane;
@@ -209,6 +210,23 @@ public class PasswordChangeDialog extends javax.swing.JDialog {
         
         if (userManager.updateUser(targetUser)) {
             passwordChanged = true;
+            
+            // Send email notification about password change
+            if (targetUser.getEmail() != null && !targetUser.getEmail().isEmpty()) {
+                SendEmail sendEmail = new SendEmail(targetUser.getEmail());
+                String emailSubject = "Password Changed Notification";
+                String emailContent = "Dear " + targetUser.getFullName() + ",\n\n" +
+                        "Your password has been successfully changed " + "\n\n" +
+                        "If you did not do this change, please contact the system administrator immediately.\n\n" +
+                        "Best regards,\n" +
+                        "System Administrator";
+                
+                // using thread to prevent GUI freezing
+                new Thread(() ->
+                    sendEmail.Notification(emailSubject, emailContent)
+                ).start();
+            }
+            
             JOptionPane.showMessageDialog(this,
                 "Password changed successfully!",
                 "Success", JOptionPane.INFORMATION_MESSAGE);

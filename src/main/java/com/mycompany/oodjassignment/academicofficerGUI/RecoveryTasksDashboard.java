@@ -1,19 +1,35 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
+
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.mycompany.oodjassignment.functions.*;
-import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.classes.RecoveryPlan;
+import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.classes.Student;
+import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.FileHandler;
+import com.mycompany.oodjassignment.functions.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
-
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.util.*;
-
-import javax.swing.*;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 
 public class RecoveryTasksDashboard {
     private final Runnable onExitCallback;
@@ -172,12 +188,11 @@ public class RecoveryTasksDashboard {
                 "Please note that this task is no longer required as part of your recovery plan.\n\n" +
                 "Best regards,\n" +
                 "Academic Officer Team";
-
+                
+        // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(
-                        emailSubject,
-                        emailContent
-                )).start();
+                sendEmail.Notification(emailSubject,emailContent)
+        ).start();
 
         JOptionPane.showMessageDialog(RecoveryTasksPanel, "Recovery Task deleted successfully!");
     }

@@ -230,7 +230,13 @@ private void showPasswordReset() {
                 "Password Reset Successful",
                 JOptionPane.INFORMATION_MESSAGE
             );
-            sendEmail.Notification("Temporary Pass", ("New Temporary Password: " + tempPassword ));
+        
+        // using new thread prevent GUI freezing
+        new Thread(() -> 
+                sendEmail.Notification("Temporary Password", 
+                "Here is your temporary password: " + tempPassword + "\n\nBest regards,\n" +"System Administrator")
+        ).start();
+
         } else {
             JOptionPane.showMessageDialog(
                 this,

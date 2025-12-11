@@ -1,13 +1,30 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Insets;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.mycompany.oodjassignment.functions.*;
-import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.classes.RecoveryPlan;
+import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.classes.Student;
+import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.FileHandler;
+import com.mycompany.oodjassignment.functions.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
-
-import java.awt.*;
-import javax.swing.*;
 
 public class ModifyTaskMenu {
     private final Runnable onExitCallback;
@@ -139,7 +156,7 @@ public class ModifyTaskMenu {
         Student student = database.getStudent(associatedPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
         String emailSubject = "Recovery Task Description Updated";
-        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
                 "The description of a recovery task in your course recovery plan has been updated.\n\n" +
                 "Plan ID: " + targetTask.getPlanID() + "\n" +
                 "Task ID: " + targetTask.getTaskID() + "\n" +
@@ -149,11 +166,11 @@ public class ModifyTaskMenu {
                 "Best regards,\n" +
                 "Academic Officer Team";
 
+        // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(
-                        emailSubject,
-                        emailContent
-                )).start();
+                sendEmail.Notification(emailSubject,emailContent)
+        ).start();
+        
     }
 
     private void modifyWeek() {
@@ -195,7 +212,7 @@ public class ModifyTaskMenu {
         Student student = database.getStudent(associatedPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
         String emailSubject = "Recovery Task Week Updated";
-        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName()+",\n\n" +
                 "The week deadline of a recovery task in your course recovery plan has been updated.\n\n" +
                 "Plan ID: " + targetTask.getPlanID() + "\n" +
                 "Task ID: " + targetTask.getTaskID() + "\n" +
@@ -205,11 +222,10 @@ public class ModifyTaskMenu {
                 "Best regards,\n" +
                 "Academic Officer Team";
 
+        // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(
-                        emailSubject,
-                        emailContent
-                )).start();
+                sendEmail.Notification(emailSubject,emailContent)
+        ).start();
     }
 
     private void modifyCompletion() {
@@ -227,21 +243,20 @@ public class ModifyTaskMenu {
         Student student = database.getStudent(associatedPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
         String emailSubject = "Recovery Task Completion Status Updated";
-        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
+        String emailContent = "Dear " + student.getFirstName() + " " +  student.getLastName() + ",\n\n" +
                 "The completion status of a recovery task in your course recovery plan has been updated.\n\n" +
                 "Plan ID: " + targetTask.getPlanID() + "\n" +
                 "Task ID: " + targetTask.getTaskID() + "\n" +
-                "Previous Status: " + (oldCompletionStatus ? "Completed" : "Incomplete") + "\n" +
-                "Current Status: " + (newCompletionStatus ? "Completed" : "Incomplete") + "\n\n" +
+                "Previous Status: " + oldCompletionStatus + "\n" +
+                "Current Status: " + newCompletionStatus+ "\n\n" +
                 "Please check your recovery plan for the updated status.\n\n" +
                 "Best regards,\n" +
                 "Academic Officer Team";
 
+        // using new thread prevent GUI freezing
         new Thread(() ->
-                sendEmail.Notification(
-                        emailSubject,
-                        emailContent
-                )).start();
+                sendEmail.Notification(emailSubject,emailContent)
+        ).start();
     }
 
         private void openRecoveryTaskDashboard() {
