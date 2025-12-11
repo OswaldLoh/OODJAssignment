@@ -57,6 +57,8 @@ public class AddRecoveryTask {
 
         confirmButton.addActionListener(e -> {
             addTask(targetPlanID);
+            closeCurrentMenu();
+            openRecoveryPlanDashboard();
         });
 
         backButton.addActionListener(e -> {
@@ -72,7 +74,7 @@ public class AddRecoveryTask {
         String newDescription = txtDescription.getText().trim();
         String newWeekString = txtWeek.getText().trim();
 
-        if (newDescription.isEmpty()) {
+        if (newDescription.isEmpty()) {                             // if no input for description
             JOptionPane.showMessageDialog(addRecoveryTaskPanel,
                     "Please enter a task description.",
                     "Missing Input", JOptionPane.WARNING_MESSAGE);
@@ -80,7 +82,7 @@ public class AddRecoveryTask {
         }
 
         try {
-            if (newWeekString.isEmpty()) {
+            if (newWeekString.isEmpty()) {                          // if no input for week
                 JOptionPane.showMessageDialog(addRecoveryTaskPanel,
                         "Please enter week: ",
                         "Error.", JOptionPane.WARNING_MESSAGE);
@@ -89,7 +91,7 @@ public class AddRecoveryTask {
 
             newWeek = Integer.parseInt(newWeekString);
 
-            if (newWeek <= 0) {
+            if (newWeek <= 0) {                                     // if input week is smaller than or equal to 0
                 JOptionPane.showMessageDialog(addRecoveryTaskPanel,
                         "Week must be greater than 0.",
                         "Error.", JOptionPane.WARNING_MESSAGE);
@@ -97,13 +99,13 @@ public class AddRecoveryTask {
             }
 
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(addRecoveryTaskPanel,
+            JOptionPane.showMessageDialog(addRecoveryTaskPanel,     // non-integer value received for week
                     "Please enter a valid whole number for week.",
                     "Error.", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        IDManager recTasKIDManager = new IDManager(database.getRecTaskDB());
+        IDManager recTasKIDManager = new IDManager(database.getRecTaskDB());    // generate new Task ID
         recTasKIDManager.getHighestTaskID();
         String nextTaskID = "T" + recTasKIDManager.generateNewID();
 
@@ -131,10 +133,6 @@ public class AddRecoveryTask {
         ).start();
 
         JOptionPane.showMessageDialog(addRecoveryTaskPanel, "Recovery Task added successfully!");
-
-        closeCurrentMenu();
-        studentSelectionDashboard();
-
     }
 
     private void studentSelectionDashboard() {

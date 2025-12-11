@@ -44,6 +44,7 @@ public class RecoveryPlanDashboard {
 
         monitorProgressButton.addActionListener(e -> {
             monitorProgress();
+            closeCurrentMenu();
         });
 
         addPlanButton.addActionListener(e -> {
@@ -118,7 +119,6 @@ public class RecoveryPlanDashboard {
         int modelRow = planListTable.convertRowIndexToModel(row);
         String targetPlanID = (String) tableModel.getValueAt(modelRow, 0);
         openMonitorProgress(targetPlanID);
-        closeCurrentMenu();
     }
 
     private void addTask() {
@@ -136,30 +136,32 @@ public class RecoveryPlanDashboard {
     }
 
     private void deletePlan() {
-        int taskCount = 1, taskDeleteConfirmation = 0;
+        int taskCount = 1, taskDeleteConfirmation;
         int row = planListTable.getSelectedRow();
-        if (row == -1) {
+        if (row == -1) {                                                    // if user clicks button without selecting plan
             JOptionPane.showMessageDialog(recoveryPlanDashboardPanel,
                     "Please select a plan first.",
                     "Error.", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        int modelRow = planListTable.convertRowIndexToModel(row);
+
+        int modelRow = planListTable.convertRowIndexToModel(row);           // getting values from selected plan (row)
         String planID = (String) tableModel.getValueAt(modelRow, 0);
-        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);
+        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);       // getting all recovery tasks under selected recovery plan
         StringBuilder taskDeletionMessage = new StringBuilder();
+
         taskDeletionMessage.append("Doing so will delete the following recovery tasks registered under " + planID + "!\n\n");
         for (RecoveryTask task : planTasks) {
-            taskDeletionMessage.append(taskCount + ". ").append(task.getTaskID()).append("\n");
+            taskDeletionMessage.append(taskCount + ". ").append(task.getTaskID()).append("\n");     // list out all recovery tasks under recovery plan
             taskCount++;
         }
         taskDeletionMessage.append("\nConfirm deletion?");
 
-        int planDeleteConfirmation = JOptionPane.showConfirmDialog(recoveryPlanDashboardPanel,
+        int planDeleteConfirmation = JOptionPane.showConfirmDialog(recoveryPlanDashboardPanel,      // prompt user for delete confirmation
                 "Are you sure you want to delete Plan " + planID + "?",
                 "Confirm Delete", JOptionPane.YES_NO_OPTION);
 
-        if (planDeleteConfirmation == JOptionPane.YES_OPTION) {
+        if (planDeleteConfirmation == JOptionPane.YES_OPTION) {                                     // inform user of batch deletion of recovery tasks
             taskDeleteConfirmation = JOptionPane.showConfirmDialog(recoveryPlanDashboardPanel,
                     taskDeletionMessage, "Confirm Delete", JOptionPane.YES_NO_OPTION);
         } else {
@@ -167,10 +169,10 @@ public class RecoveryPlanDashboard {
         }
         ;
 
-        if (taskDeleteConfirmation == JOptionPane.YES_OPTION) {
-            database.removeRecoveryPlan(planID);
+        if (taskDeleteConfirmation == JOptionPane.YES_OPTION) {     // deletion confirmed
+            database.removeRecoveryPlan(planID);                    // delete recovery plan
             for (RecoveryTask task : planTasks) {
-                database.removeRecoveryTask(task.getTaskID());
+                database.removeRecoveryTask(task.getTaskID());      // delete all recovery tasks under recovery plan
             }
             tableModel.removeRow(modelRow);
         } else {
@@ -179,7 +181,7 @@ public class RecoveryPlanDashboard {
 
         RecoveryPlan recPlan = new RecoveryPlan();
         RecoveryTask recTask = new RecoveryTask();
-        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+        FileHandler.writeCSV(recPlan, database.getRecPlanDB());     // write the latest database to text file
         FileHandler.writeCSV(recTask, database.getRecTaskDB());
     }
 

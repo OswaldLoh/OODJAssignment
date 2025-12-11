@@ -51,6 +51,8 @@ public class ModifyTaskMenu {
         this.authService = authService;
         this.onExitCallback = onExitCallback;
 
+
+
         RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);       // getting object of selected recovery task
 
         showSelectedModifyTarget(mode);            // only show specific search box or radio button based on which data to be modified
@@ -64,20 +66,18 @@ public class ModifyTaskMenu {
         }
 
         confirmButton.addActionListener(e -> {      // receive
-            switch (mode) {
-                case "Description":
-                    modifyDescription(targetTask);
-                    break;
-                case "Week":
-                    modifyWeek(targetTask);
-                    break;
-                case "Completion Status":
-                    modifyCompletion(targetTask);
-                    break;
+            boolean modified = switch (mode) {
+                case "Description" -> modifyDescription(targetTask);
+                case "Week" -> modifyWeek(targetTask);
+                case "Completion Status" -> modifyCompletion(targetTask);
+                default -> false;
+            };
+
+            if (modified) {
+                JOptionPane.showMessageDialog(modifyTaskPanel, "Task modified successfully!");
+                openRecoveryTaskDashboard();
+                closeCurrentMenu();
             }
-            JOptionPane.showMessageDialog(modifyTaskPanel, "Task modified successfully!");
-            openRecoveryTaskDashboard();
-            closeCurrentMenu();
         });
 
         backButton.addActionListener(e -> {
@@ -86,13 +86,13 @@ public class ModifyTaskMenu {
         });
     }
 
-    private void modifyDescription(RecoveryTask targetTask) {
+    private boolean modifyDescription(RecoveryTask targetTask) {
         String newDescription = txtNewDescription.getText().trim();
         if (newDescription.isEmpty()) {
             JOptionPane.showMessageDialog(modifyTaskPanel,
                     "Please enter a task description.",
                     "Missing Input", JOptionPane.WARNING_MESSAGE);
-            return;
+            return false;
         }
 
         // Store old description for email
@@ -122,10 +122,10 @@ public class ModifyTaskMenu {
         new Thread(() ->
                 sendEmail.Notification(emailSubject, emailContent)
         ).start();
-
+        return true;
     }
 
-    private void modifyWeek(RecoveryTask targetTask) {
+    private boolean modifyWeek(RecoveryTask targetTask) {
         String newWeekString = txtNewWeek.getText().trim();
         int newWeek = 0;
         try {
@@ -133,7 +133,7 @@ public class ModifyTaskMenu {
                 JOptionPane.showMessageDialog(modifyTaskPanel,
                         "Please enter a week.",
                         "Missing Input", JOptionPane.WARNING_MESSAGE);
-                return;
+                return false;
             }
             newWeek = Integer.parseInt(newWeekString);
 
@@ -141,13 +141,13 @@ public class ModifyTaskMenu {
                 JOptionPane.showMessageDialog(modifyTaskPanel,
                         "Week must be greater than 0.",
                         "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                return;
+                return false;
             }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(modifyTaskPanel,
                     "Week must be a valid whole number.",
                     "Invalid Input", JOptionPane.ERROR_MESSAGE);
-            return;
+            return false;
         }
 
         // Store old week for email
@@ -177,9 +177,10 @@ public class ModifyTaskMenu {
         new Thread(() ->
                 sendEmail.Notification(emailSubject, emailContent)
         ).start();
+        return true;
     }
 
-    private void modifyCompletion(RecoveryTask targetTask) {
+    private boolean modifyCompletion(RecoveryTask targetTask) {
         boolean newCompletionStatus = completeRadioButton.isSelected();
         RecoveryPlan recPlan = new RecoveryPlan();
         boolean oldCompletionStatus = targetTask.getCompletion(); // Store old status for email
@@ -207,6 +208,7 @@ public class ModifyTaskMenu {
         new Thread(() ->
                 sendEmail.Notification(emailSubject, emailContent)
         ).start();
+        return true;
     }
     private void showSelectedModifyTarget(String mode) {
         if (mode.equals("Description")) {

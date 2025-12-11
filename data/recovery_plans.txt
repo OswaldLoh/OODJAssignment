@@ -2,4 +2,4 @@ planID,studentID,courseID,component,createdBy,progress
 P1,S015,C217,Assignment,AO001,0.0
 P3,S004,C236,Examination,AO001,0.0
 P4,S011,C217,Examination and Assignment,AO001,0.0
-P5,S077,C215,Module Retake,AO001,0.0
+P5,S077,C215,Module Retake,AO001,25.0

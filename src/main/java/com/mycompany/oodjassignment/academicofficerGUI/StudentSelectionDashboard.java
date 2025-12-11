@@ -44,7 +44,7 @@ public class StudentSelectionDashboard {
         });
 
         addPlanButton.addActionListener(e -> {
-            addPlan();
+            selectStudentNewPlan();
 
         });
         backButton.addActionListener(e -> {
@@ -85,7 +85,7 @@ public class StudentSelectionDashboard {
         }
     }
 
-    private void addPlan() {
+    private void selectStudentNewPlan() {
         int row = studentListTable.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(addPlanDashboardPanel,

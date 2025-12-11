@@ -1,32 +1,15 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Insets;
+
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import java.awt.*;
+import javax.swing.*;
+import com.intellij.uiDesigner.core.*;
+import com.mycompany.oodjassignment.classes.*;
+import com.mycompany.oodjassignment.functions.*;
 import javax.swing.table.DefaultTableModel;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
-import com.mycompany.oodjassignment.classes.RecoveryPlan;
-import com.mycompany.oodjassignment.classes.RecoveryTask;
-import com.mycompany.oodjassignment.classes.Student;
-import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.functions.FileHandler;
-import com.mycompany.oodjassignment.functions.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 public class RecoveryTasksDashboard {
@@ -44,6 +27,7 @@ public class RecoveryTasksDashboard {
     private JScrollPane taskScroll;
     private JButton modifyButton;
     private JLabel searchPrompt;
+    public JButton addRecoveryTaskButton;
 
     public RecoveryTasksDashboard(Database database, Runnable onExitCallback, AuthenticationService authService) {
         this.onExitCallback = onExitCallback;
@@ -65,7 +49,10 @@ public class RecoveryTasksDashboard {
         deleteTaskButton.addActionListener(e -> {
             deleteTask();
         });
-
+        addRecoveryTaskButton.addActionListener(e -> {
+            closeCurrentMenu();
+            openRecoveryPlanDashboard();
+        });
         backButton.addActionListener(e -> {
             closeCurrentMenu();
             openMainMenu();
@@ -232,6 +219,7 @@ public class RecoveryTasksDashboard {
 
         TableSorter sorter = new TableSorter(tableModel, taskTable);
         sorter.sortTable(0, "ID");
+        sorter.sortTable(3, "Not ID");
 
         taskTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
@@ -239,13 +227,13 @@ public class RecoveryTasksDashboard {
     private String modifySelection() {
         String[] options = {"Description", "Week", "Completion Status"};
         String selectedOption = (String) JOptionPane.showInputDialog(
-                RecoveryTasksPanel,                 // Parent
-                "Choose data to modify.",        // Message
-                "Selection",                  // Title
-                JOptionPane.QUESTION_MESSAGE,    // Icon type
-                null,                            // Custom Icon (none)
-                options,                         // The Array of options
-                options[0]                       // The default selection
+                RecoveryTasksPanel,
+                "Choose data to modify.",
+                "Selection",
+                JOptionPane.QUESTION_MESSAGE,
+                null,                            // no custom icon needed
+                options,                         // display options
+                options[0]                       // default selection of the dropdown
         );
 
         if (selectedOption != null) {
@@ -253,6 +241,16 @@ public class RecoveryTasksDashboard {
         } else {
             return null;
         }
+    }
+
+    private void openRecoveryPlanDashboard() {
+        JFrame recoveryPlanDashboardFrame = new JFrame("Academic Officer System");
+        RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
+        recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
+        recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        recoveryPlanDashboardFrame.setSize(1100, 400);
+        recoveryPlanDashboardFrame.setLocationRelativeTo(null);
+        recoveryPlanDashboardFrame.setVisible(true);
     }
 
     private void openModifyTaskMenu(String targetTaskID, String mode) {
@@ -328,6 +326,15 @@ public class RecoveryTasksDashboard {
         RecoveryTasksPanel.add(searchPrompt, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         RecoveryTasksPanel.add(spacer1, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        final JPanel panel1 = new JPanel();
+        panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setBackground(new Color(-1));
+        RecoveryTasksPanel.add(panel1, new GridConstraints(4, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        addRecoveryTaskButton = new JButton();
+        addRecoveryTaskButton.setText("Add Recovery Task");
+        panel1.add(addRecoveryTaskButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer2 = new Spacer();
+        panel1.add(spacer2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
     }
 
     /**
