@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment;
+package com.mycompany.oodjassignment.test;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ import com.mycompany.oodjassignment.classes.UserStatus;
 /**
  * Testing file to print the toString methods for all classes in the OODJAssignment project
  */
-public class Test {
+public class TestAllToString {
 
     public static void main(String[] args) {
         System.out.println("=== Testing toString methods for all classes ===\n");

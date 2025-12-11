@@ -263,11 +263,17 @@ public class EligibilityMain extends JFrame {
                     "BLOCKED"
             );
 
-            // Run email in a separate thread to avoid UI freezing
+            // using thread to prevent GUI freezing
             new Thread(() ->
                     sendEmail.Notification(
-                            "Eligibility Notification",
-                            "You are not eligible for enrolment."
+                            "Course Eligibility Notification",
+                            "Dear " + s.getFirstName() + " " +  s.getLastName() + ",\n\n" +
+                            "Unfortunately, you are not eligible for enrolment based on your current academic standing.\n\n" +
+                            "Your CGPA: " + String.format("%.2f", cgpa) + "\n" +
+                            "Failed Courses: " + fails + "\n\n" +
+                            "Please contact your academic advisor for guidance on improving your eligibility.\n\n" +
+                            "Best regards,\n" +
+                            "Academic Administrator"
                     )
             ).start();
 
@@ -296,11 +302,17 @@ public class EligibilityMain extends JFrame {
                 s.getStudentID(), fullName, cgpa, fails, "ENROLLED"
         );
 
-        // Email sent asynchronously to keep UI responsive
+        // using thread to prevent GUI freezing
         new Thread(() ->
                 sendEmail.Notification(
-                        "Enrolment Successful",
-                        "You have been successfully enrolled."
+                        "Enrolment Confirmation",
+                        "Dear " + s.getFirstName() + s.getLastName() + ",\n\n" +
+                        "Congratulations! You have been successfully enrolled.\n\n" +
+                        "Your CGPA: " + String.format("%.2f", cgpa) + "\n" +
+                        "Failed Courses: " + fails + "\n\n" +
+                        "Your enrolment has been confirmed. Please check your student portal for further details.\n\n" +
+                        "Best regards,\n" +
+                        "Academic Administrator"
                 )
         ).start();
 

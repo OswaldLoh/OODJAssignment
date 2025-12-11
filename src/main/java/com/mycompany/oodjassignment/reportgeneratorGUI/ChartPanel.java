@@ -21,34 +21,12 @@ public class ChartPanel extends JPanel {
     
     public ChartPanel(String chartType) {
         this.chartType = chartType;
-        this.setPreferredSize(new Dimension(1000, 600)); // Even larger size for better display
+        this.setPreferredSize(new Dimension(1000, 600)); 
     }
     
     public void updateChartType(String newChartType) {
         this.chartType = newChartType;
         repaint();
-    }
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        switch (chartType) {
-            case "GPA Distribution":
-                drawGPADistributionChart(g2d);
-                break;
-            case "Department Performance":
-                drawDepartmentPerformanceChart(g2d);
-                break;
-            case "Course Performance":
-                drawCoursePerformanceChart(g2d);
-                break;
-            case "Semester Performance":
-                drawSemesterPerformanceChart(g2d);
-                break;
-        }
     }
     
     private void drawGPADistributionChart(Graphics2D g2d) {
@@ -66,9 +44,10 @@ public class ChartPanel extends JPanel {
         List<Double> gpaValues = new ArrayList<>();
         List<String> deptLabels = new ArrayList<>();
         
+        // adding the department and gpa in dept data
         for (Map.Entry<String, Double> entry : deptData.entrySet()) {
-            deptLabels.add(entry.getKey());  // department name
-            gpaValues.add(entry.getValue()); // average GPA
+            deptLabels.add(entry.getKey());  
+            gpaValues.add(entry.getValue()); 
         }
         
         // Sort the data by CGPA descending for better visualization
@@ -77,7 +56,8 @@ public class ChartPanel extends JPanel {
             sortedData.add(new int[]{i, (int) Math.round(gpaValues.get(i) * 100)});
         }
         
-        sortedData.sort((a, b) -> Integer.compare(b[1], a[1])); // Sort by value descending
+        // Sort by value descending
+        sortedData.sort((a, b) -> Integer.compare(b[1], a[1])); 
         
         // Convert to sorted arrays
         int[] values = new int[sortedData.size()];
@@ -99,9 +79,10 @@ public class ChartPanel extends JPanel {
         List<Double> gpaValues = new ArrayList<>();
         List<String> courseLabels = new ArrayList<>();
         
+        // adding the course and gpa in course data
         for (Map.Entry<String, Double> entry : courseData.entrySet()) {
-            courseLabels.add(entry.getKey());  // course ID
-            gpaValues.add(entry.getValue());   // average GPA
+            courseLabels.add(entry.getKey());  
+            gpaValues.add(entry.getValue());   
         }
         
         // Sort the data by GPA descending for better visualization
@@ -319,17 +300,15 @@ public class ChartPanel extends JPanel {
             
             else {
                 // Rotate labels for large datasets or long labels to save space and avoid graph overlap
-                if (labels.length > 6 || labelWidth > 30) { // Also consider label length for rotation
-                    // Use a steeper angle and position the label to avoid graph area
-                    g2d.rotate(-Math.PI/2.2, x + barWidth/2, labelY); // Steeper rotation (about 81 degrees) - almost vertical
+                if (labels.length > 6 || labelWidth > 30) {
+                    g2d.rotate(-Math.PI/2.2, x + barWidth/2, labelY); 
                     g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 15); // Move down more to avoid overlap
-                    g2d.rotate(Math.PI/2.2, x + barWidth/2, labelY); // Rotate back
+                    g2d.rotate(Math.PI/2.2, x + barWidth/2, labelY); 
                 } 
                 
                 else if (labelWidth > barWidth) {
-                    // For medium-sized datasets with wide labels, use 60-degree rotation
                     g2d.rotate(-Math.PI/3, x + barWidth/2, labelY);
-                    g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 12); // Move down more to avoid overlap
+                    g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 12);  // Adjust position to avoid overlap
                     g2d.rotate(Math.PI/3, x + barWidth/2, labelY);
                 } 
                 
@@ -347,20 +326,18 @@ public class ChartPanel extends JPanel {
                 
                 if (valueWidth <= barWidth) {
                     // Check if there's enough space to draw the value on top of the bar
-                    if (barHeight > 20) { // If bar is tall enough, put value inside the bar near the bottom
-                        int valueLabelY = y + barHeight - 5; // Position near the bottom of the bar
-                        g2d.setColor(Color.BLACK); // Use black text for visibility inside bar
+                    if (barHeight > 20) { 
+                        int valueLabelY = y + barHeight - 5; 
+                        g2d.setColor(Color.BLACK);
                         g2d.drawString(valueStr, x + (barWidth - valueWidth) / 2, valueLabelY);
-                        // Restore the original color after drawing the value
                         g2d.setColor(barColor);
                     } 
                     
                     else {
                         // If bar is not tall enough to put the value inside, put it on top
                         int valueLabelY = y - 5;
-                        g2d.setColor(Color.BLACK); // Use black text for contrast
+                        g2d.setColor(Color.BLACK); 
                         g2d.drawString(valueStr, x + (barWidth - valueWidth) / 2, valueLabelY);
-                        // Restore the original color
                         g2d.setColor(barColor);
                     }
                 }
@@ -404,4 +381,27 @@ public class ChartPanel extends JPanel {
             g2d.drawString(grades[i], x + 20, y + i * 20 + 12);
         }
     }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
+        switch (chartType) {
+            case "GPA Distribution":
+                drawGPADistributionChart(g2d);
+                break;
+            case "Department Performance":
+                drawDepartmentPerformanceChart(g2d);
+                break;
+            case "Course Performance":
+                drawCoursePerformanceChart(g2d);
+                break;
+            case "Semester Performance":
+                drawSemesterPerformanceChart(g2d);
+                break;
+        }
+    }
+
 }
