@@ -1,11 +1,23 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import java.awt.*;
-
-import java.util.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Insets;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.StyleContext;
@@ -13,10 +25,17 @@ import javax.swing.text.StyleContext;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-
-import com.mycompany.oodjassignment.classes.*;
-
-import com.mycompany.oodjassignment.functions.*;
+import com.mycompany.oodjassignment.classes.Course;
+import com.mycompany.oodjassignment.classes.Grades;
+import com.mycompany.oodjassignment.classes.RecoveryPlan;
+import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.classes.Student;
+import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.FileHandler;
+import com.mycompany.oodjassignment.functions.IDManager;
+import com.mycompany.oodjassignment.functions.SendEmail;
+import com.mycompany.oodjassignment.functions.TableSorter;
+import com.mycompany.oodjassignment.functions.TaskGenerator;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 public class CourseSelectionMenu {
@@ -89,6 +108,26 @@ public class CourseSelectionMenu {
         RecoveryPlan newPlan = new RecoveryPlan(nextPlanID, targetStudentID, courseID, component, userID, "0.00");
         database.addRecoveryPlan(newPlan);
         FileHandler.writeCSV(newPlan, database.getRecPlanDB());
+
+        // Send email notification to the student
+        Student student = database.getStudent(targetStudentID);
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "New Recovery Plan Created";
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" + 
+                "A new recovery plan has been created for you in the course: " + courseID + "\n\n" +   
+                "Plan Details:" + "\n" +
+                "Plan ID: " + nextPlanID + "\n" + 
+                "Course: " + courseID + "\n" + 
+                "Component: " + component + "\n" + 
+                "Created by: Academic Officer" + "\n" +
+                "Please check your recovery plan dashboard for more details and upcoming tasks." + "\n\n" +
+                "Best regards," + "\n" + 
+                "Academic Officer Team";
+
+        // Send email in a separate thread to prevent GUI freezing
+        new Thread(() -> {
+            sendEmail.Notification(emailSubject, emailContent);
+        }).start();
 
         JOptionPane.showMessageDialog(studentCourseSelectionPanel,
                 "Recovery Plan added!",
