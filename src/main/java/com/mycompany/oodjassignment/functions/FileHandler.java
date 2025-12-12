@@ -6,8 +6,6 @@ import java.util.HashMap;
 @SuppressWarnings("CallToPrintStackTrace")
 
 public class FileHandler {
-
-
     public static <Class extends CSVParser<Class>> HashMap<String, Class> readCSV(Class parseTarget) {
         HashMap<String, Class> resultHashMap = new HashMap<>();
         try (BufferedReader fileReader = new BufferedReader(new FileReader(parseTarget.getFilename()))) {   // abstract method getFilename()

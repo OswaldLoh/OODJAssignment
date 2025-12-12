@@ -34,19 +34,19 @@ public class Database {
     }
 
     // Object adder
-    public void addRecoveryPlan(RecoveryPlan recPlan) {
-        recPlanDB.put(recPlan.getPlanID(),recPlan);
+    public void addRecoveryPlan(RecoveryPlan newPlan) {
+        recPlanDB.put(newPlan.getPlanID(),newPlan);
     }
-    public void addRecoveryTask(RecoveryTask recTask) {
-        recTaskDB.put(recTask.getTaskID(),recTask);
+    public void addRecoveryTask(RecoveryTask newTask) {
+        recTaskDB.put(newTask.getTaskID(),newTask);
     }
 
     // Object removers
-    public void removeRecoveryPlan(String planID) {
-        recPlanDB.remove(planID);
+    public void removeRecoveryPlan(String targetPlanID) {
+        recPlanDB.remove(targetPlanID);
     }
-    public void removeRecoveryTask(String taskID) {
-        recTaskDB.remove(taskID);
+    public void removeRecoveryTask(String targetTaskID) {
+        recTaskDB.remove(targetTaskID);
     }
     
     // Object getters
@@ -77,9 +77,6 @@ public class Database {
     public HashMap<String, Student> getStudentDB() {
         return studentDB;
     }
-    public HashMap<String, Course> getCourseDB() {
-        return courseDB;
-    }
     public HashMap<String, Grades> getGradeDB() {
         return gradesDB;
     }
@@ -105,7 +102,6 @@ public class Database {
                 }
             }
         }
-
         return new ArrayList<>(latestGradesMap.values());
     }
 
@@ -159,7 +155,7 @@ public class Database {
 
 
     public String getRecoveryPlanComponent(String targetStudentID, String targetCourseID) {
-        String retakenComponent = "hi";
+        String retakenComponent = "Null";
         int attemptCount = 0;
         ArrayList<Grades> courseAttempts = new ArrayList<>();
         for (Grades grade : gradesDB.values()) {
@@ -188,10 +184,10 @@ public class Database {
         return retakenComponent;
     }
 
-    public ArrayList<RecoveryTask> getPlanRecoveryTask(String targetRecoveryPlanID) {
+    public ArrayList<RecoveryTask> getTaskUnderPlan(String targetPlanID) {
         ArrayList<RecoveryTask> taskInPlan = new ArrayList<>();
         for (RecoveryTask task : recTaskDB.values()) {
-            if ((targetRecoveryPlanID).equals(task.getPlanID())) {
+            if ((targetPlanID).equals(task.getPlanID())) {
                 taskInPlan.add(task);
             }
         }
@@ -315,12 +311,10 @@ public class Database {
     
     // Get GPA distribution data
     public int[] getGPADistributionData() {
-        HashMap<String, Grades> gradeDB = getGradeDB();
-        
         // Count grades in different GPA ranges
         int gradeA = 0, gradeB = 0, gradeC = 0, gradeD = 0, gradeF = 0;
         
-        for (Grades grade : gradeDB.values()) {
+        for (Grades grade : gradesDB.values()) {
             grade.setCourseObject(getCourse(grade.getCourseID()));
             String letterGrade = grade.getLetterGrade();
             

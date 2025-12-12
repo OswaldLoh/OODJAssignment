@@ -162,7 +162,7 @@ public class RecoveryPlanDashboard {
 
         int modelRow = planListTable.convertRowIndexToModel(row);           // getting values from selected plan (row)
         String planID = (String) tableModel.getValueAt(modelRow, 0);
-        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(planID);       // getting all recovery tasks under selected recovery plan
+        ArrayList<RecoveryTask> planTasks = database.getTaskUnderPlan(planID);       // getting all recovery tasks under selected recovery plan
         StringBuilder taskDeletionMessage = new StringBuilder();
 
         taskDeletionMessage.append("Doing so will delete the following recovery tasks registered under " + planID + "!\n\n");

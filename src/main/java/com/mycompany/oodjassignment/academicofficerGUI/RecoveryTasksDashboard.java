@@ -165,7 +165,7 @@ public class RecoveryTasksDashboard {
         RecoveryPlan associatedPlan = database.getRecoveryPlan(targetPlanID);
         Student student = database.getStudent(associatedPlan.getStudentID());
 
-        ArrayList<RecoveryTask> planTasks = database.getPlanRecoveryTask(targetPlanID); // check if last recovery task in plan?
+        ArrayList<RecoveryTask> planTasks = database.getTaskUnderPlan(targetPlanID); // check if last recovery task in plan?
         int taskCount = planTasks.size();
         if (taskCount == 1) {
             JOptionPane.showMessageDialog(RecoveryTasksPanel,
