@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.AcademicOfficerGUI;
+package com.mycompany.oodjassignment.CourseRecoverySystemGUI;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;

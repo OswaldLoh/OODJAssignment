@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.AcademicOfficerGUI;
+package com.mycompany.oodjassignment.CourseRecoverySystemGUI;
 import com.mycompany.oodjassignment.Entities.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;

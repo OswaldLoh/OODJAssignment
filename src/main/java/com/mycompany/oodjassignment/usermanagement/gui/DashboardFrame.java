@@ -4,11 +4,11 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.AcademicOfficerGUI.CourseRecovery;
+import com.mycompany.oodjassignment.CourseRecoverySystemGUI.CourseRecovery;
 import com.mycompany.oodjassignment.Entities.User;
 import com.mycompany.oodjassignment.Enums.UserRole;
 import com.mycompany.oodjassignment.Helpers.Database;
-import com.mycompany.oodjassignment.academicperformanceGUI.AcademicPerformancePanel;
+import com.mycompany.oodjassignment.AcademicPerformanceGUI.AcademicPerformancePanel;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.Eligibility.EligibilityMain;
 

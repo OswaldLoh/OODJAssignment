@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.AcademicOfficerGUI;
+package com.mycompany.oodjassignment.CourseRecoverySystemGUI;
 
 import java.awt.*;
 import java.util.Locale;

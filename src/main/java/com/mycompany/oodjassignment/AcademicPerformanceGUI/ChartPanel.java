@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.academicperformanceGUI;
+package com.mycompany.oodjassignment.AcademicPerformanceGUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
