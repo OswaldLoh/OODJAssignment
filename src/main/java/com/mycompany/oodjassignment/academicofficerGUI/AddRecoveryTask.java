@@ -118,14 +118,14 @@ public class AddRecoveryTask {
         Student student = database.getStudent(recPlan.getStudentID());
         SendEmail sendEmail = new SendEmail(student.getEmail());
 
-        String emailSubject = "New Recovery Task Assigned";
-        String emailContent = "Dear " + student.getFirstName() + ",\n\n" +
-                "A new recovery task has been assigned to you for your course recovery plan (Plan ID: " + targetPlanID + ").\n\n" +
-                "Task Description: " + newDescription + "\n" +
-                "Week: " + newWeek + "\n\n" +
-                "Please make sure to complete the task within the specified duration.\n\n" +
-                "Best regards,\n" +
-                "Academic Officer Team";
+        String emailSubject = \"New Recovery Task Assigned\";
+        String emailContent = \"Dear \" + student.getFirstName() + \",\\n\\n\" +
+                \"A new recovery task has been assigned to you for your course recovery plan (Plan ID: \" + targetPlanID + \").\\n\\n\" +
+                \"Task Description: \" + newDescription + \"\\n\" +
+                \"Week: \" + newWeek + \"\\n\\n\" +
+                \"Please make sure to complete the task within the specified duration.\\n\\n\" +
+                \"Best regards,\\n\" +
+                \"Academic Officer Team\";
 
         // using new thread prevent GUI freezing
         new Thread(() ->
