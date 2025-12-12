@@ -163,10 +163,6 @@ public abstract class User implements Serializable {
         touch();
     }
 
-    public void showMenu() {
-        
-    }
-
     public String toFileString() {
         DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         return String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s",

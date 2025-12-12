@@ -6,6 +6,7 @@ import java.util.*;
 public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     private String planID, studentID, courseID, createdBy, component;
     private double progress;
+    private final String filename = "data/recovery_plans.txt";
 
     // constructors
     public RecoveryPlan() {}
@@ -51,7 +52,7 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     }
     @Override
     public String getFilename() {
-    return "data/recovery_plans.txt";
+        return filename;
     }
 
     @Override
