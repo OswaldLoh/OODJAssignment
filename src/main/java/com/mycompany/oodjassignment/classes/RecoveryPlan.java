@@ -6,7 +6,6 @@ import java.util.*;
 public class RecoveryPlan implements CSVParser<RecoveryPlan> {
     private String planID, studentID, courseID, createdBy, component;
     private double progress;
-    private static final String filename = "data/recovery_plans.txt";
 
     // constructors
     public RecoveryPlan() {}
@@ -43,16 +42,16 @@ public class RecoveryPlan implements CSVParser<RecoveryPlan> {
         return new RecoveryPlan(details[0],details[1],details[2],details[3],details[4],details[5]);
     }
     @Override
-        public String toCSV() {
+    public String toCSV() {
         return (planID+","+studentID+","+courseID+","+component+","+createdBy+","+progress);
     }
     @Override
-        public String getFileHeader() {
+    public String getFileHeader() {
         return "planID,studentID,courseID,component,createdBy,progress";
     }
     @Override
-        public String getFilename() {
-        return filename;
+    public String getFilename() {
+    return "data/recovery_plans.txt";
     }
 
     @Override
