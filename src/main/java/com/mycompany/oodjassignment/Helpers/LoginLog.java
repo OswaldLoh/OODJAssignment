@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Entities;
+package com.mycompany.oodjassignment.Helpers;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

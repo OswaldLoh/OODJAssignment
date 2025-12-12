@@ -6,7 +6,7 @@ import com.mycompany.oodjassignment.Entities.AcademicOfficer;
 import com.mycompany.oodjassignment.Entities.Course;
 import com.mycompany.oodjassignment.Entities.CourseAdministrator;
 import com.mycompany.oodjassignment.Entities.Grades;
-import com.mycompany.oodjassignment.Entities.LoginLog;
+import com.mycompany.oodjassignment.Helpers.LoginLog;
 import com.mycompany.oodjassignment.Entities.RecoveryPlan;
 import com.mycompany.oodjassignment.Entities.RecoveryTask;
 import com.mycompany.oodjassignment.Entities.Student;

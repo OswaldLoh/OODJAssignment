@@ -1,6 +1,6 @@
 package com.mycompany.oodjassignment.usermanagement.service;
 
-import com.mycompany.oodjassignment.Entities.LoginLog;
+import com.mycompany.oodjassignment.Helpers.LoginLog;
 import com.mycompany.oodjassignment.Entities.User;
 import com.mycompany.oodjassignment.Entities.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.util.PasswordUtil;
