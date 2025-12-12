@@ -69,7 +69,7 @@ public class ChartPanel extends JPanel {
             labels[i] = deptLabels.get(originalIndex);
         }
         
-        drawBarChart(g2d, values, labels, "Department Performance");
+        drawBarChart(g2d, values, labels, "Department Average GPA");
     }
     
     private void drawCoursePerformanceChart(Graphics2D g2d) {
