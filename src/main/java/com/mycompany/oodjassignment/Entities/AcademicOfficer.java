@@ -1,5 +1,7 @@
 package com.mycompany.oodjassignment.Entities;
 
+import com.mycompany.oodjassignment.Enums.UserRole;
+
 public class AcademicOfficer extends User {
     private static final long serialVersionUID = 1L;
     private String department;

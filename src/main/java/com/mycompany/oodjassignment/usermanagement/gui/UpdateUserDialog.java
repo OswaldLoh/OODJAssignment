@@ -7,7 +7,7 @@ package com.mycompany.oodjassignment.usermanagement.gui;
 import com.mycompany.oodjassignment.Entities.AcademicOfficer;
 import com.mycompany.oodjassignment.Entities.CourseAdministrator;
 import com.mycompany.oodjassignment.Entities.User;
-import com.mycompany.oodjassignment.Entities.UserStatus;
+import com.mycompany.oodjassignment.Enums.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import javax.swing.JOptionPane;
 /**

@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Entities;
+package com.mycompany.oodjassignment.Enums;
 public enum UserRole {
     ACADEMIC_OFFICER("Academic Officer"),
     COURSE_ADMINISTRATOR("Course Administrator");

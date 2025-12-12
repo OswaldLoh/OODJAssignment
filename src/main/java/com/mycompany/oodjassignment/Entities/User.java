@@ -1,5 +1,8 @@
 package com.mycompany.oodjassignment.Entities;
 
+import com.mycompany.oodjassignment.Enums.UserRole;
+import com.mycompany.oodjassignment.Enums.UserStatus;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

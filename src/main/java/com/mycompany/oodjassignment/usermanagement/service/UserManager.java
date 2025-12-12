@@ -1,6 +1,8 @@
 package com.mycompany.oodjassignment.usermanagement.service;
 
 import com.mycompany.oodjassignment.Entities.*;
+import com.mycompany.oodjassignment.Enums.UserRole;
+import com.mycompany.oodjassignment.Enums.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.util.PasswordUtil;
 
 import java.io.*;

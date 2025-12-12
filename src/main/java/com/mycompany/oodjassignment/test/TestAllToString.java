@@ -10,8 +10,8 @@ import com.mycompany.oodjassignment.Helpers.LoginLog;
 import com.mycompany.oodjassignment.Entities.RecoveryPlan;
 import com.mycompany.oodjassignment.Entities.RecoveryTask;
 import com.mycompany.oodjassignment.Entities.Student;
-import com.mycompany.oodjassignment.Entities.UserRole;
-import com.mycompany.oodjassignment.Entities.UserStatus;
+import com.mycompany.oodjassignment.Enums.UserRole;
+import com.mycompany.oodjassignment.Enums.UserStatus;
 
 /**
  * Testing file to print the toString methods for all classes in the OODJAssignment project

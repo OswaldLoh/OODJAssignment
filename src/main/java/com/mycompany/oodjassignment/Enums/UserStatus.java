@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Entities;
+package com.mycompany.oodjassignment.Enums;
 public enum UserStatus {
     ACTIVE("Active"),
     INACTIVE("Inactive"),

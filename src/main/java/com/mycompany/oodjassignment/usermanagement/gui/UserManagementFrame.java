@@ -4,8 +4,8 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 import com.mycompany.oodjassignment.Entities.User;
-import com.mycompany.oodjassignment.Entities.UserRole;
-import com.mycompany.oodjassignment.Entities.UserStatus;
+import com.mycompany.oodjassignment.Enums.UserRole;
+import com.mycompany.oodjassignment.Enums.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import javax.swing.JOptionPane;
