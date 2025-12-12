@@ -192,8 +192,10 @@ public class RecoveryPlanDashboard {
             database.removeRecoveryPlan(planID);                    
             for (RecoveryTask task : planTasks) {
                 database.removeRecoveryTask(task.getTaskID());      
-                tableModel.removeRow(modelRow);
             }
+
+            tableModel.removeRow(modelRow);
+            
             // Send email notification to student about plan deletion
             SendEmail sendEmail = new SendEmail(student.getEmail());
             String emailSubject = "Recovery Plan Deleted";
