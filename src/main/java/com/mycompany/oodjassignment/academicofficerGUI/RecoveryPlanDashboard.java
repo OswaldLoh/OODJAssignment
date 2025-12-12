@@ -1,16 +1,33 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import com.intellij.uiDesigner.core.GridConstraints;
-import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.mycompany.oodjassignment.functions.*;
-import com.mycompany.oodjassignment.classes.*;
-import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.util.ArrayList;
 
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import java.awt.*;
-import java.util.*;
-import javax.swing.*;
+import com.intellij.uiDesigner.core.GridConstraints;
+import com.intellij.uiDesigner.core.GridLayoutManager;
+import com.mycompany.oodjassignment.classes.RecoveryPlan;
+import com.mycompany.oodjassignment.classes.RecoveryTask;
+import com.mycompany.oodjassignment.classes.Student;
+import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.FileHandler;
+import com.mycompany.oodjassignment.functions.SendEmail;
+import com.mycompany.oodjassignment.functions.TableSorter;
+import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 
 public class RecoveryPlanDashboard {
@@ -167,13 +184,33 @@ public class RecoveryPlanDashboard {
         }
         ;
 
-        if (taskDeleteConfirmation == JOptionPane.YES_OPTION) {     // deletion confirmed
-            database.removeRecoveryPlan(planID);                    // delete recovery plan
+        if (taskDeleteConfirmation == JOptionPane.YES_OPTION) {     
+
+            RecoveryPlan recoveryPlan = database.getRecoveryPlan(planID);
+            Student student = database.getStudent(recoveryPlan.getStudentID());
+            
+            database.removeRecoveryPlan(planID);                    
             for (RecoveryTask task : planTasks) {
-                database.removeRecoveryTask(task.getTaskID());      // delete all recovery tasks under recovery plan
+                database.removeRecoveryTask(task.getTaskID());      
+                tableModel.removeRow(modelRow);
             }
-            tableModel.removeRow(modelRow);
-        } else {
+            // Send email notification to student about plan deletion
+            SendEmail sendEmail = new SendEmail(student.getEmail());
+            String emailSubject = "Recovery Plan Deleted";
+            String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
+                    "Your recovery plan (Plan ID: " + planID + ") has been removed from the system.\n\n" +
+                    "This plan included " + planTasks.size() + " recovery task(s) which have also been deleted.\n\n" +
+                    "If you have any questions regarding this change, please contact your academic officer.\n\n" +
+                    "Best regards,\n" +
+                    "Academic Officer Team";
+
+            // using new thread to prevent GUI freezing
+            new Thread(() ->
+                    sendEmail.Notification(emailSubject, emailContent)
+            ).start();
+        } 
+        
+        else {
             return;
         }
 
