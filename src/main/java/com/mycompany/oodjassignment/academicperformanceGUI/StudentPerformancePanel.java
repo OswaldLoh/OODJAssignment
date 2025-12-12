@@ -69,7 +69,7 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
         jPanelChartContainer = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Student Performance Dashboard");
+        setTitle("Student Performance");
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 255));
@@ -79,7 +79,7 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Student Performance Dashboard");
+        jLabel1.setText("Student Performance");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
