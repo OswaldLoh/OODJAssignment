@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.mycompany.oodjassignment.AcademicOfficerGUI.RecoveryPlanDashboard">
+  <grid id="27dc6" binding="recoveryPlanDashboardPanel" layout-manager="GridLayoutManager" row-count="5" column-count="22" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+    <margin top="20" left="20" bottom="20" right="20"/>
+    <constraints>
+      <xy x="20" y="20" width="1156" height="400"/>
+    </constraints>
+    <properties>
+      <background color="-1"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <component id="52645" class="javax.swing.JLabel" binding="recoveryPlanDashboardTitle">
+        <constraints>
+          <grid row="0" column="0" row-span="1" col-span="22" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Recovery Plan Dashboard"/>
+        </properties>
+      </component>
+      <scrollpane id="67d5d" binding="planListScroll">
+        <constraints>
+          <grid row="3" column="0" row-span="1" col-span="22" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="5458f" class="javax.swing.JTable" binding="planListTable">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+      <grid id="436f9" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+        <margin top="0" left="0" bottom="0" right="0"/>
+        <constraints>
+          <grid row="1" column="11" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </grid>
+      <component id="ea280" class="javax.swing.JLabel" binding="searchPrompt">
+        <constraints>
+          <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Search by PlanID:"/>
+        </properties>
+      </component>
+      <component id="2142c" class="javax.swing.JTextField" binding="txtPlanID">
+        <constraints>
+          <grid row="2" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="1" indent="0" use-parent-layout="false">
+            <preferred-size width="150" height="-1"/>
+          </grid>
+        </constraints>
+        <properties/>
+      </component>
+      <component id="a282a" class="javax.swing.JButton" binding="addPlanButton">
+        <constraints>
+          <grid row="4" column="0" row-span="1" col-span="3" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Create New Plan"/>
+        </properties>
+      </component>
+      <component id="b2c11" class="javax.swing.JButton" binding="deletePlanButton">
+        <constraints>
+          <grid row="4" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Delete Recovery Plan"/>
+        </properties>
+      </component>
+      <component id="89bc3" class="javax.swing.JButton" binding="searchButton">
+        <constraints>
+          <grid row="2" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Search"/>
+        </properties>
+      </component>
+      <component id="6d0b9" class="javax.swing.JButton" binding="addTaskButton">
+        <constraints>
+          <grid row="4" column="21" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Add Recovery Task"/>
+        </properties>
+      </component>
+      <component id="8a5bd" class="javax.swing.JButton" binding="backButton" default-binding="true">
+        <constraints>
+          <grid row="2" column="21" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Back"/>
+        </properties>
+      </component>
+      <component id="e0392" class="javax.swing.JButton" binding="monitorProgressButton" default-binding="true">
+        <constraints>
+          <grid row="4" column="20" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+        </constraints>
+        <properties>
+          <text value="Monitor Progress"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

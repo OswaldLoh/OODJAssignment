@@ -13,7 +13,7 @@ import java.util.Map;
 
 import javax.swing.JPanel;
 
-import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.Helpers.Database;
 
 public class ChartPanel extends JPanel {
     private String chartType;

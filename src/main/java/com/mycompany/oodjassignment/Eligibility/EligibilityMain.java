@@ -19,9 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import com.mycompany.oodjassignment.classes.Student;
-import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.functions.SendEmail;
+import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Helpers.Database;
+import com.mycompany.oodjassignment.Helpers.SendEmail;
 
 /**
  * Main GUI for the Eligibility Check & Enrolment module.

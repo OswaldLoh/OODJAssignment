@@ -3,9 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
-import com.mycompany.oodjassignment.classes.User;
-import com.mycompany.oodjassignment.classes.UserRole;
-import com.mycompany.oodjassignment.classes.UserStatus;
+import com.mycompany.oodjassignment.Classes.User;
+import com.mycompany.oodjassignment.Classes.UserRole;
+import com.mycompany.oodjassignment.Classes.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import javax.swing.JOptionPane;

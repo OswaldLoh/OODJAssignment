@@ -4,15 +4,14 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.academicofficerGUI.CourseRecovery;
-import com.mycompany.oodjassignment.classes.User;
-import com.mycompany.oodjassignment.classes.UserRole;
-import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.AcademicOfficerGUI.CourseRecovery;
+import com.mycompany.oodjassignment.Classes.User;
+import com.mycompany.oodjassignment.Classes.UserRole;
+import com.mycompany.oodjassignment.Helpers.Database;
 import com.mycompany.oodjassignment.academicperformanceGUI.AcademicPerformancePanel;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.Eligibility.EligibilityMain;
 
-import javax.swing.JOptionPane;
 /**
  *
  * @author willy

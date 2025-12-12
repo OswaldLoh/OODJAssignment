@@ -1,8 +1,8 @@
 package com.mycompany.oodjassignment.usermanagement.service;
 
-import com.mycompany.oodjassignment.classes.LoginLog;
-import com.mycompany.oodjassignment.classes.User;
-import com.mycompany.oodjassignment.classes.UserStatus;
+import com.mycompany.oodjassignment.Classes.LoginLog;
+import com.mycompany.oodjassignment.Classes.User;
+import com.mycompany.oodjassignment.Classes.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.util.PasswordUtil;
 
 import java.io.*;

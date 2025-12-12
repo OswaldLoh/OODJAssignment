@@ -1,7 +1,7 @@
 package com.mycompany.oodjassignment;
 import java.util.Scanner;
 
-import com.mycompany.oodjassignment.functions.FileHandler;
+import com.mycompany.oodjassignment.Helpers.FileHandler;
 
 public class Main {
     public static void main(String[] args) {

@@ -4,15 +4,14 @@
  */
 package com.mycompany.oodjassignment.academicperformanceGUI;
 import java.awt.Desktop;
-import java.io.FileReader;
 import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import com.mycompany.oodjassignment.classes.Student;
-import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.functions.ReportGenerator;
-import com.mycompany.oodjassignment.functions.SendEmail;
+import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Helpers.Database;
+import com.mycompany.oodjassignment.Helpers.ReportGenerator;
+import com.mycompany.oodjassignment.Helpers.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.gui.DashboardFrame;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
@@ -268,8 +267,8 @@ public class AcademicPerformancePanel extends javax.swing.JFrame {
             try {
                 String filePath = "data/student_report/student_yearly_report_" + studentId + "_year" + year + ".pdf";
                 
-                com.mycompany.oodjassignment.functions.ReportGenerator reportGenerator = 
-                    new com.mycompany.oodjassignment.functions.ReportGenerator(filePath);
+                com.mycompany.oodjassignment.Helpers.ReportGenerator reportGenerator =
+                    new com.mycompany.oodjassignment.Helpers.ReportGenerator(filePath);
                 
                 reportGenerator.generateYearlyReport(studentId, year);
                 

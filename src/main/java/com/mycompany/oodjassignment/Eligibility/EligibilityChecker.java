@@ -1,9 +1,9 @@
 package com.mycompany.oodjassignment.Eligibility;
 
-import com.mycompany.oodjassignment.classes.Student;
-import com.mycompany.oodjassignment.classes.Grades;
-import com.mycompany.oodjassignment.classes.Course;
-import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Classes.Grades;
+import com.mycompany.oodjassignment.Classes.Course;
+import com.mycompany.oodjassignment.Helpers.Database;
 
 import java.util.ArrayList;
 

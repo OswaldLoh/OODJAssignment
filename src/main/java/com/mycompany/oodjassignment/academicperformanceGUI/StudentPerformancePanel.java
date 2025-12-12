@@ -4,7 +4,7 @@
  */
 package com.mycompany.oodjassignment.academicperformanceGUI;
 
-import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.Helpers.Database;
 
 /**
  *

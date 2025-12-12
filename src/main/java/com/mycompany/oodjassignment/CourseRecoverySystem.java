@@ -1,8 +1,6 @@
 package com.mycompany.oodjassignment;
-import com.mycompany.oodjassignment.classes.*;
-import com.mycompany.oodjassignment.functions.*;
-
-import java.util.*;
+import com.mycompany.oodjassignment.Classes.*;
+import com.mycompany.oodjassignment.Helpers.*;
 
 public class CourseRecoverySystem {
     public static void main(String[]args) {

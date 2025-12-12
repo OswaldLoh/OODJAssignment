@@ -2,16 +2,16 @@ package com.mycompany.oodjassignment.test;
 
 import java.time.LocalDateTime;
 
-import com.mycompany.oodjassignment.classes.AcademicOfficer;
-import com.mycompany.oodjassignment.classes.Course;
-import com.mycompany.oodjassignment.classes.CourseAdministrator;
-import com.mycompany.oodjassignment.classes.Grades;
-import com.mycompany.oodjassignment.classes.LoginLog;
-import com.mycompany.oodjassignment.classes.RecoveryPlan;
-import com.mycompany.oodjassignment.classes.RecoveryTask;
-import com.mycompany.oodjassignment.classes.Student;
-import com.mycompany.oodjassignment.classes.UserRole;
-import com.mycompany.oodjassignment.classes.UserStatus;
+import com.mycompany.oodjassignment.Classes.AcademicOfficer;
+import com.mycompany.oodjassignment.Classes.Course;
+import com.mycompany.oodjassignment.Classes.CourseAdministrator;
+import com.mycompany.oodjassignment.Classes.Grades;
+import com.mycompany.oodjassignment.Classes.LoginLog;
+import com.mycompany.oodjassignment.Classes.RecoveryPlan;
+import com.mycompany.oodjassignment.Classes.RecoveryTask;
+import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Classes.UserRole;
+import com.mycompany.oodjassignment.Classes.UserStatus;
 
 /**
  * Testing file to print the toString methods for all classes in the OODJAssignment project

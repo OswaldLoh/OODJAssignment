@@ -4,10 +4,10 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.classes.AcademicOfficer;
-import com.mycompany.oodjassignment.classes.CourseAdministrator;
-import com.mycompany.oodjassignment.classes.User;
-import com.mycompany.oodjassignment.classes.UserRole;
+import com.mycompany.oodjassignment.Classes.AcademicOfficer;
+import com.mycompany.oodjassignment.Classes.CourseAdministrator;
+import com.mycompany.oodjassignment.Classes.User;
+import com.mycompany.oodjassignment.Classes.UserRole;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import com.mycompany.oodjassignment.usermanagement.util.PasswordUtil;
 

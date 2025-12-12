@@ -4,9 +4,9 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.classes.User;
+import com.mycompany.oodjassignment.Classes.User;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
-import com.mycompany.oodjassignment.functions.*;
+import com.mycompany.oodjassignment.Helpers.*;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.awt.Color;
