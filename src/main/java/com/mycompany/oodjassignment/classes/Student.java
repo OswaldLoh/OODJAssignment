@@ -1,10 +1,9 @@
 package com.mycompany.oodjassignment.classes;
 import com.mycompany.oodjassignment.functions.CSVParser;
-import java.util.ArrayList;
 
 public class Student implements CSVParser<Student> {
     private String studentID, firstName, lastName, major, email, year;
-    ArrayList<String> enrolledCourses;
+
 
     // constructors
     public Student() {};
@@ -55,13 +54,12 @@ public class Student implements CSVParser<Student> {
         this.year = year;
     }
 
-    // Methods
+    // Interface methods
     @Override
     public Student fromCSV(String line) {
         String[] details = line.split(",");
         return new Student(details[0],details[1],details[2],details[3],details[4],details[5]);
     }
-
     @Override
     public String toCSV() {
         return (studentID+","+firstName+","+lastName+","+major+","+year+","+email);
@@ -80,3 +78,5 @@ public class Student implements CSVParser<Student> {
                 studentID, firstName, lastName, major, year, email);
     }
 }
+
+

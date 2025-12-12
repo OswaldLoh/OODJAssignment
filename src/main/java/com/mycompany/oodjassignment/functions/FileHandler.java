@@ -10,12 +10,12 @@ public class FileHandler {
 
     public static <Class extends CSVParser<Class>> HashMap<String, Class> readCSV(Class parseTarget) {
         HashMap<String, Class> resultHashMap = new HashMap<>();
-        try (BufferedReader fileReader = new BufferedReader(new FileReader(parseTarget.getFilename()))) {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader(parseTarget.getFilename()))) {   // abstract method getFilename()
             String line;
             fileReader.readLine();
             while ((line = fileReader.readLine()) != null) {    // parse lines from CSV files into objects and add them into a HashMap
                 String[] details = line.split(",");
-                resultHashMap.put(details[0], parseTarget.fromCSV(line));
+                resultHashMap.put(details[0], parseTarget.fromCSV(line));   // interface method fromCSV
             }
         } catch (IOException | NullPointerException | ArrayIndexOutOfBoundsException e) {
             System.out.println("Warning! Filename: " + parseTarget.getFilename() + " may have no content inside!");

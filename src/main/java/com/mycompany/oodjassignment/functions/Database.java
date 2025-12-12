@@ -31,8 +31,8 @@ public class Database {
         this.recTaskDB = FileHandler.readCSV(RecoveryTask);
         this.studentDB = FileHandler.readCSV(Student);
         this.gradesDB = FileHandler.readCSV(Grades);
-
     }
+
     // Object adder
     public void addRecoveryPlan(RecoveryPlan recPlan) {
         recPlanDB.put(recPlan.getPlanID(),recPlan);
