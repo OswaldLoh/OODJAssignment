@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.oodjassignment.reportgeneratorGUI;
+package com.mycompany.oodjassignment.academicperformanceGUI;
 import java.awt.Desktop;
 import java.io.FileReader;
 import java.util.Set;
@@ -20,21 +20,21 @@ import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService
  *
  * @author ASUS
  */
-public class ReportGeneratorPanel extends javax.swing.JFrame {                
+public class AcademicPerformancePanel extends javax.swing.JFrame {                
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ReportGeneratorPanel.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AcademicPerformancePanel.class.getName());
     private final Database database = new Database();
     private AuthenticationService authService;
 
 
     /**
-     * Creates new form ReportGenerator1
+     * Creates new form AcademicPerformancePanel
      */
-    public ReportGeneratorPanel() {
+    public AcademicPerformancePanel() {
         this(null);
     }
 
-    public ReportGeneratorPanel(AuthenticationService authService) {
+    public AcademicPerformancePanel(AuthenticationService authService) {
         this.authService = authService;
         initComponents();
         setLocationRelativeTo(null);
@@ -418,7 +418,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // Open the Student Performance Dashboard (chart)
         StudentPerformancePanel studentPerformancePanel = new StudentPerformancePanel();
-        studentPerformancePanel.setReportGeneratorPanel(this); // Pass reference to ReportGeneratorPanel
+        studentPerformancePanel.setAcademicPerformancePanel(this); // Pass reference to AcademicPerformancePanel
         studentPerformancePanel.setVisible(true);
         setVisible(false); // Hide current window
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -460,7 +460,7 @@ public class ReportGeneratorPanel extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ReportGeneratorPanel().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new AcademicPerformancePanel().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

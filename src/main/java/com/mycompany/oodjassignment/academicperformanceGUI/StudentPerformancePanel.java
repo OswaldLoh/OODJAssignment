@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-package com.mycompany.oodjassignment.reportgeneratorGUI;
+package com.mycompany.oodjassignment.academicperformanceGUI;
 
 import com.mycompany.oodjassignment.functions.Database;
 
@@ -16,7 +16,7 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
     private final Database database = new Database();
     private String currentChartType = "GPA Distribution";
     private ChartPanel chartPanel;
-    private ReportGeneratorPanel reportGeneratorPanel; // Reference to the calling panel
+    private AcademicPerformancePanel academicPerformancePanel; // Reference to the calling panel
 
     /**
      * Creates new form StudentPerformancePanel
@@ -28,8 +28,8 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
         loadChart(); // Load initial chart
     }
     
-    public void setReportGeneratorPanel(ReportGeneratorPanel panel) {
-        this.reportGeneratorPanel = panel;
+    public void setAcademicPerformancePanel(AcademicPerformancePanel panel) {
+        this.academicPerformancePanel = panel;
     }
 
     /**
@@ -252,10 +252,10 @@ public class StudentPerformancePanel extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox2ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // Return to the Report Generator panel if available, otherwise just dispose
-        if (reportGeneratorPanel != null) {
-            reportGeneratorPanel.setVisible(true);
-            reportGeneratorPanel.toFront(); // Bring to front to ensure it's visible
+        // Return to the Academic Performance panel if available, otherwise just dispose
+        if (academicPerformancePanel != null) {
+            academicPerformancePanel.setVisible(true);
+            academicPerformancePanel.toFront(); // Bring to front to ensure it's visible
         }
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed

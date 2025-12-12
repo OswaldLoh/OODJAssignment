@@ -8,7 +8,7 @@ import com.mycompany.oodjassignment.academicofficerGUI.CourseRecovery;
 import com.mycompany.oodjassignment.classes.User;
 import com.mycompany.oodjassignment.classes.UserRole;
 import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.reportgeneratorGUI.ReportGeneratorPanel;
+import com.mycompany.oodjassignment.academicperformanceGUI.AcademicPerformancePanel;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import com.mycompany.oodjassignment.Eligibility.EligibilityMain;
 
@@ -240,7 +240,7 @@ public class DashboardFrame extends javax.swing.JFrame {
 
     private void academicReportButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_academicReportButtonActionPerformed
         // TODO add your handling code here:
-        ReportGeneratorPanel generatorPanel = new ReportGeneratorPanel(authService);
+        AcademicPerformancePanel generatorPanel = new AcademicPerformancePanel(authService);
         generatorPanel.setVisible(true);
         dispose();
     }//GEN-LAST:event_academicReportButtonActionPerformed
