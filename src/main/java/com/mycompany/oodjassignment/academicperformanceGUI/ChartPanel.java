@@ -299,22 +299,38 @@ public class ChartPanel extends JPanel {
             } 
             
             else {
-                // Rotate labels for large datasets or long labels to save space and avoid graph overlap
-                if (labels.length > 6 || labelWidth > 30) {
-                    g2d.rotate(-Math.PI/2.2, x + barWidth/2, labelY); 
-                    g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 15); // Move down more to avoid overlap
-                    g2d.rotate(Math.PI/2.2, x + barWidth/2, labelY); 
+                // For Department Performance and Course Performance charts, use more readable angle
+                if (chartType.equals("Department Performance") || chartType.equals("Course Performance")) {
+                    if (labels.length > 4 || labelWidth > 40) {
+                        // Use a 45-degree angle for better readability of department/course names
+                        double angle = -Math.PI/4; // 45 degrees
+                        g2d.rotate(angle, x + barWidth/2, labelY); 
+                        g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 10);
+                        g2d.rotate(-angle, x + barWidth/2, labelY); 
+                    } else {
+                        // For fewer items or shorter names, keep horizontal
+                        g2d.drawString(label, labelX, labelY);
+                    }
                 } 
-                
-                else if (labelWidth > barWidth) {
-                    g2d.rotate(-Math.PI/3, x + barWidth/2, labelY);
-                    g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 12);  // Adjust position to avoid overlap
-                    g2d.rotate(Math.PI/3, x + barWidth/2, labelY);
-                } 
-                
+                // For other chart types, use the original rotation logic
                 else {
-                    // For shorter labels, draw horizontally
-                    g2d.drawString(label, labelX, labelY);
+                    // Rotate labels for large datasets or long labels to save space and avoid graph overlap
+                    if (labels.length > 6 || labelWidth > 30) {
+                        g2d.rotate(-Math.PI/2.2, x + barWidth/2, labelY); 
+                        g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 15); // Move down more to avoid overlap
+                        g2d.rotate(Math.PI/2.2, x + barWidth/2, labelY); 
+                    } 
+                    
+                    else if (labelWidth > barWidth) {
+                        g2d.rotate(-Math.PI/3, x + barWidth/2, labelY);
+                        g2d.drawString(label, x + barWidth/2 - labelWidth/2, labelY + 12);  // Adjust position to avoid overlap
+                        g2d.rotate(Math.PI/3, x + barWidth/2, labelY);
+                    } 
+                    
+                    else {
+                        // For shorter labels, draw horizontally
+                        g2d.drawString(label, labelX, labelY);
+                    }
                 }
             }
             

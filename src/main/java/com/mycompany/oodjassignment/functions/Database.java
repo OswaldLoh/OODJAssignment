@@ -444,7 +444,9 @@ public class Database {
                 avgGPA = 0.0;
             }
             
-            courseData.put(courseId, avgGPA);
+            // Use course name instead of ID for better x-axis labelling
+            String courseName = course.getCourseName();
+            courseData.put(courseName, avgGPA);
         }
         
         return courseData;
