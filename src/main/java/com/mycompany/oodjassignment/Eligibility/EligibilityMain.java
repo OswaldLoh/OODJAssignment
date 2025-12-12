@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
-import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Entities.Student;
 import com.mycompany.oodjassignment.Helpers.Database;
 import com.mycompany.oodjassignment.Helpers.SendEmail;
 

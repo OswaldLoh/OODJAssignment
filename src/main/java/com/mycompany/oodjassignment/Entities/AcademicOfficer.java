@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Classes;
+package com.mycompany.oodjassignment.Entities;
 
 public class AcademicOfficer extends User {
     private static final long serialVersionUID = 1L;

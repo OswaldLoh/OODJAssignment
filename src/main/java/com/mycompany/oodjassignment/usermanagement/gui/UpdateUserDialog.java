@@ -4,10 +4,10 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.Classes.AcademicOfficer;
-import com.mycompany.oodjassignment.Classes.CourseAdministrator;
-import com.mycompany.oodjassignment.Classes.User;
-import com.mycompany.oodjassignment.Classes.UserStatus;
+import com.mycompany.oodjassignment.Entities.AcademicOfficer;
+import com.mycompany.oodjassignment.Entities.CourseAdministrator;
+import com.mycompany.oodjassignment.Entities.User;
+import com.mycompany.oodjassignment.Entities.UserStatus;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import javax.swing.JOptionPane;
 /**

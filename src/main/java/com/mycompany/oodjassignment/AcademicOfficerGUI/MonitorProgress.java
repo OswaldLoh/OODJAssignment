@@ -1,9 +1,9 @@
 package com.mycompany.oodjassignment.AcademicOfficerGUI;
-import com.mycompany.oodjassignment.Classes.*;
+import com.mycompany.oodjassignment.Entities.*;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.mycompany.oodjassignment.Classes.RecoveryTask;
+import com.mycompany.oodjassignment.Entities.RecoveryTask;
 import com.mycompany.oodjassignment.Helpers.Database;
 import com.mycompany.oodjassignment.Helpers.TableSorter;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;

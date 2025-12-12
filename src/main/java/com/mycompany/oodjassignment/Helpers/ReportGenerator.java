@@ -12,9 +12,9 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.mycompany.oodjassignment.Classes.Course;
-import com.mycompany.oodjassignment.Classes.Grades;
-import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Entities.Course;
+import com.mycompany.oodjassignment.Entities.Grades;
+import com.mycompany.oodjassignment.Entities.Student;
 
 public class ReportGenerator {
     

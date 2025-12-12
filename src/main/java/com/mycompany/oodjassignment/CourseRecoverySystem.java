@@ -1,5 +1,5 @@
 package com.mycompany.oodjassignment;
-import com.mycompany.oodjassignment.Classes.*;
+import com.mycompany.oodjassignment.Entities.*;
 import com.mycompany.oodjassignment.Helpers.*;
 
 public class CourseRecoverySystem {

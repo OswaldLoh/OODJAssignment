@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.Classes;
+package com.mycompany.oodjassignment.Entities;
 import com.mycompany.oodjassignment.Helpers.*;
 
 public class Course implements CSVParser<Course>{

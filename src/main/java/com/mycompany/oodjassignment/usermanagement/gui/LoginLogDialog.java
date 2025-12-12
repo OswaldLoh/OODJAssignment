@@ -4,7 +4,7 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.Classes.LoginLog;
+import com.mycompany.oodjassignment.Entities.LoginLog;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;

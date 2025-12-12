@@ -1,6 +1,6 @@
 package com.mycompany.oodjassignment.Eligibility;
 
-import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Entities.Student;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.List;

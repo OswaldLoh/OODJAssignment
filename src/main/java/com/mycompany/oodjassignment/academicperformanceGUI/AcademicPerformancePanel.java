@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.swing.JOptionPane;
 
-import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Entities.Student;
 import com.mycompany.oodjassignment.Helpers.Database;
 import com.mycompany.oodjassignment.Helpers.ReportGenerator;
 import com.mycompany.oodjassignment.Helpers.SendEmail;

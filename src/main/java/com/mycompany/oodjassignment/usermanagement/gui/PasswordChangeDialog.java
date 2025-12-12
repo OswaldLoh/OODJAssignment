@@ -4,7 +4,7 @@
  */
 package com.mycompany.oodjassignment.usermanagement.gui;
 
-import com.mycompany.oodjassignment.Classes.User;
+import com.mycompany.oodjassignment.Entities.User;
 import com.mycompany.oodjassignment.Helpers.SendEmail;
 import com.mycompany.oodjassignment.usermanagement.service.UserManager;
 import com.mycompany.oodjassignment.usermanagement.util.PasswordUtil;

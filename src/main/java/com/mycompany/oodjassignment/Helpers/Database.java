@@ -7,11 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mycompany.oodjassignment.Classes.Course;
-import com.mycompany.oodjassignment.Classes.Grades;
-import com.mycompany.oodjassignment.Classes.RecoveryPlan;
-import com.mycompany.oodjassignment.Classes.RecoveryTask;
-import com.mycompany.oodjassignment.Classes.Student;
+import com.mycompany.oodjassignment.Entities.Course;
+import com.mycompany.oodjassignment.Entities.Grades;
+import com.mycompany.oodjassignment.Entities.RecoveryPlan;
+import com.mycompany.oodjassignment.Entities.RecoveryTask;
+import com.mycompany.oodjassignment.Entities.Student;
 
 public class Database {
     private HashMap<String, Course> courseDB;
