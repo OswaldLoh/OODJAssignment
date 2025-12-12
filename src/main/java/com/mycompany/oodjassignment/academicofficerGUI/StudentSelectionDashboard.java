@@ -44,7 +44,7 @@ public class StudentSelectionDashboard {
         });
 
         addPlanButton.addActionListener(e -> {
-            addPlan();
+            selectStudentNewPlan();
 
         });
         backButton.addActionListener(e -> {
@@ -85,7 +85,7 @@ public class StudentSelectionDashboard {
         }
     }
 
-    private void addPlan() {
+    private void selectStudentNewPlan() {
         int row = studentListTable.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(addPlanDashboardPanel,
@@ -120,6 +120,7 @@ public class StudentSelectionDashboard {
             };
             tableModel.addRow(row);
         }
+
         studentListTable.setModel(tableModel);
         studentListTable.setAutoCreateRowSorter(true);
         studentListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -132,7 +133,7 @@ public class StudentSelectionDashboard {
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800, 400);
+        recoveryPlanDashboardFrame.setSize(1100, 400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }

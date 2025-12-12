@@ -94,19 +94,27 @@ public class Database {
         return recTaskDB;
     }
 
-    public  ArrayList<Grades> getStudentAllGrades(String targetStudentID) {
-        ArrayList<Grades> studentGrades = new ArrayList<>();
+    public ArrayList<Grades> getStudentAllGrades(String targetStudentID) {
+        HashMap<String, Grades> latestGradesMap = new HashMap<>();
+
         for (Grades grade : gradesDB.values()) {
-            if (grade.getStudentID().equals(targetStudentID)) {
-                studentGrades.add(grade);
+            if (grade.getStudentID().equals(targetStudentID)) {             // check if grade belongs to target Student
+                if (latestGradesMap.containsKey(grade.getCourseID())) {                 // if the hashmap already has this course ID
+                    Grades existingGrade = latestGradesMap.get(grade.getCourseID());    // cast the existing grade into existingGrade
+                    if (grade.getAttempt() > existingGrade.getAttempt()) {              // compare attempt of grade vs existingGrade
+                        latestGradesMap.put(grade.getCourseID(), grade);                // replace if attempt is larger
+                    }
+                } else {
+                    latestGradesMap.put(grade.getCourseID(), grade);                    // first time checking the grade, place it in
+                }
             }
         }
-        return studentGrades;
+
+        return new ArrayList<>(latestGradesMap.values());
     }
 
+
     // Check existence in database
-
-
     public boolean studentExist(String targetStudentID) {
         return studentDB.containsKey(targetStudentID);
     }
@@ -152,6 +160,7 @@ public class Database {
         newProgress = completeCount/totalTaskCount * 100;
         getRecoveryPlan(planID).setProgress(newProgress);
     }
+
 
     public String getRecoveryPlanComponent(String targetStudentID, String targetCourseID) {
         String retakenComponent = "hi";

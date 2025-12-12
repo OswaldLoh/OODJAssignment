@@ -1,23 +1,11 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
+import java.util.*;
+import java.util.List;
+
+import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.StyleContext;
@@ -25,14 +13,10 @@ import javax.swing.text.StyleContext;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
-import com.mycompany.oodjassignment.classes.Course;
-import com.mycompany.oodjassignment.classes.Grades;
-import com.mycompany.oodjassignment.classes.RecoveryPlan;
-import com.mycompany.oodjassignment.classes.RecoveryTask;
-import com.mycompany.oodjassignment.functions.Database;
-import com.mycompany.oodjassignment.functions.FileHandler;
-import com.mycompany.oodjassignment.functions.IDManager;
-import com.mycompany.oodjassignment.functions.TaskGenerator;
+
+import com.mycompany.oodjassignment.classes.*;
+
+import com.mycompany.oodjassignment.functions.*;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 public class CourseSelectionMenu {
@@ -59,6 +43,8 @@ public class CourseSelectionMenu {
 
         confirmButton.addActionListener(e -> {
             addPlan(targetStudentID);
+            openRecoveryPlanDashboard();
+            closeCurrentMenu();
         });
 
         backButton.addActionListener(e -> {
@@ -77,7 +63,7 @@ public class CourseSelectionMenu {
         }
 
         String courseID = (String) tableModel.getValueAt(row, 0);
-        double GPA = (double) tableModel.getValueAt(row, 2);
+        double GPA = (double) tableModel.getValueAt(row, 3);
 
         if (GPA >= 2.0) {
             JOptionPane.showMessageDialog(studentCourseSelectionPanel,
@@ -109,8 +95,6 @@ public class CourseSelectionMenu {
                 "Success!", JOptionPane.INFORMATION_MESSAGE);
 
         initializeTasks(component, nextPlanID);
-        openRecoveryPlanDashboard();
-        closeCurrentMenu();
     }
 
     private void initializeTasks(String component, String targetPlanID) {
@@ -129,9 +113,8 @@ public class CourseSelectionMenu {
     }
 
     private void tableSetup() {
-        String[] columnNames = {"Course ID", "Course Name", "GPA", "Grade"};
+        String[] columnNames = {"Course ID", "Course Name", "Attempt", "GPA", "Grade"};
         tableModel = new DefaultTableModel(columnNames, 0) {
-            // Make cells un-editable (optional, but recommended)
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -145,9 +128,11 @@ public class CourseSelectionMenu {
         for (Grades grade : studentGrades) {
             Course course = database.getCourse(grade.getCourseID());
             grade.setCourseObject(course);
+
             Object[] row = {
                     grade.getCourseID(),
                     course.getCourseName(),
+                    grade.getAttempt(),
                     grade.calculateGPA(),
                     grade.getLetterGrade()
             };
@@ -155,6 +140,7 @@ public class CourseSelectionMenu {
         }
 
         gradeList.setModel(tableModel);
+        TableSorter sorter = new TableSorter(tableModel, gradeList);
         gradeList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     }
 
@@ -163,7 +149,7 @@ public class CourseSelectionMenu {
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800, 400);
+        recoveryPlanDashboardFrame.setSize(1100, 400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }

@@ -1,13 +1,18 @@
 taskID,planID,description,week,completion
 T4,P1,Submit the recovery assignment.,13,false
-T5,P2,Break the assignment into manageable subtasks with checkpoints.,1,false
-T6,P2,Revisit feedback and identify components requiring improvement.,5,false
-T10,P3,Practice past-year papers and timed mock questions.,5,false
-T7,P2,Consult the lecturer or tutor to confirm expectations and requirements.,9,false
-T8,P2,Submit the recovery assignment.,13,false
-T12,P3,Sit for the recovery examination.,13,false
 T9,P3,"Review all core and weak topics through notes, slides, and tutorials.",1,false
+T10,P3,Practice past-year papers and timed mock questions.,5,false
+T21,P5,Sit for the finale examination for the retaken module.,17,false
+T20,P5,Direct submission of assignment,8,true
+T12,P3,Sit for the recovery examination.,13,false
 T11,P3,Attend consultation sessions to clarify unclear concepts.,9,false
+T14,P4,Strengthen weak areas and refine assignment sections based on feedback.,5,false
+T13,P4,Create a balanced weekly schedule for revision and assignment progress.,1,false
+T16,P4,Complete the assignment and take the recovery examination.,13,false
+T15,P4,Meet with lecturer/tutor to confirm both exam topics and assignment expectations.,9,false
+T18,P5,Rebuild understanding through continuous weekly revision and practice.,5,false
+T17,P5,"Attend all required lectures, tutorials, and learning activities consistently.",1,false
 T1,P1,Break the assignment into manageable subtasks with checkpoints.,1,false
+T19,P5,Complete all continuous assessments with early feedback.,7,false
 T2,P1,Revisit feedback and identify components requiring improvement.,5,false
 T3,P1,Consult the lecturer or tutor to confirm expectations and requirements.,9,false

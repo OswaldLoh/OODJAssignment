@@ -64,7 +64,7 @@ public class CourseRecovery {
         RecoveryPlanDashboard recoveryPlanDashboard = new RecoveryPlanDashboard(database, onExitCallback, authService);
         recoveryPlanDashboardFrame.setContentPane(recoveryPlanDashboard.getRecoveryPlanDashboardPanel());
         recoveryPlanDashboardFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        recoveryPlanDashboardFrame.setSize(800, 400);
+        recoveryPlanDashboardFrame.setSize(1100, 400);
         recoveryPlanDashboardFrame.setLocationRelativeTo(null);
         recoveryPlanDashboardFrame.setVisible(true);
     }

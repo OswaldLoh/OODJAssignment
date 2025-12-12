@@ -1,8 +1,7 @@
 package com.mycompany.oodjassignment.academicofficerGUI;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Insets;
+import java.awt.*;
+import java.util.Locale;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -15,6 +14,8 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -29,7 +30,6 @@ import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService
 public class ModifyTaskMenu {
     private final Runnable onExitCallback;
     private AuthenticationService authService;
-    private String mode;
     private String targetTaskID;
     private Database database;
     private JPanel modifyTaskPanel;
@@ -46,12 +46,171 @@ public class ModifyTaskMenu {
     private JButton confirmButton;
 
     public ModifyTaskMenu(String targetTaskID, String mode, Database database, AuthenticationService authService, Runnable onExitCallback) {
-        this.mode = mode;
         this.database = database;
         this.targetTaskID = targetTaskID;
         this.authService = authService;
         this.onExitCallback = onExitCallback;
 
+
+
+        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);       // getting object of selected recovery task
+
+        showSelectedModifyTarget(mode);            // only show specific search box or radio button based on which data to be modified
+
+        initializeTextArea(targetTask);            // show the current details of the selected task
+
+        if (targetTask.getCompletion()) {               // initialize selection of the completion radio button
+            completeRadioButton.setSelected(true);
+        } else {
+            incompleteRadioButton.setSelected(true);
+        }
+
+        confirmButton.addActionListener(e -> {      // receive
+            boolean modified = switch (mode) {
+                case "Description" -> modifyDescription(targetTask);
+                case "Week" -> modifyWeek(targetTask);
+                case "Completion Status" -> modifyCompletion(targetTask);
+                default -> false;
+            };
+
+            if (modified) {
+                JOptionPane.showMessageDialog(modifyTaskPanel, "Task modified successfully!");
+                openRecoveryTaskDashboard();
+                closeCurrentMenu();
+            }
+        });
+
+        backButton.addActionListener(e -> {
+            openRecoveryTaskDashboard();
+            closeCurrentMenu();
+        });
+    }
+
+    private boolean modifyDescription(RecoveryTask targetTask) {
+        String newDescription = txtNewDescription.getText().trim();
+        if (newDescription.isEmpty()) {
+            JOptionPane.showMessageDialog(modifyTaskPanel,
+                    "Please enter a task description.",
+                    "Missing Input", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+
+        // Store old description for email
+        String oldDescription = targetTask.getDescription();
+
+        targetTask.setDescription(newDescription);
+        RecoveryPlan recPlan = new RecoveryPlan();
+        FileHandler.writeCSV(targetTask, database.getRecTaskDB());
+        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+
+        // Send email notification about description change
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
+        Student student = database.getStudent(associatedPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Description Updated";
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
+                "The description of a recovery task in your course recovery plan has been updated.\n\n" +
+                "Plan ID: " + targetTask.getPlanID() + "\n" +
+                "Task ID: " + targetTask.getTaskID() + "\n" +
+                "Old Description: " + oldDescription + "\n" +
+                "New Description: " + newDescription + "\n\n" +
+                "Please take note of the updated task requirements.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        // using new thread prevent GUI freezing
+        new Thread(() ->
+                sendEmail.Notification(emailSubject, emailContent)
+        ).start();
+        return true;
+    }
+
+    private boolean modifyWeek(RecoveryTask targetTask) {
+        String newWeekString = txtNewWeek.getText().trim();
+        int newWeek = 0;
+        try {
+            if (newWeekString.isEmpty()) {
+                JOptionPane.showMessageDialog(modifyTaskPanel,
+                        "Please enter a week.",
+                        "Missing Input", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+            newWeek = Integer.parseInt(newWeekString);
+
+            if (newWeek <= 0) {
+                JOptionPane.showMessageDialog(modifyTaskPanel,
+                        "Week must be greater than 0.",
+                        "Invalid Input", JOptionPane.WARNING_MESSAGE);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(modifyTaskPanel,
+                    "Week must be a valid whole number.",
+                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Store old week for email
+        int oldWeek = targetTask.getWeek();
+
+        targetTask.setWeek(newWeek);
+        RecoveryPlan recPlan = new RecoveryPlan();
+        FileHandler.writeCSV(targetTask, database.getRecTaskDB());
+        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+
+        // Send email notification about week change
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
+        Student student = database.getStudent(associatedPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Week Updated";
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
+                "The week deadline of a recovery task in your course recovery plan has been updated.\n\n" +
+                "Plan ID: " + targetTask.getPlanID() + "\n" +
+                "Task ID: " + targetTask.getTaskID() + "\n" +
+                "Old Week: " + oldWeek + "\n" +
+                "New Week: " + newWeek + "\n\n" +
+                "Please adjust your schedule to meet the new deadline.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        // using new thread prevent GUI freezing
+        new Thread(() ->
+                sendEmail.Notification(emailSubject, emailContent)
+        ).start();
+        return true;
+    }
+
+    private boolean modifyCompletion(RecoveryTask targetTask) {
+        boolean newCompletionStatus = completeRadioButton.isSelected();
+        RecoveryPlan recPlan = new RecoveryPlan();
+        boolean oldCompletionStatus = targetTask.getCompletion(); // Store old status for email
+        targetTask.setCompletion(newCompletionStatus);
+        database.updatePlanProgress(targetTask.getPlanID());
+        FileHandler.writeCSV(targetTask, database.getRecTaskDB());
+        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
+
+        // Send email notification about completion status change
+        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
+        Student student = database.getStudent(associatedPlan.getStudentID());
+        SendEmail sendEmail = new SendEmail(student.getEmail());
+        String emailSubject = "Recovery Task Completion Status Updated";
+        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
+                "The completion status of a recovery task in your course recovery plan has been updated.\n\n" +
+                "Plan ID: " + targetTask.getPlanID() + "\n" +
+                "Task ID: " + targetTask.getTaskID() + "\n" +
+                "Previous Status: " + oldCompletionStatus + "\n" +
+                "Current Status: " + newCompletionStatus + "\n\n" +
+                "Please check your recovery plan for the updated status.\n\n" +
+                "Best regards,\n" +
+                "Academic Officer Team";
+
+        // using new thread prevent GUI freezing
+        new Thread(() ->
+                sendEmail.Notification(emailSubject, emailContent)
+        ).start();
+        return true;
+    }
+    private void showSelectedModifyTarget(String mode) {
         if (mode.equals("Description")) {
             // show
             promptDescription.setVisible(true);
@@ -96,170 +255,26 @@ public class ModifyTaskMenu {
             txtNewDescription.setVisible(false);
             promptWeek.setVisible(false);
             txtNewWeek.setVisible(false);
-        } else if (mode == null) {
-            return;
         }
+    }
 
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
-        detailsTextArea.setText("Plan ID: " + targetTask.getPlanID() +
-                "\nTask ID: " + targetTask.getTaskID());
-
-        if (targetTask.getCompletion()) {
-            completeRadioButton.setSelected(true);
+    private void initializeTextArea(RecoveryTask targetTask) {
+        String completionStatus;
+        if (targetTask.getCompletion()) {               // parsing the completion status from boolean to completion
+            completionStatus = "Complete";
         } else {
-            incompleteRadioButton.setSelected(true);
+            completionStatus = "Incomplete";
         }
 
-        confirmButton.addActionListener(e -> {
-            switch (mode) {
-                case "Description":
-                    modifyDescription();
-                    break;
-                case "Week":
-                    modifyWeek();
-                    break;
-                case "Completion Status":
-                    modifyCompletion();
-                    break;
-            }
-            JOptionPane.showMessageDialog(modifyTaskPanel, "Task modified successfully!");
-            openRecoveryTaskDashboard();
-            closeCurrentMenu();
-        });
-
-        backButton.addActionListener(e -> {
-            openRecoveryTaskDashboard();
-            closeCurrentMenu();
-        });
+        detailsTextArea.setEditable(false);                             // disallow editing the text area
+        detailsTextArea.setText("Plan ID: " + targetTask.getPlanID() +  // display the current details of the selected task
+                "\nTask ID: " + targetTask.getTaskID() +
+                "\nDescription: " + targetTask.getDescription() +
+                "\nWeek: " + targetTask.getWeek() +
+                "\nCompletion Status: " + completionStatus);
     }
 
-    private void modifyDescription() {
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
-        String newDescription = txtNewDescription.getText().trim();
-        if (newDescription.isEmpty()) {
-            JOptionPane.showMessageDialog(modifyTaskPanel,
-                    "Please enter a task description.",
-                    "Missing Input", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Store old description for email
-        String oldDescription = targetTask.getDescription();
-        
-        targetTask.setDescription(newDescription);
-        RecoveryPlan recPlan = new RecoveryPlan();
-        FileHandler.writeCSV(targetTask, database.getRecTaskDB());
-        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        
-        // Send email notification about description change
-        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
-        Student student = database.getStudent(associatedPlan.getStudentID());
-        SendEmail sendEmail = new SendEmail(student.getEmail());
-        String emailSubject = "Recovery Task Description Updated";
-        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName() + ",\n\n" +
-                "The description of a recovery task in your course recovery plan has been updated.\n\n" +
-                "Plan ID: " + targetTask.getPlanID() + "\n" +
-                "Task ID: " + targetTask.getTaskID() + "\n" +
-                "Old Description: " + oldDescription + "\n" +
-                "New Description: " + newDescription + "\n\n" +
-                "Please take note of the updated task requirements.\n\n" +
-                "Best regards,\n" +
-                "Academic Officer Team";
-
-        // using new thread prevent GUI freezing
-        new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
-        ).start();
-        
-    }
-
-    private void modifyWeek() {
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
-        String newWeekString = txtNewWeek.getText().trim();
-        int newWeek = 0;
-        try {
-            if (newWeekString.isEmpty()) {
-                JOptionPane.showMessageDialog(modifyTaskPanel,
-                        "Please enter a week.",
-                        "Missing Input", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-            newWeek = Integer.parseInt(newWeekString);
-
-            if (newWeek <= 0) {
-                JOptionPane.showMessageDialog(modifyTaskPanel,
-                        "Week must be greater than 0.",
-                        "Invalid Input", JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(modifyTaskPanel,
-                    "Week must be a valid whole number.",
-                    "Invalid Input", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        
-        // Store old week for email
-        int oldWeek = targetTask.getWeek();
-        
-        targetTask.setWeek(newWeek);
-        RecoveryPlan recPlan = new RecoveryPlan();
-        FileHandler.writeCSV(targetTask, database.getRecTaskDB());
-        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        
-        // Send email notification about week change
-        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
-        Student student = database.getStudent(associatedPlan.getStudentID());
-        SendEmail sendEmail = new SendEmail(student.getEmail());
-        String emailSubject = "Recovery Task Week Updated";
-        String emailContent = "Dear " + student.getFirstName() + " " + student.getLastName()+",\n\n" +
-                "The week deadline of a recovery task in your course recovery plan has been updated.\n\n" +
-                "Plan ID: " + targetTask.getPlanID() + "\n" +
-                "Task ID: " + targetTask.getTaskID() + "\n" +
-                "Old Week: " + oldWeek + "\n" +
-                "New Week: " + newWeek + "\n\n" +
-                "Please adjust your schedule to meet the new deadline.\n\n" +
-                "Best regards,\n" +
-                "Academic Officer Team";
-
-        // using new thread prevent GUI freezing
-        new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
-        ).start();
-    }
-
-    private void modifyCompletion() {
-        boolean newCompletionStatus = completeRadioButton.isSelected();
-        RecoveryPlan recPlan = new RecoveryPlan();
-        RecoveryTask targetTask = database.getRecoveryTask(targetTaskID);
-        boolean oldCompletionStatus = targetTask.getCompletion(); // Store old status for email
-        targetTask.setCompletion(newCompletionStatus);
-        database.updatePlanProgress(targetTask.getPlanID());
-        FileHandler.writeCSV(targetTask, database.getRecTaskDB());
-        FileHandler.writeCSV(recPlan, database.getRecPlanDB());
-        
-        // Send email notification about completion status change
-        RecoveryPlan associatedPlan = database.getRecoveryPlan(targetTask.getPlanID());
-        Student student = database.getStudent(associatedPlan.getStudentID());
-        SendEmail sendEmail = new SendEmail(student.getEmail());
-        String emailSubject = "Recovery Task Completion Status Updated";
-        String emailContent = "Dear " + student.getFirstName() + " " +  student.getLastName() + ",\n\n" +
-                "The completion status of a recovery task in your course recovery plan has been updated.\n\n" +
-                "Plan ID: " + targetTask.getPlanID() + "\n" +
-                "Task ID: " + targetTask.getTaskID() + "\n" +
-                "Previous Status: " + oldCompletionStatus + "\n" +
-                "Current Status: " + newCompletionStatus+ "\n\n" +
-                "Please check your recovery plan for the updated status.\n\n" +
-                "Best regards,\n" +
-                "Academic Officer Team";
-
-        // using new thread prevent GUI freezing
-        new Thread(() ->
-                sendEmail.Notification(emailSubject,emailContent)
-        ).start();
-    }
-
-        private void openRecoveryTaskDashboard() {
+    private void openRecoveryTaskDashboard() {
         JFrame recoveryTaskDashboardFrame = new JFrame("Academic Officer System");
         RecoveryTasksDashboard recoveryTasksDashboard = new RecoveryTasksDashboard(database, onExitCallback, authService);
         recoveryTaskDashboardFrame.setContentPane(recoveryTasksDashboard.getRecoveryTasksPanel());
@@ -300,6 +315,8 @@ public class ModifyTaskMenu {
         modifyTitle.setText("Modifying Recovery Task Details");
         modifyTaskPanel.add(modifyTitle, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         detailsTextArea = new JTextArea();
+        Font detailsTextAreaFont = this.$$$getFont$$$("Dialog", -1, -1, detailsTextArea.getFont());
+        if (detailsTextAreaFont != null) detailsTextArea.setFont(detailsTextAreaFont);
         modifyTaskPanel.add(detailsTextArea, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_WANT_GROW, null, new Dimension(150, 50), null, 0, false));
         txtNewDescription = new JTextField();
         modifyTaskPanel.add(txtNewDescription, new GridConstraints(2, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -307,9 +324,11 @@ public class ModifyTaskMenu {
         promptDescription.setText("Enter new Description:");
         modifyTaskPanel.add(promptDescription, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_EAST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         completeRadioButton = new JRadioButton();
+        completeRadioButton.setBackground(new Color(-1));
         completeRadioButton.setText("Complete");
         modifyTaskPanel.add(completeRadioButton, new GridConstraints(4, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         incompleteRadioButton = new JRadioButton();
+        incompleteRadioButton.setBackground(new Color(-1));
         incompleteRadioButton.setText("Incomplete");
         modifyTaskPanel.add(incompleteRadioButton, new GridConstraints(5, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         promptCompletion = new JLabel();
@@ -326,6 +345,28 @@ public class ModifyTaskMenu {
         confirmButton = new JButton();
         confirmButton.setText("Confirm");
         modifyTaskPanel.add(confirmButton, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**
