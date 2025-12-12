@@ -259,24 +259,29 @@ public class Database {
         if (!studentExist(targetStudentID)) {
             throw new IllegalArgumentException("Student ID does not exist: " + targetStudentID);
         }
-        
-        double totalGPA = 0.0;
-        int courseCount = 0;
-        
+
+        double totalGradePoints = 0.0;
+        int totalCreditHours = 0;
+
         for (Grades grade : gradesDB.values()) {
             if (grade.getStudentID().equals(targetStudentID)) {
-                // Set course object for proper GPA calculation
-                grade.setCourseObject(courseDB.get(grade.getCourseID()));
-                
-                // Add the GPA from this course to the total
-                totalGPA += grade.calculateGPA();
-                courseCount++;
+
+                Course course = courseDB.get(grade.getCourseID());
+                if (course != null) {
+                    grade.setCourseObject(course);
+
+                    double gradePoint = grade.calculateGPA();
+                    int creditHours = course.getCredit();
+
+                    totalGradePoints += gradePoint * creditHours;
+                    totalCreditHours += creditHours;
+                }
             }
         }
-        
-        // Return average GPA for all courses taken by the student
-        return courseCount > 0 ? totalGPA / courseCount : 0.0;
+
+        return totalCreditHours > 0 ? totalGradePoints / totalCreditHours : 0.0;
     }
+
     
     // Get all available years for a student
     public Set<Integer> getAvailableYears(String targetStudentID) {
