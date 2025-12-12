@@ -31,14 +31,15 @@ public class ReportGenerator {
         return filePath;
     }
 
+    public Database getDatabase() {
+        return database;
+    }
+
     public void setFilePath(String filePath) {
         this.filePath = filePath;
     }
 
     // method
-    public void displayReport(){
-        
-    }
 
     // Semester based report generation    
     public void generateReport(String studentId, int semester){
