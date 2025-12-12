@@ -45,14 +45,10 @@ public class Database {
     public void removeRecoveryPlan(String planID) {
         recPlanDB.remove(planID);
     }
-    public void removeRecoveryTask(String taskID) { recTaskDB.remove(taskID); }
-    public void removeAllRecoveryTask(String targetPlanID) {
-        ArrayList<RecoveryTask> taskPlans = getPlanRecoveryTask(targetPlanID);
-        for (RecoveryTask task : taskPlans) {
-            recTaskDB.remove(task.getTaskID());
-        }
+    public void removeRecoveryTask(String taskID) {
+        recTaskDB.remove(taskID);
     }
-
+    
     // Object getters
     public Grades getGrades(String targetStudentID, String targetCourseID) {
         Grades newGrade = new Grades();

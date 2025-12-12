@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Student implements CSVParser<Student> {
     private String studentID, firstName, lastName, major, email, year;
-    private static final String filename = "data/student_information.txt";
     ArrayList<String> enrolledCourses;
 
     // constructors
@@ -67,17 +66,14 @@ public class Student implements CSVParser<Student> {
     public String toCSV() {
         return (studentID+","+firstName+","+lastName+","+major+","+year+","+email);
     }
-
     @Override
     public String getFileHeader() {
         return "StudentID,FirstName,LastName,Major,Year,Email";
     }
-
     @Override
     public String getFilename() {
-        return filename;
+        return "data/student_information.txt";
     }
-    
     @Override
     public String toString() {
         return String.format("Student[ID=%s, FirstName=%s, LastName=%s, Major=%s, Year=%s, Email=%s]", 

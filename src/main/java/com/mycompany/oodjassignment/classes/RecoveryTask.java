@@ -10,7 +10,7 @@ public class RecoveryTask implements CSVParser<RecoveryTask> {
     public RecoveryTask() {
     }; // No arg constructor used to retrieve fromCSV method for object parsing
 
-    public RecoveryTask(String taskID, String planID, String description, int week, boolean completion) { // used for parsing possibly
+    public RecoveryTask(String taskID, String planID, String description, int week, boolean completion) {
         this.taskID = taskID;
         this.planID = planID;
         this.description = description;

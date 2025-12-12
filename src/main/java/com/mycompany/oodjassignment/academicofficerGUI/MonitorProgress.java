@@ -5,12 +5,11 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import com.mycompany.oodjassignment.classes.RecoveryTask;
 import com.mycompany.oodjassignment.functions.Database;
+import com.mycompany.oodjassignment.functions.TableSorter;
 import com.mycompany.oodjassignment.usermanagement.service.AuthenticationService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.table.TableRowSorter;
 import java.awt.*;
 
 public class MonitorProgress {

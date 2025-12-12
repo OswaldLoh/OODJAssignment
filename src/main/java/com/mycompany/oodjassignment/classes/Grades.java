@@ -5,9 +5,8 @@ import com.mycompany.oodjassignment.functions.Database;
 import java.util.ArrayList;
 
 public class Grades implements CSVParser<Grades> {
-    private String gradeID, studentID, courseID, component;
+    private String gradeID, studentID, courseID;
     private double examMark, assignmentMark;
-    private static final String filename = "data/student_grades.txt";
     private int semester, attempt;
     private Course course;
 
@@ -129,12 +128,11 @@ public class Grades implements CSVParser<Grades> {
     }
     @Override
     public String getFilename() {
-        return filename;
+        return "data/student_grades.txt";
     }
-    
     @Override
     public String toString() {
-        return String.format("Grades[ID=%s, StudentID=%s, CourseID=%s, Component=%s, ExamMark=%.2f, AssignmentMark=%.2f, Semester=%d, Attempt=%d]", 
-                gradeID, studentID, courseID, component, examMark, assignmentMark, semester, attempt);
+        return String.format("Grades[ID=%s, StudentID=%s, CourseID=%s, ExamMark=%.2f, AssignmentMark=%.2f, Semester=%d, Attempt=%d]",
+                gradeID, studentID, courseID, examMark, assignmentMark, semester, attempt);
     }
 }

@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.academicofficerGUI;
+package com.mycompany.oodjassignment.functions;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
