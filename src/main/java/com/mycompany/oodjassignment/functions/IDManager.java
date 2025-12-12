@@ -18,7 +18,6 @@ public class IDManager {
     }
 
     public int getHighestTaskID() {
-
         for (String key : sourceHashMap.keySet()) {
             int num = Integer.parseInt(key.substring(1));
             if (num > highestInt) {
