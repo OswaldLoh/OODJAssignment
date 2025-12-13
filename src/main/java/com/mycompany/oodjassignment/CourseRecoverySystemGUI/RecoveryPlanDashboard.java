@@ -59,7 +59,6 @@ public class RecoveryPlanDashboard {
 
         monitorProgressButton.addActionListener(e -> {
             monitorProgress();
-            closeCurrentMenu();
         });
 
         addPlanButton.addActionListener(e -> {
@@ -133,6 +132,7 @@ public class RecoveryPlanDashboard {
         }
         int modelRow = planListTable.convertRowIndexToModel(row);
         String targetPlanID = (String) tableModel.getValueAt(modelRow, 0);
+        closeCurrentMenu();
         openMonitorProgress(targetPlanID);
     }
 
