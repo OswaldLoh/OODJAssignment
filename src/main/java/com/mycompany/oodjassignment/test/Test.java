@@ -18,7 +18,7 @@ import com.mycompany.oodjassignment.Helpers.SendEmail;
 /**
  * Testing file to print the toString methods for all classes in the OODJAssignment project
  */
-public class TestAllToString {
+public class Test {
 
     public static void main(String[] args) {
         System.out.println("=== Testing toString methods for all classes ===\n");
@@ -121,8 +121,7 @@ public class TestAllToString {
         // Test send email method in User class (inherited by AcademicOfficer and CourseAdministrator)
         System.out.println("--- Testing sendEmail method ---");
         SendEmail sendEmail = new SendEmail("hello@hmail.com");
-        sendEmail.Notification("a", "a" );
-        System.out.println("");sendEmail.toString();
+        System.out.println(sendEmail.toString());
         System.out.println();
 
         // Report Generator testing
