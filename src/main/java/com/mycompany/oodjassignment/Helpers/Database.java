@@ -214,42 +214,7 @@ public class Database {
         }
         return hasDataInYear;
     }
-    
-    // Calculate CGPA for a specific academic year
-    public double calculateCGPAByYear(String targetStudentID, int targetYear) {
-        if (!studentExist(targetStudentID)) {
-            throw new IllegalArgumentException("Student ID does not exist: " + targetStudentID);
-        }
-        
-        double totalGPA = 0.0;
-        int courseCount = 0;
-        
-        int startSemester = (targetYear - 1) * 2 + 1;  // First semester of the year
-        int endSemester = startSemester + 1;           // Last semester of the year
-        
-        for (Grades grade : gradesDB.values()) {
-            if (grade.getStudentID().equals(targetStudentID) && 
-                grade.getSemester() >= startSemester && 
-                grade.getSemester() <= endSemester) {
-                
-                // Set course object for proper GPA calculation
-                grade.setCourseObject(courseDB.get(grade.getCourseID()));
-                
-                // Add the GPA from this course to the total
-                totalGPA += grade.calculateGPA();
-                courseCount++;
-            }
-        }
-        
-        // Return average GPA for the year, or 0.0 if no courses found
-        if(courseCount > 0){
-            return totalGPA / courseCount;
-        }
-        else{
-            return 0.0;
-        }
-    }
-    
+      
     // Calculate overall CGPA for all years
     public double calculateOverallCGPA(String targetStudentID) {
         if (!studentExist(targetStudentID)) {

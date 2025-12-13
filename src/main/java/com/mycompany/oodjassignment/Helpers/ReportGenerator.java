@@ -358,7 +358,6 @@ public class ReportGenerator {
         }
     }
 
-    @Override
     public String toString() {
         return "ReportGenerator{" + "filePath=" + filePath + '}';
     }
