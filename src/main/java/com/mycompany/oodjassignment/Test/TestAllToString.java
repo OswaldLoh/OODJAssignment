@@ -1,4 +1,4 @@
-package com.mycompany.oodjassignment.test;
+package com.mycompany.oodjassignment.Test;
 
 import java.time.LocalDateTime;
 
