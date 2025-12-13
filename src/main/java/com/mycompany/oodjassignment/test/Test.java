@@ -6,12 +6,14 @@ import com.mycompany.oodjassignment.Entities.AcademicOfficer;
 import com.mycompany.oodjassignment.Entities.Course;
 import com.mycompany.oodjassignment.Entities.CourseAdministrator;
 import com.mycompany.oodjassignment.Entities.Grades;
-import com.mycompany.oodjassignment.Helpers.LoginLog;
 import com.mycompany.oodjassignment.Entities.RecoveryPlan;
 import com.mycompany.oodjassignment.Entities.RecoveryTask;
 import com.mycompany.oodjassignment.Entities.Student;
 import com.mycompany.oodjassignment.Enums.UserRole;
 import com.mycompany.oodjassignment.Enums.UserStatus;
+import com.mycompany.oodjassignment.Helpers.LoginLog;
+import com.mycompany.oodjassignment.Helpers.ReportGenerator;
+import com.mycompany.oodjassignment.Helpers.SendEmail;
 
 /**
  * Testing file to print the toString methods for all classes in the OODJAssignment project
@@ -116,6 +118,19 @@ public class TestAllToString {
         System.out.println("- RecoveryTask: " + RecoveryTask.class.getSimpleName());
         System.out.println();
 
+        // Test send email method in User class (inherited by AcademicOfficer and CourseAdministrator)
+        System.out.println("--- Testing sendEmail method ---");
+        SendEmail sendEmail = new SendEmail("hello@hmail.com");
+        sendEmail.Notification("a", "a" );
+        System.out.println("");sendEmail.toString();
+        System.out.println();
+
+        // Report Generator testing
+        System.out.println("--- Report Generator Testing ---");
+        ReportGenerator reportGenerator = new ReportGenerator("D:");
+        System.out.println(reportGenerator.toString());
+        System.err.println(" ");
+        
         System.out.println("=== Testing completed ===");
     }
 }
